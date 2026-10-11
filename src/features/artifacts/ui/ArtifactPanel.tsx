@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Copy, Trash2 } from "../../../shared/ui/icons";
 import { copyMessage } from "../../../platform/tauri/clipboard";
@@ -41,10 +42,14 @@ export function ArtifactPanel({
     return () => window.removeEventListener("keydown", escape);
   }, [onClose]);
 
-  const label = artifact ? artifactLabel(artifact.kind) : "Document";
+  const label = artifact ? artifactLabel(artifact.kind) : t("Document");
   const noun = label.toLowerCase();
   const onDelete = async () => {
-    if (!artifact || deleting || !window.confirm(`Delete “${artifact.title}”?`))
+    if (
+      !artifact ||
+      deleting ||
+      !window.confirm(t("Delete “{0}”?", { "0": artifact.title }))
+    )
       return;
     setDeleting(true);
     setError(null);
@@ -72,14 +77,14 @@ export function ArtifactPanel({
           artifact ? (
             <>
               <IconButton
-                label={`Delete ${noun}`}
+                label={t("Delete {0}", { "0": noun })}
                 disabled={deleting}
                 onClick={() => void onDelete()}
               >
                 <Trash2 className="size-3.5" />
               </IconButton>
               <IconButton
-                label={copied ? "Copied" : `Copy ${noun}`}
+                label={copied ? t("Copied") : t("Copy {0}", { "0": noun })}
                 onClick={() =>
                   void copyMessage(artifact.body).then(
                     () => setCopied(true),
@@ -96,7 +101,7 @@ export function ArtifactPanel({
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none px-7 py-6">
         {!loaded ? (
           <p role="status" className="text-[13px] text-content/50">
-            Loading document…
+            {t("Loading document…")}
           </p>
         ) : error && !artifact ? (
           <p role="alert" className="text-[13px] text-content/65">
@@ -104,7 +109,7 @@ export function ArtifactPanel({
           </p>
         ) : !artifact ? (
           <p role="status" className="text-[13px] text-content/50">
-            This document is no longer available.
+            {t("This document is no longer available.")}
           </p>
         ) : (
           <article data-artifact-reader={artifact.id}>
@@ -113,7 +118,7 @@ export function ArtifactPanel({
                 {artifact.title}
               </h1>
               <p className="mt-2 text-[11px] text-content/45">
-                Updated {new Date(artifact.updatedAt).toLocaleString()}
+                {t("Updated")} {new Date(artifact.updatedAt).toLocaleString()}
               </p>
             </div>
             <ArtifactContent artifact={artifact} onOpenFile={onOpenFile} />

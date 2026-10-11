@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useRef } from "react";
 import { MessageSquarePlus } from "../../../shared/ui/icons";
 import { Popover } from "../../../shared/ui/Popover";
@@ -44,7 +45,7 @@ export function EditorSelectionMenu({
       gap={6}
       onDismiss={onDismiss}
       role="toolbar"
-      aria-label="Selected code actions"
+      aria-label={t("Selected code actions")}
       className="p-1"
     >
       <button
@@ -61,7 +62,7 @@ export function EditorSelectionMenu({
           className="size-3.5"
           strokeWidth={1.75}
         />
-        Add to chat
+        {t("Add to chat")}
       </button>
     </Popover>
   );

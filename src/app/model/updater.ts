@@ -1,17 +1,17 @@
+import { t } from "../../shared/i18n/index";
 import { BundleType, getBundleType, getVersion } from "@tauri-apps/api/app";
 import { ask, message } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { check, type DownloadEvent, type Update } from "@tauri-apps/plugin-updater";
+import {
+  check,
+  type DownloadEvent,
+  type Update,
+} from "@tauri-apps/plugin-updater";
 import { announceUpdateAvailable } from "../../features/settings/model/sounds";
 import { rememberInstalledUpdate } from "./updateNotice";
 
 export type UpdaterPhase =
-  | "idle"
-  | "checking"
-  | "current"
-  | "available"
-  | "downloading"
-  | "error";
+  "idle" | "checking" | "current" | "available" | "downloading" | "error";
 
 export type UpdaterSnapshot = {
   phase: UpdaterPhase;
@@ -56,7 +56,9 @@ export function packageManagerHint(kind: PackageManagedInstall): string {
 function isTargetMissingError(error: unknown): boolean {
   const text = error instanceof Error ? error.message : String(error);
   // tauri-plugin-updater Error::TargetsNotFound / Error::TargetNotFound.
-  return /none of the fallback platforms|the platform `[^`]*` was not found/i.test(text);
+  return /none of the fallback platforms|the platform `[^`]*` was not found/i.test(
+    text,
+  );
 }
 
 function isUpdaterNotConfiguredError(error: unknown): boolean {
@@ -73,6 +75,10 @@ export async function readAppVersion(): Promise<string> {
 }
 
 export async function probeForUpdate(): Promise<Update | null> {
+  if (import.meta.env.VITE_MONOCODE_ZH_FORK) {
+    pendingUpdate = null;
+    return null;
+  }
   if (await packageManagedInstall()) {
     pendingUpdate = null;
     return null;
@@ -90,6 +96,23 @@ export async function runUpdateFlow(
   const currentVersion = await readAppVersion();
   const base: UpdaterSnapshot = { phase: "checking", currentVersion };
   onProgress?.(base);
+
+  // A personal Chinese build has no signed update feed of its own. Never
+  // replace it with an upstream English binary or send users to that download.
+  if (import.meta.env.VITE_MONOCODE_ZH_FORK) {
+    pendingUpdate = null;
+    const idle: UpdaterSnapshot = { phase: "idle", currentVersion };
+    onProgress?.(idle);
+    if (manual) {
+      await message(
+        t(
+          "This Chinese edition is updated through your own builds. Use the Mac build script or your GitHub Actions artifact.",
+        ),
+        { title: "MonoCode" },
+      );
+    }
+    return idle;
+  }
 
   const managed = await packageManagedInstall();
   if (managed) {
@@ -115,7 +138,9 @@ export async function runUpdateFlow(
       const current: UpdaterSnapshot = { phase: "current", currentVersion };
       onProgress?.(current);
       if (manual) {
-        await message("You're on the latest version.", { title: "MonoCode" });
+        await message(t("You're on the latest version."), {
+          title: "MonoCode",
+        });
       }
       return current;
     }
@@ -135,7 +160,7 @@ export async function runUpdateFlow(
     const detail = notes ? `\n\n${notes}` : "";
     const yes = await ask(
       `MonoCode ${update.version} is available (you have ${currentVersion}).${detail}\n\nInstall now?`,
-      { title: "Update available", kind: "info" },
+      { title: t("Update available"), kind: "info" },
     );
     if (!yes) return available;
 
@@ -240,7 +265,9 @@ export async function installPendingUpdate(
       error,
     };
     onProgress?.(failed);
-    await message(`Couldn't install the update.\n\n${error}`, { title: "MonoCode" });
+    await message(`Couldn't install the update.\n\n${error}`, {
+      title: "MonoCode",
+    });
     return failed;
   }
 }

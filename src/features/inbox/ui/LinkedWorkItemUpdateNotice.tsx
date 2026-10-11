@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useEffect, useState } from "react";
 import {
@@ -38,13 +39,13 @@ type Props = {
 function entryKindLabel(entry: LinkedWorkItemActivityEntry): string {
   switch (entry.kind) {
     case "commit":
-      return `Commit ${entry.id.slice(0, 7)}`;
+      return t("Commit {0}", { "0": entry.id.slice(0, 7) });
     case "review":
-      return "Review";
+      return t("Review");
     case "review_comment":
-      return "Review comment";
+      return t("Review comment");
     default:
-      return "Comment";
+      return t("Comment");
   }
 }
 
@@ -77,7 +78,7 @@ export function LinkedWorkItemUpdateNotice({
   if (!card || card.status === "loading") return null;
 
   const KindIcon = card.kind === "pr" ? GitPullRequest : CircleDot;
-  const kindLabel = card.kind === "pr" ? "Pull request" : "Issue";
+  const kindLabel = card.kind === "pr" ? t("Pull request") : t("Issue");
   const latest = card.entries[0];
   const discussion =
     latest?.kind === "comment" ||
@@ -85,21 +86,21 @@ export function LinkedWorkItemUpdateNotice({
     latest?.kind === "review_comment";
   const openLabel =
     latest?.kind === "commit"
-      ? "Open commit"
-      : `Open ${card.kind === "pr" ? "PR" : "issue"}`;
+      ? t("Open commit")
+      : t("Open {0}", { "0": card.kind === "pr" ? "PR" : "issue" });
   const agentLabel = discussion
-    ? "Address with agent"
+    ? t("Address with agent")
     : latest?.kind === "commit"
-      ? "Review with agent"
-      : "Continue with agent";
+      ? t("Review with agent")
+      : t("Continue with agent");
   const terminalState = linkedWorkItemTerminalState(card);
   const terminalLabel =
     terminalState === "pr_merged"
-      ? "Pull request merged"
+      ? t("Pull request merged")
       : terminalState === "pr_closed"
-        ? "Pull request closed"
+        ? t("Pull request closed")
         : terminalState === "issue_closed"
-          ? "Issue closed"
+          ? t("Issue closed")
           : "";
   const TerminalIcon =
     terminalState === "pr_merged"
@@ -135,7 +136,10 @@ export function LinkedWorkItemUpdateNotice({
 
   return (
     <section
-      aria-label={`New activity on ${kindLabel} ${card.number}`}
+      aria-label={t("New activity on {0} {1}", {
+        "0": kindLabel,
+        "1": card.number,
+      })}
       aria-live="polite"
       className="pointer-events-auto absolute top-3 right-3 z-40 isolate w-[min(320px,calc(100%_-_24px))] overflow-hidden rounded-xl border border-content/10 text-content shadow-xl"
     >
@@ -146,13 +150,16 @@ export function LinkedWorkItemUpdateNotice({
             <span className="size-2 shrink-0 rounded-full bg-accent" />
             <KindIcon className="size-3.5 text-content/55" strokeWidth={1.75} />
             <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
-              GitHub activity
+              {t("GitHub activity")}
             </span>
           </div>
           <button
             type="button"
-            title="Dismiss"
-            aria-label={`Dismiss updates for ${kindLabel} ${card.number}`}
+            title={t("Dismiss")}
+            aria-label={t("Dismiss updates for {0} {1}", {
+              "0": kindLabel,
+              "1": card.number,
+            })}
             onClick={dismiss}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/40 hover:bg-content/10 hover:text-content"
           >
@@ -214,7 +221,7 @@ export function LinkedWorkItemUpdateNotice({
                     </span>
                   </span>
                   <span className="mt-0.5 line-clamp-2 block text-[12px] leading-relaxed text-content/65">
-                    {entry.text || "No message"}
+                    {entry.text || t("No message")}
                   </span>
                 </span>
               </button>
@@ -236,12 +243,14 @@ export function LinkedWorkItemUpdateNotice({
               <span className="font-medium text-content/75">
                 {terminalLabel}
               </span>
-              <span className="text-content/45">Clean up this session</span>
+              <span className="text-content/45">
+                {t("Clean up this session")}
+              </span>
             </div>
             <div className="mt-2 flex items-center gap-1.5">
               <button
                 type="button"
-                title="Archive session"
+                title={t("Archive session")}
                 disabled={Boolean(cleanupAction) || !onArchiveSession}
                 onClick={() => void runCleanup("archive", onArchiveSession)}
                 className="inline-flex min-w-0 items-center gap-1.5 overflow-hidden rounded-md bg-content/10 px-2 py-1 text-[11px] font-medium hover:bg-content/15 disabled:opacity-40"
@@ -252,12 +261,12 @@ export function LinkedWorkItemUpdateNotice({
                   <Archive className="size-3 shrink-0" strokeWidth={1.75} />
                 )}
                 <span className="min-w-0 truncate whitespace-nowrap">
-                  Archive session
+                  {t("Archive session")}
                 </span>
               </button>
               <button
                 type="button"
-                title="Delete session"
+                title={t("Delete session")}
                 disabled={Boolean(cleanupAction) || !onDeleteSession}
                 onClick={() => void runCleanup("delete", onDeleteSession)}
                 className="inline-flex min-w-0 items-center gap-1.5 overflow-hidden rounded-md px-2 py-1 text-[11px] text-red-300/90 hover:bg-red-500/15 disabled:opacity-40"
@@ -268,7 +277,7 @@ export function LinkedWorkItemUpdateNotice({
                   <Trash2 className="size-3 shrink-0" strokeWidth={1.75} />
                 )}
                 <span className="min-w-0 truncate whitespace-nowrap">
-                  Delete…
+                  {t("Delete…")}
                 </span>
               </button>
             </div>

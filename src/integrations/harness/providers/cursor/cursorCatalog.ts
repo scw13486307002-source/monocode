@@ -1,3 +1,4 @@
+import { t } from "../../../../shared/i18n/index";
 import { homeDir } from "../../../../platform/tauri/fs";
 import {
   setHarnessModels,
@@ -42,11 +43,15 @@ export function refreshCursorCatalog(): Promise<void> {
   return inflight;
 }
 
-export async function discoverCursorModels(workingDirectory?: string): Promise<AgentModel[]> {
-  const fromAcp = await discoverViaAcp(workingDirectory).catch((error: unknown) => {
-    console.debug("[monocode] cursor ACP catalog failed", error);
-    return [];
-  });
+export async function discoverCursorModels(
+  workingDirectory?: string,
+): Promise<AgentModel[]> {
+  const fromAcp = await discoverViaAcp(workingDirectory).catch(
+    (error: unknown) => {
+      console.debug("[monocode] cursor ACP catalog failed", error);
+      return [];
+    },
+  );
   if (fromAcp.length > 0) return fromAcp;
   return discoverViaCli(workingDirectory).catch((error: unknown) => {
     console.debug("[monocode] cursor CLI catalog failed", error);
@@ -54,7 +59,9 @@ export async function discoverCursorModels(workingDirectory?: string): Promise<A
   });
 }
 
-async function discoverViaAcp(workingDirectory?: string): Promise<AgentModel[]> {
+async function discoverViaAcp(
+  workingDirectory?: string,
+): Promise<AgentModel[]> {
   const { path } = await resolveCursorBinary();
   const cwd = workingDirectory ?? (await homeDir());
   const probeId = `${PROBE_ID}-${crypto.randomUUID()}`;
@@ -78,42 +85,48 @@ async function discoverViaAcp(workingDirectory?: string): Promise<AgentModel[]> 
 
   try {
     await spawnChild(probeId, path, ["acp"], cwd, undefined, "cursor");
-    return await withTimeout(DISCOVERY_TIMEOUT_MS, async () => {
-      await acp.request(
-        "initialize",
-        {
-          protocolVersion: 1,
-          clientCapabilities: CURSOR_CLIENT_CAPABILITIES,
-          clientInfo: { name: "monocode", version: "0.1.0" },
-        },
-        REQUEST_TIMEOUT_MS,
-      );
-      // ACP reads existing CLI credentials at startup. `cursor_login` can
-      // launch a browser, so a catalog refresh must never request it. Missing
-      // credentials fall back to CLI discovery and the bundled model list.
-      const listed = await acp.request<unknown>(
-        "cursor/list_available_models",
-        {},
-        REQUEST_TIMEOUT_MS,
-      );
-      const models = modelsFromListAvailable(listed);
-      if (models.length > 0) return models;
+    return await withTimeout(
+      DISCOVERY_TIMEOUT_MS,
+      async () => {
+        await acp.request(
+          "initialize",
+          {
+            protocolVersion: 1,
+            clientCapabilities: CURSOR_CLIENT_CAPABILITIES,
+            clientInfo: { name: "monocode", version: "0.1.0" },
+          },
+          REQUEST_TIMEOUT_MS,
+        );
+        // ACP reads existing CLI credentials at startup. `cursor_login` can
+        // launch a browser, so a catalog refresh must never request it. Missing
+        // credentials fall back to CLI discovery and the bundled model list.
+        const listed = await acp.request<unknown>(
+          "cursor/list_available_models",
+          {},
+          REQUEST_TIMEOUT_MS,
+        );
+        const models = modelsFromListAvailable(listed);
+        if (models.length > 0) return models;
 
-      const created = await acp.request<unknown>(
-        "session/new",
-        { cwd, mcpServers: [] },
-        REQUEST_TIMEOUT_MS,
-      );
-      return modelsFromSessionNew(created);
-    }, () => {
-      void stop();
-    });
+        const created = await acp.request<unknown>(
+          "session/new",
+          { cwd, mcpServers: [] },
+          REQUEST_TIMEOUT_MS,
+        );
+        return modelsFromSessionNew(created);
+      },
+      () => {
+        void stop();
+      },
+    );
   } finally {
     await stop();
   }
 }
 
-async function discoverViaCli(workingDirectory?: string): Promise<AgentModel[]> {
+async function discoverViaCli(
+  workingDirectory?: string,
+): Promise<AgentModel[]> {
   const { path } = await resolveCursorBinary();
   const cwd = workingDirectory ?? (await homeDir());
   const stdout = await execChild(path, ["--list-models"], cwd, "cursor");
@@ -255,7 +268,7 @@ function groupCliModels(
     if (efforts.length > 1) {
       settings.push({
         id: effortKeyFor(base),
-        label: "Effort",
+        label: t("Effort"),
         kind: "select",
         value: canonical?.effort ?? efforts[0],
         options: efforts.map((value) => ({
@@ -267,24 +280,24 @@ function groupCliModels(
     if (hasThinking) {
       settings.push({
         id: "thinking",
-        label: "Thinking",
+        label: t("Thinking"),
         kind: "toggle",
         value: canonical?.thinking ? "true" : "false",
         options: [
-          { value: "false", label: "Off" },
-          { value: "true", label: "On" },
+          { value: "false", label: t("Off") },
+          { value: "true", label: t("On") },
         ],
       });
     }
     if (hasFast) {
       settings.push({
         id: "fast",
-        label: "Fast",
+        label: t("Fast"),
         kind: "toggle",
         value: canonical?.fast ? "true" : "false",
         options: [
-          { value: "false", label: "Off" },
-          { value: "true", label: "Fast" },
+          { value: "false", label: t("Off") },
+          { value: "true", label: t("Fast") },
         ],
       });
     }
@@ -338,7 +351,9 @@ function parseConfigOptions(raw: unknown): ModelSetting[] | undefined {
     const rec = asRecord(item);
     if (!rec) continue;
     const id = String(rec.id ?? rec.configId ?? "").trim();
-    const category = String(rec.category ?? "").trim().toLowerCase();
+    const category = String(rec.category ?? "")
+      .trim()
+      .toLowerCase();
     if (
       !id ||
       id === "mode" ||
@@ -361,8 +376,8 @@ function parseConfigOptions(raw: unknown): ModelSetting[] | undefined {
         kind: "toggle",
         value: on ? "true" : "false",
         options: [
-          { value: "false", label: "Off" },
-          { value: "true", label: "On" },
+          { value: "false", label: t("Off") },
+          { value: "true", label: t("On") },
         ],
       });
       continue;
@@ -437,7 +452,11 @@ function stripVariantWords(name: string): string {
 }
 
 function effortKeyFor(base: string): string {
-  if (base.startsWith("gpt-") || base.startsWith("kimi-") || base.startsWith("glm-")) {
+  if (
+    base.startsWith("gpt-") ||
+    base.startsWith("kimi-") ||
+    base.startsWith("glm-")
+  ) {
     return "reasoning";
   }
   return "effort";
@@ -446,20 +465,20 @@ function effortKeyFor(base: string): string {
 function effortLabel(value: string): string {
   switch (value) {
     case "none":
-      return "None";
+      return t("None");
     case "minimal":
       return "Minimal";
     case "low":
-      return "Low";
+      return t("Low");
     case "medium":
-      return "Medium";
+      return t("Medium");
     case "high":
-      return "High";
+      return t("High");
     case "xhigh":
     case "extra-high":
-      return "Extra High";
+      return t("Extra High");
     case "max":
-      return "Max";
+      return t("Max");
     default:
       return value;
   }

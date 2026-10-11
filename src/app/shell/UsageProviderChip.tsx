@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   clampUsedPercent,
@@ -14,9 +15,15 @@ import {
   type RateLimitWindow,
 } from "../../features/providers/model/rateLimits";
 import type { CodexRateLimitResetOutcome } from "../../features/providers/model/rateLimitsFetch";
-import { mascotPath, projectMascot } from "../../features/projects/model/projectMascots";
+import {
+  mascotPath,
+  projectMascot,
+} from "../../features/projects/model/projectMascots";
 import { projectKey, projectName } from "../../shared/lib/paths";
-import { HARNESS_TITLE, type HarnessId } from "../../features/sessions/model/session";
+import {
+  HARNESS_TITLE,
+  type HarnessId,
+} from "../../features/sessions/model/session";
 import {
   loadTabGroupColors,
   loadTabGroupCustomColors,
@@ -25,7 +32,13 @@ import {
   resolveTabGroupMascot,
 } from "../../features/workspace/model/tabGroups";
 import { HarnessIcon } from "../../features/sessions/ui/HarnessIcon";
-import { ArrowLeft, Check, ChevronRight, Plus, RefreshCw } from "../../shared/ui/icons";
+import {
+  ArrowLeft,
+  Check,
+  ChevronRight,
+  Plus,
+  RefreshCw,
+} from "../../shared/ui/icons";
 import { Popover, type PopoverDismissReason } from "../../shared/ui/Popover";
 import {
   ProviderSignInPanel,
@@ -127,7 +140,7 @@ export function UsageProviderChip({
   const iconHarness = presentation?.harness ?? limits.provider;
   const activeAccount = accounts.find((account) => account.id === accountId);
   const canManageAccounts = Boolean(onSelectAccount && onAddAccount);
-  const activeAccountLabel = activeAccount?.label ?? "Removed account";
+  const activeAccountLabel = activeAccount?.label ?? t("Removed account");
   const identities = useProviderAccountIdentities(
     accounts,
     `${open}:${limits.updatedAt}:${reconnectState}`,
@@ -198,7 +211,7 @@ export function UsageProviderChip({
       setResetAction(await onConsumeReset(credit?.id));
     } catch (error) {
       setResetError(
-        error instanceof Error ? error.message : "Could not use this reset",
+        error instanceof Error ? error.message : t("Could not use this reset"),
       );
       setResetAction("error");
     }
@@ -213,7 +226,9 @@ export function UsageProviderChip({
       setReconnectState("complete");
     } catch (error) {
       setReconnectError(
-        error instanceof Error ? error.message : "Could not complete sign-in",
+        error instanceof Error
+          ? error.message
+          : t("Could not complete sign-in"),
       );
       setReconnectState("error");
     }
@@ -232,10 +247,10 @@ export function UsageProviderChip({
           tooltip ||
           limits.error ||
           (disconnected
-            ? "Not connected"
+            ? t("Not connected")
             : loading
-              ? "Loading usage…"
-              : "Usage details")
+              ? t("Loading usage…")
+              : t("Usage details"))
         }
         onClick={() => setOpen((value) => !value)}
       >
@@ -243,7 +258,7 @@ export function UsageProviderChip({
         {loading ? (
           <span className="animate-pulse text-content/35">···</span>
         ) : disconnected ? (
-          <span className="text-content/35">not connected</span>
+          <span className="text-content/35">{t("not connected")}</span>
         ) : windows.length === 0 ? (
           <span className="text-content/35">{emptyUsageLabel(limits)}</span>
         ) : (
@@ -345,7 +360,7 @@ export function UsageProviderChip({
                 </span>
                 <div className="min-w-0 flex-1">
                   <h2 className="text-[13px] font-medium leading-4">
-                    {providerLabel} usage
+                    {providerLabel} {t("usage")}
                   </h2>
                   <p className="mt-0.5 text-[10px] leading-4 text-content/40">
                     {updatedLabel(limits, now)}
@@ -356,14 +371,14 @@ export function UsageProviderChip({
                     </p>
                   ) : null}
                   {canManageAccounts ? (
-                    <div
-                      className="pointer-events-none relative mt-1 -ml-1 inline-flex max-w-full items-center gap-1 rounded px-1 py-0.5 text-[10px] text-content/55"
-                    >
+                    <div className="pointer-events-none relative mt-1 -ml-1 inline-flex max-w-full items-center gap-1 rounded px-1 py-0.5 text-[10px] text-content/55">
                       {/* Keep account switching separate from email revelation. */}
                       <button
                         type="button"
                         className="pointer-events-auto absolute inset-0 rounded hover:bg-content/10 focus-visible:outline-2 focus-visible:outline-accent"
-                        aria-label={`Switch ${providerLabel} account`}
+                        aria-label={t("Switch {0} account", {
+                          "0": providerLabel,
+                        })}
                         onClick={() => setAccountView("accounts")}
                       />
                       <span className="max-w-[60%] shrink-0 truncate">
@@ -389,14 +404,14 @@ export function UsageProviderChip({
                       strokeWidth={1.75}
                       aria-hidden
                     />
-                    Updating
+                    {t("Updating")}
                   </span>
                 ) : null}
               </div>
 
               {limits.status === "error" && windows.length > 0 ? (
                 <p className="mb-2 rounded-lg bg-amber-400/10 px-2.5 py-2 text-[10px] leading-4 text-amber-700 dark:text-amber-300">
-                  Couldn’t refresh. Showing the last available snapshot.
+                  {t("Couldn’t refresh. Showing the last available snapshot.")}
                 </p>
               ) : null}
 
@@ -418,7 +433,7 @@ export function UsageProviderChip({
               {limits.extraUsageBalance != null ? (
                 <section className="mt-1.5 flex items-baseline justify-between gap-3 rounded-lg bg-content/[0.045] px-3 py-2.5 ring-1 ring-inset ring-content/[0.06]">
                   <h3 className="text-[11px] font-medium text-content/65">
-                    Extra usage balance
+                    {t("Extra usage balance")}
                   </h3>
                   <span className="shrink-0 text-[11px] font-medium tabular-nums">
                     {formatExtraUsageBalance(limits.extraUsageBalance)}
@@ -481,11 +496,11 @@ function AccountSwitchRow({
       <button
         type="button"
         className="flex h-8 w-full items-center gap-2 rounded-lg bg-content/[0.045] px-2.5 text-left text-[11px] ring-1 ring-inset ring-content/[0.06] hover:bg-content/[0.08]"
-        aria-label={`Switch account from ${accountLabel}`}
+        aria-label={t("Switch account from {0}", { "0": accountLabel })}
         onClick={onClick}
       >
         <span className="min-w-0 flex-1 truncate">{accountLabel}</span>
-        <span className="text-[10px] text-content/40">Switch</span>
+        <span className="text-[10px] text-content/40">{t("Switch")}</span>
         <ChevronRight
           className="size-3 shrink-0 text-content/35"
           strokeWidth={1.75}
@@ -526,15 +541,17 @@ function ProviderAccountPicker({
         <button
           type="button"
           className="grid size-6 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
-          aria-label="Back to usage"
+          aria-label={t("Back to usage")}
           onClick={onBack}
         >
           <ArrowLeft className="size-3.5" strokeWidth={1.75} aria-hidden />
         </button>
-        <h2 className="text-[13px] font-medium">{providerLabel} accounts</h2>
+        <h2 className="text-[13px] font-medium">
+          {providerLabel} {t("accounts")}
+        </h2>
       </div>
       <p className="mt-1 px-1 text-[10px] leading-4 text-content/40">
-        Each conversation stays pinned to the account that started it.
+        {t("Each conversation stays pinned to the account that started it.")}
       </p>
       <div
         className="mt-2 flex flex-col gap-1"
@@ -622,7 +639,7 @@ function ProviderAccountPicker({
         onClick={onAdd}
       >
         <Plus className="size-3.5" strokeWidth={1.75} aria-hidden />
-        Add account
+        {t("Add account")}
       </button>
       {onManage ? (
         <button
@@ -632,7 +649,7 @@ function ProviderAccountPicker({
             onManage();
           }}
         >
-          Manage accounts…
+          {t("Manage accounts…")}
         </button>
       ) : null}
     </div>
@@ -656,7 +673,7 @@ function SwitchSuggestion({
     <section className="mt-2 flex items-center gap-2.5 rounded-lg bg-content/[0.045] px-3 py-2.5 ring-1 ring-inset ring-content/[0.06]">
       <div className="min-w-0 flex-1">
         <p className="text-[10px] leading-4 text-content/45">
-          {exhausted ? "Out of usage" : "Running low"} · switch to
+          {exhausted ? t("Out of usage") : t("Running low")} {t("· switch to")}
         </p>
         <p className="mt-0.5 flex min-w-0 items-center gap-2 text-[11px]">
           <span className="min-w-0 truncate font-medium">{account.label}</span>
@@ -671,7 +688,7 @@ function SwitchSuggestion({
         className="h-7 shrink-0 rounded-md bg-content px-2.5 text-[11px] font-medium text-background-base transition-transform duration-150 hover:bg-content/85 active:scale-[0.97]"
         onClick={onSwitch}
       >
-        Switch
+        {t("Switch")}
       </button>
     </section>
   );
@@ -702,7 +719,9 @@ function AddProviderAccount({
       onComplete();
     } catch (caught) {
       setError(
-        caught instanceof Error ? caught.message : "Could not add this account",
+        caught instanceof Error
+          ? caught.message
+          : t("Could not add this account"),
       );
       setRunning(false);
     }
@@ -714,26 +733,30 @@ function AddProviderAccount({
         <button
           type="button"
           className="grid size-6 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content disabled:opacity-40"
-          aria-label="Back to accounts"
+          aria-label={t("Back to accounts")}
           disabled={running}
           onClick={onBack}
         >
           <ArrowLeft className="size-3.5" strokeWidth={1.75} aria-hidden />
         </button>
-        <h2 className="text-[13px] font-medium">Add {providerLabel} account</h2>
+        <h2 className="text-[13px] font-medium">
+          {t("Add")} {providerLabel} {t("account")}
+        </h2>
       </div>
       <p className="mt-1 px-1 text-[10px] leading-4 text-content/40">
-        Give this account a local name, then finish sign-in in your browser.
+        {t(
+          "Give this account a local name, then finish sign-in in your browser.",
+        )}
       </p>
       <label className="mt-3 block text-[10px] font-medium text-content/55">
-        Account name
+        {t("Account name")}
         <input
           autoFocus
           type="text"
           maxLength={48}
           value={label}
           disabled={running}
-          placeholder="Work or Personal"
+          placeholder={t("Work or Personal")}
           className="mt-1.5 h-8 w-full rounded-lg border border-content/10 bg-content/[0.04] px-2.5 text-[11px] text-content outline-none placeholder:text-content/25 focus:border-accent/45 disabled:opacity-55"
           onChange={(event) => setLabel(event.target.value)}
         />
@@ -746,7 +769,7 @@ function AddProviderAccount({
         {running ? (
           <RefreshCw className="size-3.5 animate-spin" aria-hidden />
         ) : null}
-        {running ? "Waiting for browser…" : "Sign in and add account"}
+        {running ? t("Waiting for browser…") : t("Sign in and add account")}
       </button>
       {error ? (
         <p className="mt-2 text-[10px] leading-4 text-red-500" role="status">
@@ -784,14 +807,14 @@ function UsageWindowCard({
   const shown = showRemaining ? remaining : pct;
   const title =
     kind === "session" && window.windowMinutes === DAILY_WINDOW_MINUTES
-      ? "Daily limit"
+      ? t("Daily limit")
       : kind === "session"
-      ? "5-hour limit"
-      : kind === "weekly"
-        ? "Weekly limit"
-        : kind === "monthly"
-          ? "Monthly limit"
-          : `${formatWindowLabel(window.windowMinutes)} limit`;
+        ? "5-hour limit"
+        : kind === "weekly"
+          ? t("Weekly limit")
+          : kind === "monthly"
+            ? t("Monthly limit")
+            : `${formatWindowLabel(window.windowMinutes)} limit`;
   return (
     <section className="rounded-lg bg-content/[0.045] px-3 py-2.5 ring-1 ring-inset ring-content/[0.06]">
       <div className="flex items-baseline justify-between gap-3">
@@ -878,13 +901,13 @@ function BankedResets({
       <div className="relative min-h-[78px] overflow-hidden rounded-lg bg-content/[0.04] px-3 py-3 pr-[84px] ring-1 ring-inset ring-content/[0.06]">
         <div className="relative z-10 min-w-0">
           <div className="flex items-center gap-1.5">
-            <h3 className="text-[11px] font-medium">Banked resets</h3>
+            <h3 className="text-[11px] font-medium">{t("Banked resets")}</h3>
             <span className="rounded-full bg-content/[0.07] px-1.5 py-px text-[9px] font-medium tabular-nums text-content/65 ring-1 ring-inset ring-content/[0.07]">
               {count}
             </span>
           </div>
           <p className="mt-0.5 text-[10px] leading-4 text-content/40">
-            {count} {count === 1 ? "reset" : "resets"} available
+            {count} {count === 1 ? "reset" : "resets"} {t("available")}
           </p>
         </div>
         <BankedResetMascot
@@ -896,7 +919,7 @@ function BankedResets({
 
       <div
         className="mt-2 max-h-56 overflow-y-auto overscroll-contain"
-        aria-label="Available banked resets"
+        aria-label={t("Available banked resets")}
       >
         <div className="flex flex-col gap-1.5">
           {rows.map((credit, index) => {
@@ -1017,7 +1040,7 @@ function BankedResetRow({
   return (
     <article className="rounded-lg bg-content/[0.04] px-2.5 py-2 ring-1 ring-inset ring-content/[0.06]">
       <h4 className="text-[10px] font-medium leading-4 text-content/70">
-        {credit?.title ?? `Banked reset ${index + 1}`}
+        {credit?.title ?? t("Banked reset {0}", { "0": index + 1 })}
       </h4>
       {credit?.description ? (
         <p className="mt-0.5 text-[10px] leading-4 text-content/45">
@@ -1034,10 +1057,12 @@ function BankedResetRow({
           }
         >
           {credit?.expiresAt == null
-            ? "Expiry not provided"
+            ? t("Expiry not provided")
             : credit.expiresAt <= now
-              ? "Expires now"
-              : `Expires in ${formatResetDuration(credit.expiresAt - now)}`}
+              ? t("Expires now")
+              : t("Expires in {0}", {
+                  "0": formatResetDuration(credit.expiresAt - now),
+                })}
         </p>
         {action === "using" ? (
           <span className="inline-flex shrink-0 items-center gap-1.5 text-[10px] text-content/45">
@@ -1046,7 +1071,7 @@ function BankedResetRow({
               strokeWidth={1.75}
               aria-hidden
             />
-            Applying…
+            {t("Applying…")}
           </span>
         ) : isResetOutcome(action) || action === "error" ? (
           <span
@@ -1066,14 +1091,14 @@ function BankedResetRow({
             disabled={disabled}
             onClick={onConfirm}
           >
-            Use reset
+            {t("Use reset")}
           </button>
         ) : null}
       </div>
       {action === "confirming" ? (
         <div className="mt-2 flex items-center justify-between gap-2 border-t border-content/[0.07] pt-2">
           <p className="text-[10px] leading-4 text-content/50">
-            Spend this reset now?
+            {t("Spend this reset now?")}
           </p>
           <div className="flex shrink-0 gap-1">
             <button
@@ -1081,14 +1106,14 @@ function BankedResetRow({
               className="h-6 rounded-md px-2 text-[10px] text-content/50 hover:bg-content/10 hover:text-content"
               onClick={onCancel}
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="button"
               className="h-6 rounded-md bg-content px-2.5 text-[10px] font-medium text-background-base transition-transform duration-150 ease-out active:scale-[0.97]"
               onClick={onUse}
             >
-              Confirm
+              {t("Confirm")}
             </button>
           </div>
         </div>
@@ -1108,10 +1133,10 @@ function EmptyUsageState({
     <div className="rounded-lg bg-content/[0.04] px-3 py-4 text-center ring-1 ring-inset ring-content/[0.06]">
       <p className="text-[11px] font-medium text-content/65">
         {loading
-          ? "Loading usage…"
+          ? t("Loading usage…")
           : limits.status === "unavailable"
-            ? "Not connected"
-            : "Usage unavailable"}
+            ? t("Not connected")
+            : t("Usage unavailable")}
       </p>
       {limits.error ? (
         <p className="mx-auto mt-1 max-w-[15rem] text-[10px] leading-4 text-content/40">
@@ -1136,21 +1161,23 @@ export function needsProviderLogin(limits: ProviderRateLimits): boolean {
 }
 
 function updatedLabel(limits: ProviderRateLimits, now: number): string {
-  if (limits.updatedAt <= 0) return "Rate-limit details";
+  if (limits.updatedAt <= 0) return t("Rate-limit details");
   const elapsedMinutes = Math.max(
     0,
     Math.floor((now - limits.updatedAt) / 60_000),
   );
-  if (elapsedMinutes === 0) return "Updated just now";
-  if (elapsedMinutes < 60) return `Updated ${elapsedMinutes}m ago`;
-  return `Updated ${Math.floor(elapsedMinutes / 60)}h ago`;
+  if (elapsedMinutes === 0) return t("Updated just now");
+  if (elapsedMinutes < 60)
+    return t("Updated {0}m ago", { "0": elapsedMinutes });
+  return t("Updated {0}h ago", { "0": Math.floor(elapsedMinutes / 60) });
 }
 
 function resetOutcomeLabel(outcome: CodexRateLimitResetOutcome): string {
-  if (outcome === "reset") return "Codex usage was reset.";
-  if (outcome === "nothingToReset") return "There’s no active usage to reset.";
-  if (outcome === "noCredit") return "No banked resets are available.";
-  return "That reset was already used.";
+  if (outcome === "reset") return t("Codex usage was reset.");
+  if (outcome === "nothingToReset")
+    return t("There’s no active usage to reset.");
+  if (outcome === "noCredit") return t("No banked resets are available.");
+  return t("That reset was already used.");
 }
 
 function isResetOutcome(

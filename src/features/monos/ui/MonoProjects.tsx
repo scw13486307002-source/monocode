@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useRef, useState } from "react";
 import { Plus, X } from "../../../shared/ui/icons";
 import { projectKey, projectName } from "../../../shared/lib/paths";
@@ -67,8 +68,8 @@ export function MonoProjects({
           <span className="min-w-0 flex-1 truncate">{project.name}</span>
           <button
             type="button"
-            aria-label={`Remove ${project.name}`}
-            title={`Remove ${project.name}`}
+            aria-label={t("Remove {0}", { "0": project.name })}
+            title={t("Remove {0}", { "0": project.name })}
             onClick={() => removeMonoProject(monoId, project.path)}
             className="grid size-5 shrink-0 place-items-center rounded text-content/45 opacity-0 hover:bg-content/8 hover:text-content focus-visible:opacity-100 group-hover:opacity-100"
           >
@@ -85,7 +86,7 @@ export function MonoProjects({
         className="-ml-1 flex h-7 w-fit items-center gap-1.5 rounded-md px-1 text-content/45 hover:bg-content/6 hover:text-content aria-expanded:bg-content/6 aria-expanded:text-content"
       >
         <Plus className="size-3 shrink-0" strokeWidth={1.75} />
-        Add project
+        {t("Add project")}
       </button>
       {adding ? (
         <ProjectPickerPopover
@@ -93,7 +94,7 @@ export function MonoProjects({
           projects={choices}
           onDismiss={() => setAdding(false)}
           onSelectProject={(path) => addMonoProject(monoId, path)}
-          label="Add a project"
+          label={t("Add a project")}
           emptyMessage={
             choices.length === 0
               ? "It already works on every project."

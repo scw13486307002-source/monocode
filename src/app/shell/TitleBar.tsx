@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import {
   CheckCircle,
   ChevronLeft,
@@ -390,8 +391,8 @@ function TitleTabItem({
             {tab.dirty ? (
               <span
                 className="size-1.5 shrink-0 rounded-full bg-content/70"
-                title="Unsaved changes"
-                aria-label="Unsaved changes"
+                title={t("Unsaved changes")}
+                aria-label={t("Unsaved changes")}
               />
             ) : null}
           </span>
@@ -405,8 +406,8 @@ function TitleTabItem({
       {closable ? (
         <button
           type="button"
-          title="Close Tab"
-          aria-label={`Close ${headline}`}
+          title={t("Close Tab")}
+          aria-label={t("Close {0}", { "0": headline })}
           data-no-drag
           data-tauri-drag-region="false"
           onPointerDown={(event) => event.stopPropagation()}
@@ -430,7 +431,8 @@ function TabStripChevron({
   side: "left" | "right";
   onClick: () => void;
 }) {
-  const label = side === "left" ? "Scroll tabs left" : "Scroll tabs right";
+  const label =
+    side === "left" ? t("Scroll tabs left") : t("Scroll tabs right");
   const Icon = side === "left" ? ChevronLeft : ChevronRight;
   return (
     <button
@@ -525,10 +527,10 @@ export function DevModeLabel() {
   if (!import.meta.env.DEV) return null;
   return (
     <span
-      title="Development build"
+      title={t("Development build")}
       className="mr-1 min-w-0 truncate rounded-md bg-skill/15 px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-skill"
     >
-      Development
+      {t("Development")}
     </span>
   );
 }
@@ -562,14 +564,14 @@ export function TabVisitNav({
   return (
     <div className="flex shrink-0 items-center">
       <IconButton
-        label={`Back (${MOD}[)`}
+        label={t("Back ({0}[)", { "0": MOD })}
         disabled={!canGoBack}
         onClick={onGoBack}
       >
         <ChevronLeft className="size-3.5" strokeWidth={1.75} />
       </IconButton>
       <IconButton
-        label={`Forward (${MOD}])`}
+        label={t("Forward ({0}])", { "0": MOD })}
         disabled={!canGoForward}
         onClick={onGoForward}
       >
@@ -600,13 +602,13 @@ export function OverlayNav({
   return (
     <div className="flex shrink-0 items-center px-1.5">
       {onBack ? (
-        <IconButton label={`Back (${MOD}[)`} onClick={onBack}>
+        <IconButton label={t("Back ({0}[)", { "0": MOD })} onClick={onBack}>
           <ChevronLeft className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       ) : null}
       {onToggleSidebar ? (
         <IconButton
-          label={`Toggle Sidebar (${MOD}B)`}
+          label={t("Toggle Sidebar ({0}B)", { "0": MOD })}
           onClick={onToggleSidebar}
         >
           <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -651,49 +653,48 @@ function TitleBarComponent({
   const { displayed, setTabNode, finishMotion } = useTabCloseMotion(tabs);
   const tabStripRef = useRef<HTMLDivElement | null>(null);
   const paneDropArmed = useRef(false);
-  const externalTabDrop = useMemo<ReorderExternalDrop<string> | undefined>(
-    () => {
-      // A sideways drag sags, so only a deliberate pull below the tab bar
-      // targets a pane. Once armed it stays armed until the pointer is back
-      // over the tabs.
-      const pulledBelowTabs = (event: PointerEvent) => {
-        const bottom = tabStripRef.current?.getBoundingClientRect().bottom ?? 0;
-        if (event.clientY <= bottom) paneDropArmed.current = false;
-        else if (event.clientY >= bottom + PANE_DROP_PULL)
-          paneDropArmed.current = true;
-        return paneDropArmed.current;
-      };
-      return onPlaceOnPane
-        ? {
-            onMove: (tabId, event) => {
-              if (tabId === activeId || !pulledBelowTabs(event)) {
-                setExternalPaneDrop(null);
-                return false;
-              }
-              const over = paneDropFromPoint(event.clientX, event.clientY);
-              setExternalPaneDrop({
-                fromId: tabId,
-                overId: over?.id ?? null,
-                edge: over?.edge ?? "left",
-              });
-              return over != null;
-            },
-            onDrop: (tabId, event) => {
-              if (tabId === activeId || !pulledBelowTabs(event)) return false;
-              const over = paneDropFromPoint(event.clientX, event.clientY);
-              if (!over) return false;
-              onPlaceOnPane(tabId, over.id, over.edge);
-              return true;
-            },
-            onEnd: () => {
-              paneDropArmed.current = false;
+  const externalTabDrop = useMemo<
+    ReorderExternalDrop<string> | undefined
+  >(() => {
+    // A sideways drag sags, so only a deliberate pull below the tab bar
+    // targets a pane. Once armed it stays armed until the pointer is back
+    // over the tabs.
+    const pulledBelowTabs = (event: PointerEvent) => {
+      const bottom = tabStripRef.current?.getBoundingClientRect().bottom ?? 0;
+      if (event.clientY <= bottom) paneDropArmed.current = false;
+      else if (event.clientY >= bottom + PANE_DROP_PULL)
+        paneDropArmed.current = true;
+      return paneDropArmed.current;
+    };
+    return onPlaceOnPane
+      ? {
+          onMove: (tabId, event) => {
+            if (tabId === activeId || !pulledBelowTabs(event)) {
               setExternalPaneDrop(null);
-            },
-          }
-        : undefined;
-    },
-    [activeId, onPlaceOnPane],
-  );
+              return false;
+            }
+            const over = paneDropFromPoint(event.clientX, event.clientY);
+            setExternalPaneDrop({
+              fromId: tabId,
+              overId: over?.id ?? null,
+              edge: over?.edge ?? "left",
+            });
+            return over != null;
+          },
+          onDrop: (tabId, event) => {
+            if (tabId === activeId || !pulledBelowTabs(event)) return false;
+            const over = paneDropFromPoint(event.clientX, event.clientY);
+            if (!over) return false;
+            onPlaceOnPane(tabId, over.id, over.edge);
+            return true;
+          },
+          onEnd: () => {
+            paneDropArmed.current = false;
+            setExternalPaneDrop(null);
+          },
+        }
+      : undefined;
+  }, [activeId, onPlaceOnPane]);
   const sortable = useAnimatedReorder(tabIds, onReorder, "x", externalTabDrop);
   const paneToTabDrop = useExternalTitleTabDrop();
   const lockOverscroll = useLockOverscroll<HTMLDivElement>();
@@ -795,7 +796,7 @@ function TitleBarComponent({
         {
           kind: "item",
           id: "close",
-          label: "Close Tab",
+          label: t("Close Tab"),
           shortcut: `${MOD}W`,
           disabled: !titleTabClosable(contextTab, tabs.length),
         },
@@ -803,19 +804,19 @@ function TitleBarComponent({
         {
           kind: "item",
           id: "others",
-          label: "Close Other Tabs",
+          label: t("Close Other Tabs"),
           disabled: contextCloseIds?.others.length === 0,
         },
         {
           kind: "item",
           id: "right",
-          label: "Close Tabs to the Right",
+          label: t("Close Tabs to the Right"),
           disabled: contextCloseIds?.right.length === 0,
         },
         {
           kind: "item",
           id: "left",
-          label: "Close Tabs to the Left",
+          label: t("Close Tabs to the Left"),
           disabled: contextCloseIds?.left.length === 0,
         },
         ...(contextTab.sessionCount > 0 && (onArchiveTab || onDeleteTab)
@@ -826,10 +827,12 @@ function TitleBarComponent({
                     {
                       kind: "item" as const,
                       id: "archive",
-                      label: "Archive",
+                      label: t("Archive"),
                       description:
                         contextTab.sessionCount > 1
-                          ? `All ${contextTab.sessionCount} conversations in this tab`
+                          ? t("All {0} conversations in this tab", {
+                              "0": contextTab.sessionCount,
+                            })
                           : undefined,
                     },
                   ]
@@ -839,10 +842,13 @@ function TitleBarComponent({
                     {
                       kind: "item" as const,
                       id: "delete",
-                      label: "Delete",
+                      label: t("Delete"),
                       description:
                         contextTab.sessionCount > 1
-                          ? `Permanently delete all ${contextTab.sessionCount} conversations in this tab`
+                          ? t(
+                              "Permanently delete all {0} conversations in this tab",
+                              { "0": contextTab.sessionCount },
+                            )
                           : undefined,
                       danger: true,
                     },
@@ -894,7 +900,10 @@ function TitleBarComponent({
       <div className="flex h-full shrink-0 items-stretch">
         {mono && onShowMonoDetails ? (
           <div className="flex items-center px-3">
-            <IconButton label="Show Mono details" onClick={onShowMonoDetails}>
+            <IconButton
+              label={t("Show Mono details")}
+              onClick={onShowMonoDetails}
+            >
               <PanelRightToggle className="size-3.5" strokeWidth={1.75} />
             </IconButton>
           </div>
@@ -902,17 +911,20 @@ function TitleBarComponent({
         {showTrailingActions ? (
           <div className="flex items-center gap-0.5 px-2">
             {projectless && railClosed && onOpenInbox ? (
-              <IconButton label="Inbox" onClick={onOpenInbox}>
+              <IconButton label={t("Inbox")} onClick={onOpenInbox}>
                 <Inbox className="size-3.5" strokeWidth={1.75} />
               </IconButton>
             ) : null}
             {projectless && railClosed && onOpenNotes ? (
-              <IconButton label="Notes" onClick={onOpenNotes}>
+              <IconButton label={t("Notes")} onClick={onOpenNotes}>
                 <StickyNote className="size-3.5" strokeWidth={1.75} />
               </IconButton>
             ) : null}
             {!projectRailOpen && !showCurrentProject && onOpenSettings ? (
-              <IconButton label={`Settings (${MOD},)`} onClick={onOpenSettings}>
+              <IconButton
+                label={t("Settings ({0},)", { "0": MOD })}
+                onClick={onOpenSettings}
+              >
                 <Settings className="size-3.5" strokeWidth={1.75} />
               </IconButton>
             ) : null}
@@ -953,7 +965,7 @@ function TitleBarComponent({
           <div className="w-[78px] shrink-0" />
           <div className="flex shrink-0 items-center px-1.5">
             <IconButton
-              label={`Toggle Sidebar (${MOD}B)`}
+              label={t("Toggle Sidebar ({0}B)", { "0": MOD })}
               onClick={onToggleSidebar}
             >
               <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -967,7 +979,10 @@ function TitleBarComponent({
             <div className="w-[70px] shrink-0" />
           ) : null}
           <IconButton
-            label={`Toggle Session Sidebar (${MOD}${SHIFT}B)`}
+            label={t("Toggle Session Sidebar ({0}{1}B)", {
+              "0": MOD,
+              "1": SHIFT,
+            })}
             onClick={onToggleSessionSidebar}
           >
             <DashboardSquare className="size-3.5" strokeWidth={1.75} />
@@ -983,7 +998,9 @@ function TitleBarComponent({
           onNewTerminal={onNewTerminal}
           buttonClassName="flex h-full min-w-0 max-w-64 shrink items-center gap-2 px-6 text-left text-sm font-medium leading-tight"
         >
-          <span className="min-w-0 truncate text-content/50">No project</span>
+          <span className="min-w-0 truncate text-content/50">
+            {t("No project")}
+          </span>
         </CwdPicker>
       ) : null}
 
@@ -1107,7 +1124,9 @@ function TitleBarComponent({
           y={tabMenu.y}
           width={244}
           items={contextMenuItems}
-          ariaLabel={`Tab actions for ${tabCopy(contextTab).headline}`}
+          ariaLabel={t("Tab actions for {0}", {
+            "0": tabCopy(contextTab).headline,
+          })}
           onPick={onPickTabMenu}
           onClose={() => setTabMenu(null)}
         />

@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { ComponentProps, ReactNode } from "react";
 import { workSummaryLine } from "../../sessions/model/transcriptActivity";
 import { MonoActivityTrail } from "../../sessions/ui/AgentTranscript";
@@ -25,7 +26,7 @@ export function MonoActivityPanel({
       color={agent.color}
       windowControls={windowControls}
     >
-      <MonoSidebarHeader title="Activity" onClose={onClose} />
+      <MonoSidebarHeader title={t("Activity")} onClose={onClose} />
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none">
         <div className="px-3 pb-3 pt-3">
           <p className="flex min-w-0 items-center gap-1.5 px-1 text-[11px] leading-4 text-content/45">
@@ -38,7 +39,7 @@ export function MonoActivityPanel({
               }`}
             />
             <span className="shrink-0 text-content/70">
-              {trail.live ? "Working" : "Finished"}
+              {trail.live ? t("Working") : t("Finished")}
             </span>
             {summary ? <span className="truncate">· {summary}</span> : null}
           </p>

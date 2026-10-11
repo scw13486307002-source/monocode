@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { HarnessId } from "./session";
 import { HARNESSES } from "./session";
 import { loadProjectProviderSettings } from "./projectProviders";
@@ -119,14 +120,14 @@ export const MODELS: AgentModel[] = [
     settings: [
       {
         id: "effort",
-        label: "Reasoning",
+        label: t("Reasoning"),
         kind: "select",
         value: "high",
         options: [
-          { value: "xhigh", label: "Extra High" },
-          { value: "high", label: "High" },
-          { value: "medium", label: "Medium" },
-          { value: "low", label: "Low" },
+          { value: "xhigh", label: t("Extra High") },
+          { value: "high", label: t("High") },
+          { value: "medium", label: t("Medium") },
+          { value: "low", label: t("Low") },
         ],
       },
     ],
@@ -140,13 +141,13 @@ export const MODELS: AgentModel[] = [
     settings: [
       {
         id: "effort",
-        label: "Reasoning",
+        label: t("Reasoning"),
         kind: "select",
         value: "high",
         options: [
-          { value: "high", label: "High" },
-          { value: "medium", label: "Medium" },
-          { value: "low", label: "Low" },
+          { value: "high", label: t("High") },
+          { value: "medium", label: t("Medium") },
+          { value: "low", label: t("Low") },
         ],
       },
     ],

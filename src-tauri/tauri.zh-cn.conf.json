@@ -1,0 +1,20 @@
+{
+  "productName": "MonoCode 中文版",
+  "identifier": "dev.daniel.monocode.zhcn",
+  "bundle": {
+    "createUpdaterArtifacts": false,
+    "macOS": {
+      "signingIdentity": "-"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "",
+      "endpoints": []
+    }
+  },
+  "build": {
+    "beforeBuildCommand": "npm run build:frontend:zh",
+    "beforeDevCommand": "npm run dev -- --mode zh-cn"
+  }
+}

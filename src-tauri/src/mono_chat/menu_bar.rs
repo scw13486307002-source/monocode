@@ -85,7 +85,7 @@ pub(super) fn decorate(tray: &tauri::tray::TrayIcon) -> tauri::Result<()> {
                     continue;
                 }
                 let title = item.title().to_string();
-                if let Some(action) = ACTIONS.iter().find(|a| a.title == title) {
+                if let Some(action) = ACTIONS.iter().find(|a| crate::locale::t(a.title) == title) {
                     let image = action_icon(action);
                     item.setImage(image.as_deref());
                     show_image(&item);
@@ -460,7 +460,7 @@ mod tests {
     fn every_menu_action_draws_a_portrait_sized_symbol() {
         objc2::exception::catch(|| {
             for action in &ACTIONS {
-                let title = action.title;
+                let title = crate::locale::t(action.title);
                 let image = action_icon(action).unwrap_or_else(|| panic!("{title}"));
                 assert_eq!(image.size(), NSSize::new(PORTRAIT_SIZE, PORTRAIT_SIZE));
                 assert_eq!(image.isTemplate(), !action.destructive);

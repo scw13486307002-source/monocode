@@ -1,8 +1,19 @@
+import { t } from "../../../shared/i18n/index";
 import { useMemo } from "react";
 import type { GithubPrDiff } from "../model/githubTasks";
-import { mergePrDiff, parsePrPatch, type PrDiffFile } from "../../source-control/model/prDiff";
-import { blocksFromLines, type UnifiedLine } from "../../source-control/model/unifiedDiff";
-import { UnifiedDiffView, type UnifiedDiffFileModel } from "../../source-control/ui/UnifiedDiffView";
+import {
+  mergePrDiff,
+  parsePrPatch,
+  type PrDiffFile,
+} from "../../source-control/model/prDiff";
+import {
+  blocksFromLines,
+  type UnifiedLine,
+} from "../../source-control/model/unifiedDiff";
+import {
+  UnifiedDiffView,
+  type UnifiedDiffFileModel,
+} from "../../source-control/ui/UnifiedDiffView";
 
 type Props = {
   diff: GithubPrDiff;
@@ -49,8 +60,8 @@ function toModel(
     emptyMessage:
       !file.binary && file.lines.length === 0
         ? truncated
-          ? "Patch unavailable because this change is too large"
-          : "No textual diff"
+          ? t("Patch unavailable because this change is too large")
+          : t("No textual diff")
         : undefined,
     additions: file.additions,
     deletions: file.deletions,

@@ -1,6 +1,18 @@
-import { promptBlocks, type PromptContentBlock } from "../../../../features/sessions/model/attachments";
-import type { AgentModel, ModelSetting, ModelSettingChoice } from "../../../../features/sessions/model/models";
-import type { Attachment, RuntimeMode, ToolPreview } from "../../../../features/sessions/model/session";
+import { t } from "../../../../shared/i18n/index";
+import {
+  promptBlocks,
+  type PromptContentBlock,
+} from "../../../../features/sessions/model/attachments";
+import type {
+  AgentModel,
+  ModelSetting,
+  ModelSettingChoice,
+} from "../../../../features/sessions/model/models";
+import type {
+  Attachment,
+  RuntimeMode,
+  ToolPreview,
+} from "../../../../features/sessions/model/session";
 import { normalizeTaskListStatus } from "../../../../features/sessions/model/taskList";
 import type { ApprovalDecision, HarnessEvent } from "../../core/types";
 import {
@@ -65,7 +77,8 @@ export function autoPermissionOption(
   if (
     runtimeMode !== "full-access" &&
     !(runtimeMode === "auto-accept-edits" && kind === "edit")
-  ) return null;
+  )
+    return null;
   return permissionOptionId("allow", optionIds, optionKinds);
 }
 
@@ -75,16 +88,27 @@ export function permissionOptionId(
   optionIds: string[],
   optionKinds: Record<string, string> = {},
 ): string | null {
-  const kinds = decision === "allow"
-    ? ["allow_once", "allow_always"]
-    : ["reject_once", "reject_always"];
+  const kinds =
+    decision === "allow"
+      ? ["allow_once", "allow_always"]
+      : ["reject_once", "reject_always"];
   for (const kind of kinds) {
     const id = optionIds.find((id) => optionKinds[id] === kind);
     if (id) return id;
   }
-  return pickOption(optionIds, decision === "allow"
-    ? ["allow-once", "allow_once", "allow-always", "allow_always", "allow"]
-    : ["reject-once", "reject_once", "reject-always", "reject_always", "reject", "deny"]);
+  return pickOption(
+    optionIds,
+    decision === "allow"
+      ? ["allow-once", "allow_once", "allow-always", "allow_always", "allow"]
+      : [
+          "reject-once",
+          "reject_once",
+          "reject-always",
+          "reject_always",
+          "reject",
+          "deny",
+        ],
+  );
 }
 
 export function permissionRequestFromAcp(
@@ -102,10 +126,7 @@ export function permissionRequestFromAcp(
   const command = stringField(subject ?? {}, "command");
   const kind = stringField(tool, "kind") ?? stringField(subject ?? {}, "kind");
   const preview = extractToolPreview(tool, tool);
-  const label =
-    toolLabel(tool) ??
-    command ??
-    stringField(rec ?? {}, "title");
+  const label = toolLabel(tool) ?? command ?? stringField(rec ?? {}, "title");
   const title =
     composeToolTitle({
       kind,
@@ -249,7 +270,9 @@ export function modelsFromSessionNew(raw: unknown): AgentModel[] {
   const rec = asRecord(raw);
   const options = Array.isArray(rec?.configOptions) ? rec.configOptions : [];
   const modelId = extractModelConfigId(readConfigOptions(options));
-  const modelOption = options.map(asRecord).find((item) => item?.id === modelId);
+  const modelOption = options
+    .map(asRecord)
+    .find((item) => item?.id === modelId);
   const choices = configChoices(modelOption?.options);
   const settings: ModelSetting[] = [];
   for (const item of options) {
@@ -260,28 +283,40 @@ export function modelsFromSessionNew(raw: unknown): AgentModel[] {
     const current = String(option.currentValue ?? "");
     settings.push({
       id: "effort",
-      label: "Effort",
+      label: t("Effort"),
       kind: "select",
       value: values.some((choice) => choice.value === current)
-        ? current : values[0].value,
+        ? current
+        : values[0].value,
       options: values,
     });
   }
   const legacy = asRecord(rec?.models);
   const available = Array.isArray(legacy?.availableModels)
-    ? legacy.availableModels : [];
-  const models = choices.length > 0 ? choices : available.flatMap((item) => {
-    const model = asRecord(item);
-    const value = stringField(model ?? {}, "modelId");
-    return value ? [{ value, label: String(model?.name ?? value) }] : [];
-  });
-  return [...new Map(models.map(({ value, label }) => [value, {
-    id: `antigravity:${value}`,
-    harness: "antigravity" as const,
-    name: label,
-    nativeId: value,
-    ...(settings.length > 0 ? { settings } : {}),
-  }])).values()];
+    ? legacy.availableModels
+    : [];
+  const models =
+    choices.length > 0
+      ? choices
+      : available.flatMap((item) => {
+          const model = asRecord(item);
+          const value = stringField(model ?? {}, "modelId");
+          return value ? [{ value, label: String(model?.name ?? value) }] : [];
+        });
+  return [
+    ...new Map(
+      models.map(({ value, label }) => [
+        value,
+        {
+          id: `antigravity:${value}`,
+          harness: "antigravity" as const,
+          name: label,
+          nativeId: value,
+          ...(settings.length > 0 ? { settings } : {}),
+        },
+      ]),
+    ).values(),
+  ];
 }
 
 function configChoices(raw: unknown): ModelSettingChoice[] {
@@ -290,7 +325,9 @@ function configChoices(raw: unknown): ModelSettingChoice[] {
     const rec = asRecord(item);
     if (Array.isArray(rec?.options)) return configChoices(rec.options);
     const value = stringField(rec ?? {}, "value");
-    return value ? [{ value, label: String(rec?.name ?? rec?.label ?? value) }] : [];
+    return value
+      ? [{ value, label: String(rec?.name ?? rec?.label ?? value) }]
+      : [];
   });
 }
 
@@ -317,9 +354,7 @@ export function readConfigOptions(raw: unknown): SessionConfigOption[] {
   });
 }
 
-export function extractModelConfigId(
-  options: SessionConfigOption[],
-): string {
+export function extractModelConfigId(options: SessionConfigOption[]): string {
   // A model selector is never a boolean option — a boolean typed "model" would
   // coerce any model id to false in set_config_option.
   const isSelectable = (option: SessionConfigOption) =>
@@ -370,7 +405,6 @@ export function sessionIdFromResult(result: unknown): string | undefined {
   return typeof id === "string" && id.trim() ? id.trim() : undefined;
 }
 
-
 function usageFromUpdate(update: Record<string, unknown>): HarnessEvent[] {
   const usage =
     asRecord(update.usage) ??
@@ -382,7 +416,12 @@ function usageFromUpdate(update: Record<string, unknown>): HarnessEvent[] {
     numberField(usage, "used") ??
     numberField(usage, "usedTokens") ??
     numberField(usage, "used_tokens") ??
-    sumNumbers(usage, ["inputTokens", "outputTokens", "input_tokens", "output_tokens"]);
+    sumNumbers(usage, [
+      "inputTokens",
+      "outputTokens",
+      "input_tokens",
+      "output_tokens",
+    ]);
   const window =
     numberField(usage, "window") ??
     numberField(usage, "size") ??
@@ -525,9 +564,7 @@ function looksLikeCallId(value: string): boolean {
   const text = value.trim();
   return (
     /^(call[-_]?|tool[-_])[a-z0-9_-]+$/i.test(text) ||
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      text,
-    )
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(text)
   );
 }
 
@@ -535,7 +572,8 @@ function textFromContent(content: unknown, separator = ""): string {
   if (typeof content === "string") return content;
   const rec = asRecord(content);
   if (rec && typeof rec.text === "string") return rec.text;
-  if (rec && rec.content != null) return textFromContent(rec.content, separator);
+  if (rec && rec.content != null)
+    return textFromContent(rec.content, separator);
   if (Array.isArray(content)) {
     return content
       .map((item) => textFromContent(item, separator))
@@ -565,7 +603,9 @@ function numberField(
   key: string,
 ): number | undefined {
   const value = rec[key];
-  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+  return typeof value === "number" && Number.isFinite(value)
+    ? value
+    : undefined;
 }
 
 function sumNumbers(

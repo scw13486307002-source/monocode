@@ -1,3 +1,4 @@
+import { initLocale } from "../../shared/i18n";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { getCurrentWindow } from "@tauri-apps/api/window";
@@ -36,6 +37,8 @@ function applyAppearance() {
 }
 
 applyAppearance();
+
+initLocale();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

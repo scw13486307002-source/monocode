@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useRef, useState } from "react";
 import {
   Check,
@@ -76,10 +77,10 @@ export function MessageQueue({
             <Pause className="size-3.5" />
             <span className="min-w-0 flex-1 truncate">
               {failed
-                ? "A message couldn't be sent"
+                ? t("A message couldn't be sent")
                 : variant === "messages"
-                  ? "Messages paused"
-                  : "Queue paused because you interrupted"}
+                  ? t("Messages paused")
+                  : t("Queue paused because you interrupted")}
             </span>
             <button
               type="button"
@@ -87,13 +88,13 @@ export function MessageQueue({
               className="flex h-6 shrink-0 items-center gap-1.5 rounded-md px-1.5 hover:bg-content/10 hover:text-content"
             >
               <Play className="size-3.5" />
-              {failed ? "Retry" : "Resume"}
+              {failed ? t("Retry") : t("Resume")}
             </button>
           </div>
         ) : null}
         {variant === "messages" && !paused ? (
           <div role="status" className="py-1 text-[11px] text-content/50">
-            {sendingId ? "Sending…" : "Waiting to send"}
+            {sendingId ? t("Sending…") : t("Waiting to send")}
           </div>
         ) : null}
         {messages.map((message, index) => {
@@ -120,7 +121,7 @@ export function MessageQueue({
                 <>
                   <textarea
                     autoFocus
-                    aria-label="Edit queued message"
+                    aria-label={t("Edit queued message")}
                     value={editDraft}
                     rows={1}
                     onChange={(event) => setEditDraft(event.target.value)}
@@ -138,8 +139,8 @@ export function MessageQueue({
                   />
                   <button
                     type="button"
-                    title="Save queued message"
-                    aria-label="Save queued message"
+                    title={t("Save queued message")}
+                    aria-label={t("Save queued message")}
                     disabled={
                       !editDraft.trim() && message.attachments.length === 0
                     }
@@ -150,8 +151,8 @@ export function MessageQueue({
                   </button>
                   <button
                     type="button"
-                    title="Cancel queued message edit"
-                    aria-label="Cancel queued message edit"
+                    title={t("Cancel queued message edit")}
+                    aria-label={t("Cancel queued message edit")}
                     onClick={cancelEdit}
                     className="grid size-6 shrink-0 place-items-center rounded-md hover:bg-content/10 hover:text-content"
                   >
@@ -178,13 +179,13 @@ export function MessageQueue({
                       className="flex h-6 shrink-0 items-center gap-1.5 rounded-md px-1.5 hover:bg-content/10 hover:text-content"
                     >
                       <CornerDownRight className="size-3.5" />
-                      Steer
+                      {t("Steer")}
                     </button>
                   ) : null}
                   <button
                     type="button"
-                    title="Edit queued message"
-                    aria-label="Edit queued message"
+                    title={t("Edit queued message")}
+                    aria-label={t("Edit queued message")}
                     disabled={sending || !!message.monoSessionCompletion}
                     onClick={() => startEdit(message)}
                     className="grid size-6 shrink-0 place-items-center rounded-md hover:bg-content/10 hover:text-content"
@@ -193,8 +194,8 @@ export function MessageQueue({
                   </button>
                   <button
                     type="button"
-                    title="Remove queued message"
-                    aria-label="Remove queued message"
+                    title={t("Remove queued message")}
+                    aria-label={t("Remove queued message")}
                     disabled={sending}
                     onClick={() => onDelete?.(message.id)}
                     className="grid size-6 shrink-0 place-items-center rounded-md hover:bg-content/10 hover:text-content"

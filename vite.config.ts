@@ -10,6 +10,9 @@ export default defineConfig(async ({ mode }) => {
 
   return {
     plugins: [react(), tailwindcss()],
+    define: {
+      "import.meta.env.VITE_MONOCODE_ZH_FORK": JSON.stringify(mode === "zh-cn"),
+    },
     clearScreen: false,
     build: {
       rollupOptions: {

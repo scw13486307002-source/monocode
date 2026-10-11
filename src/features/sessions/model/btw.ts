@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { applyHarnessEvent } from "../../../integrations/harness/core/apply";
 import type { HarnessEvent } from "../../../integrations/harness/core/types";
 import { displayPath } from "../../../shared/lib/paths";
@@ -175,7 +176,7 @@ export const BTW_COMMAND: BuiltinSkill = {
   kind: "builtin",
   name: "btw",
   invocation: "btw",
-  description: "Ask a read-only side question about the current turn.",
+  description: t("Ask a read-only side question about the current turn."),
   scope: "builtin",
   source: "monocode",
 };
@@ -320,12 +321,12 @@ export function serializeBtwBlock(block: Block, cwd?: string): string {
   }
   const label =
     block.role === "user"
-      ? "User"
+      ? t("User")
       : block.role === "assistant"
         ? "Assistant"
         : block.role === "tasks"
-          ? "Tasks"
-          : "Plan";
+          ? t("Tasks")
+          : t("Plan");
   return [`${label}: ${body}`, ...attachments].filter(Boolean).join("\n");
 }
 
@@ -359,7 +360,7 @@ export function serializeBtwSnapshot(
 }
 
 function messageLabel(role: "user" | "assistant"): string {
-  return role === "user" ? "User" : "Assistant";
+  return role === "user" ? t("User") : "Assistant";
 }
 
 export function buildBtwPrompt(input: {

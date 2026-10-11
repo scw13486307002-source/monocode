@@ -1,3 +1,4 @@
+import { t } from "../../../../shared/i18n/index";
 import { homeDir } from "../../../../platform/tauri/fs";
 import {
   setHarnessModels,
@@ -34,78 +35,78 @@ import {
 
 const EFFORT_LOW_TO_ULTRATHINK: ModelSetting = {
   id: "effort",
-  label: "Reasoning",
+  label: t("Reasoning"),
   kind: "select",
   value: "high",
   options: [
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
-    { value: "max", label: "Max" },
-    { value: "ultrathink", label: "Ultrathink" },
+    { value: "low", label: t("Low") },
+    { value: "medium", label: t("Medium") },
+    { value: "high", label: t("High") },
+    { value: "max", label: t("Max") },
+    { value: "ultrathink", label: t("Ultrathink") },
   ],
 };
 
 const EFFORT_WITH_XHIGH: ModelSetting = {
   id: "effort",
-  label: "Reasoning",
+  label: t("Reasoning"),
   kind: "select",
   value: "high",
   options: [
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
-    { value: "xhigh", label: "Extra High" },
-    { value: "max", label: "Max" },
+    { value: "low", label: t("Low") },
+    { value: "medium", label: t("Medium") },
+    { value: "high", label: t("High") },
+    { value: "xhigh", label: t("Extra High") },
+    { value: "max", label: t("Max") },
     {
       value: "ultracode",
-      label: "Ultracode",
+      label: t("Ultracode"),
     },
-    { value: "ultrathink", label: "Ultrathink" },
+    { value: "ultrathink", label: t("Ultrathink") },
   ],
 };
 
 const EFFORT_OPUS_47: ModelSetting = {
   id: "effort",
-  label: "Reasoning",
+  label: t("Reasoning"),
   kind: "select",
   value: "xhigh",
   options: [
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
-    { value: "xhigh", label: "Extra High" },
-    { value: "max", label: "Max" },
-    { value: "ultrathink", label: "Ultrathink" },
+    { value: "low", label: t("Low") },
+    { value: "medium", label: t("Medium") },
+    { value: "high", label: t("High") },
+    { value: "xhigh", label: t("Extra High") },
+    { value: "max", label: t("Max") },
+    { value: "ultrathink", label: t("Ultrathink") },
   ],
 };
 
 const FAST_MODE: ModelSetting = {
   id: "fast",
-  label: "Fast",
+  label: t("Fast"),
   kind: "toggle",
   value: "false",
   options: [
-    { value: "true", label: "On" },
-    { value: "false", label: "Off" },
+    { value: "true", label: t("On") },
+    { value: "false", label: t("Off") },
   ],
 };
 
 const THINKING: ModelSetting = {
   id: "thinking",
-  label: "Thinking",
+  label: t("Thinking"),
   kind: "toggle",
   value: "false",
   options: [
-    { value: "true", label: "On" },
-    { value: "false", label: "Off" },
+    { value: "true", label: t("On") },
+    { value: "false", label: t("Off") },
   ],
 };
 
 function contextWindow(defaultValue: "200k" | "1m"): ModelSetting {
   return {
     id: "context",
-    label: "Context",
+    label: t("Context"),
     kind: "select",
     value: defaultValue,
     options: [
@@ -181,14 +182,14 @@ export const CLAUDE_MODEL_CATALOG: AgentModel[] = [
     settings: [
       {
         id: "effort",
-        label: "Reasoning",
+        label: t("Reasoning"),
         kind: "select",
         value: "high",
         options: [
-          { value: "low", label: "Low" },
-          { value: "medium", label: "Medium" },
-          { value: "high", label: "High" },
-          { value: "max", label: "Max" },
+          { value: "low", label: t("Low") },
+          { value: "medium", label: t("Medium") },
+          { value: "high", label: t("High") },
+          { value: "max", label: t("Max") },
         ],
       },
       FAST_MODE,
@@ -423,15 +424,15 @@ function effortSetting(levels: string[]): ModelSetting {
     known.length > 0 ? known : ["low", "medium", "high", "max"]
   ).map((value) => ({ value, label: EFFORT_LABELS[value] ?? value }));
   if (options.some((option) => option.value === "xhigh")) {
-    options.push({ value: "ultracode", label: "Ultracode" });
+    options.push({ value: "ultracode", label: t("Ultracode") });
   }
-  options.push({ value: "ultrathink", label: "Ultrathink" });
+  options.push({ value: "ultrathink", label: t("Ultrathink") });
   const defaultValue = options.some((option) => option.value === "high")
     ? "high"
     : (options[0]?.value ?? "high");
   return {
     id: "effort",
-    label: "Reasoning",
+    label: t("Reasoning"),
     kind: "select",
     value: defaultValue,
     options,

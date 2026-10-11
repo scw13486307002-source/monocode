@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { CSSProperties, ReactNode } from "react";
 import { IconButton } from "../../../app/shell/TitleBar";
 import { useDragResize } from "../../../shared/hooks/useDragResize";
@@ -64,7 +65,7 @@ export function MonoSidebar({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label={`Resize Mono ${kind}`}
+        aria-label={t("Resize Mono {0}", { "0": kind })}
         className={`absolute inset-y-0 -left-1 z-20 w-2 cursor-col-resize touch-none ${resize.dragging ? "bg-content/15" : "hover:bg-content/10"}`}
         onPointerDown={resize.onPointerDown}
         onDoubleClick={resize.onDoubleClick}
@@ -101,7 +102,7 @@ export function MonoSidebarHeader({
       <div className="flex shrink-0 items-center gap-0.5 px-3">
         {actions}
         <IconButton
-          label={`Hide ${title.toLowerCase()}`}
+          label={t("Hide {0}", { "0": title.toLowerCase() })}
           active
           onClick={onClose}
         >

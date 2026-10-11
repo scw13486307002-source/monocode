@@ -200,17 +200,17 @@ fn build(
     let open_settings = menu_item(
         app,
         "open_settings",
-        "Settings…",
+        crate::locale::t("Settings…"),
         "CmdOrCtrl+,",
         "App: Settings",
         overrides,
     )?;
     let check_for_updates =
-        MenuItemBuilder::with_id("check_for_updates", "Check for Updates…").build(app)?;
+        MenuItemBuilder::with_id("check_for_updates", crate::locale::t("Check for Updates…")).build(app)?;
     let new_window = menu_item(
         app,
         "new_window",
-        "New Window",
+        crate::locale::t("New Window"),
         "CmdOrCtrl+Shift+N",
         "App: New Window",
         overrides,
@@ -218,7 +218,7 @@ fn build(
     let open_project = menu_item(
         app,
         "open_project",
-        "Open Project…",
+        crate::locale::t("Open Project…"),
         "CmdOrCtrl+O",
         "App: Open Project",
         overrides,
@@ -226,7 +226,7 @@ fn build(
     let go_to_file = menu_item(
         app,
         "go_to_file",
-        "Go to File…",
+        crate::locale::t("Go to File…"),
         "CmdOrCtrl+P",
         "App: Go to File",
         overrides,
@@ -234,7 +234,7 @@ fn build(
     let command_palette = menu_item(
         app,
         "open_command_palette",
-        "Command Palette…",
+        crate::locale::t("Command Palette…"),
         "CmdOrCtrl+Shift+P",
         "App: Command Palette",
         overrides,
@@ -242,17 +242,17 @@ fn build(
     let open_search = menu_item(
         app,
         "open_search",
-        "Search…",
+        crate::locale::t("Search…"),
         "CmdOrCtrl+K",
         "App: Search",
         overrides,
     )?;
-    let open_inbox = MenuItemBuilder::with_id("open_inbox", "Inbox").build(app)?;
-    let open_notes = MenuItemBuilder::with_id("open_notes", "Notes").build(app)?;
+    let open_inbox = MenuItemBuilder::with_id("open_inbox", crate::locale::t("Inbox")).build(app)?;
+    let open_notes = MenuItemBuilder::with_id("open_notes", crate::locale::t("Notes")).build(app)?;
     let new_tab = menu_item(
         app,
         "new_tab",
-        "New Tab",
+        crate::locale::t("New Tab"),
         "CmdOrCtrl+T",
         "Tab: New",
         overrides,
@@ -260,7 +260,7 @@ fn build(
     let new_terminal = menu_item(
         app,
         "new_terminal",
-        "New Terminal",
+        crate::locale::t("New Terminal"),
         "CmdOrCtrl+`",
         "Terminal: New",
         overrides,
@@ -268,7 +268,7 @@ fn build(
     let new_terminal_tab = menu_item(
         app,
         "new_terminal_tab",
-        "New Terminal Tab",
+        crate::locale::t("New Terminal Tab"),
         "CmdOrCtrl+Shift+`",
         "Terminal: New Tab",
         overrides,
@@ -276,7 +276,7 @@ fn build(
     let toggle_terminal = menu_item(
         app,
         "toggle_terminal",
-        "Toggle Terminal",
+        crate::locale::t("Toggle Terminal"),
         "CmdOrCtrl+J",
         "Terminal: Toggle Dock",
         overrides,
@@ -284,7 +284,7 @@ fn build(
     let split_right = menu_item(
         app,
         "split_right",
-        "Split Pane Right",
+        crate::locale::t("Split Pane Right"),
         "CmdOrCtrl+D",
         "Pane: Split Right",
         overrides,
@@ -292,7 +292,7 @@ fn build(
     let split_down = menu_item(
         app,
         "split_down",
-        "Split Pane Down",
+        crate::locale::t("Split Pane Down"),
         "CmdOrCtrl+Shift+D",
         "Pane: Split Down",
         overrides,
@@ -300,7 +300,7 @@ fn build(
     let close_tab = menu_item(
         app,
         "close_tab",
-        "Close Pane",
+        crate::locale::t("Close Pane"),
         "CmdOrCtrl+W",
         "Pane: Close",
         overrides,
@@ -308,7 +308,7 @@ fn build(
     let close_other_tabs = menu_item(
         app,
         "close_other_tabs",
-        "Close Other Tabs",
+        crate::locale::t("Close Other Tabs"),
         "CmdOrCtrl+Alt+T",
         "Tab: Close Others",
         overrides,
@@ -316,7 +316,7 @@ fn build(
     let close_all_tabs = menu_item(
         app,
         "close_all_tabs",
-        "Close All Tabs",
+        crate::locale::t("Close All Tabs"),
         "CmdOrCtrl+Shift+W",
         "Tab: Close All",
         overrides,
@@ -324,7 +324,7 @@ fn build(
     let next_tab = menu_item(
         app,
         "next_tab",
-        "Next Tab",
+        crate::locale::t("Next Tab"),
         "CmdOrCtrl+Shift+]",
         "Tab: Next",
         overrides,
@@ -332,7 +332,7 @@ fn build(
     let prev_tab = menu_item(
         app,
         "prev_tab",
-        "Previous Tab",
+        crate::locale::t("Previous Tab"),
         "CmdOrCtrl+Shift+[",
         "Tab: Previous",
         overrides,
@@ -340,7 +340,7 @@ fn build(
     let back_tab = menu_item(
         app,
         "back_tab",
-        "Go Back",
+        crate::locale::t("Go Back"),
         "CmdOrCtrl+[",
         "Tab: Back",
         overrides,
@@ -348,7 +348,7 @@ fn build(
     let forward_tab = menu_item(
         app,
         "forward_tab",
-        "Go Forward",
+        crate::locale::t("Go Forward"),
         "CmdOrCtrl+]",
         "Tab: Forward",
         overrides,
@@ -357,7 +357,7 @@ fn build(
     let focus_left = menu_item(
         app,
         "focus_left",
-        "Focus Pane Left",
+        crate::locale::t("Focus Pane Left"),
         "CmdOrCtrl+Alt+Left",
         "Pane: Focus Left",
         overrides,
@@ -365,7 +365,7 @@ fn build(
     let focus_right = menu_item(
         app,
         "focus_right",
-        "Focus Pane Right",
+        crate::locale::t("Focus Pane Right"),
         "CmdOrCtrl+Alt+Right",
         "Pane: Focus Right",
         overrides,
@@ -373,7 +373,7 @@ fn build(
     let focus_up = menu_item(
         app,
         "focus_up",
-        "Focus Pane Up",
+        crate::locale::t("Focus Pane Up"),
         "CmdOrCtrl+Alt+Up",
         "Pane: Focus Up",
         overrides,
@@ -381,7 +381,7 @@ fn build(
     let focus_down = menu_item(
         app,
         "focus_down",
-        "Focus Pane Down",
+        crate::locale::t("Focus Pane Down"),
         "CmdOrCtrl+Alt+Down",
         "Pane: Focus Down",
         overrides,
@@ -390,7 +390,7 @@ fn build(
     let toggle_sidebar = menu_item(
         app,
         "toggle_sidebar",
-        "Toggle Sidebar",
+        crate::locale::t("Toggle Sidebar"),
         "CmdOrCtrl+B",
         "App: Toggle Sidebar",
         overrides,
@@ -398,7 +398,7 @@ fn build(
     let toggle_session_sidebar = menu_item(
         app,
         "toggle_session_sidebar",
-        "Toggle Session Sidebar",
+        crate::locale::t("Toggle Session Sidebar"),
         "CmdOrCtrl+Shift+B",
         "App: Toggle Session Sidebar",
         overrides,
@@ -406,23 +406,23 @@ fn build(
     let open_model_picker = menu_item(
         app,
         "open_model_picker",
-        "Switch Model…",
+        crate::locale::t("Switch Model…"),
         "CmdOrCtrl+.",
         "App: Switch Model",
         overrides,
     )?;
     let sidebar_opacity =
-        MenuItemBuilder::with_id("sidebar_opacity", "Sidebar Appearance…").build(app)?;
+        MenuItemBuilder::with_id("sidebar_opacity", crate::locale::t("Sidebar Appearance…")).build(app)?;
     // No accelerators here on purpose: the webview key handler owns
     // CmdOrCtrl + - 0, and a menu accelerator would fire the same command
     // a second time on top of it.
-    let zoom_in = MenuItemBuilder::with_id("zoom_in", "Zoom In").build(app)?;
-    let zoom_out = MenuItemBuilder::with_id("zoom_out", "Zoom Out").build(app)?;
-    let zoom_reset = MenuItemBuilder::with_id("zoom_reset", "Reset Zoom").build(app)?;
+    let zoom_in = MenuItemBuilder::with_id("zoom_in", crate::locale::t("Zoom In")).build(app)?;
+    let zoom_out = MenuItemBuilder::with_id("zoom_out", crate::locale::t("Zoom Out")).build(app)?;
+    let zoom_reset = MenuItemBuilder::with_id("zoom_reset", crate::locale::t("Reset Zoom")).build(app)?;
     let reload = menu_item(
         app,
         "reload",
-        "Reload",
+        crate::locale::t("Reload"),
         "CmdOrCtrl+Shift+R",
         "View: Reload",
         overrides,
@@ -430,7 +430,7 @@ fn build(
     let find = menu_item(
         app,
         "find",
-        "Find",
+        crate::locale::t("Find"),
         "CmdOrCtrl+F",
         "Editor: Find",
         overrides,
@@ -439,7 +439,7 @@ fn build(
     let find_in_project = menu_item(
         app,
         "find_in_project",
-        "Find in Files…",
+        crate::locale::t("Find in Files…"),
         "CmdOrCtrl+Shift+F",
         "App: Find in Files",
         overrides,
@@ -447,13 +447,13 @@ fn build(
     let autosave = CheckMenuItem::with_id(
         app,
         "toggle_autosave",
-        "Autosave",
+        crate::locale::t("Autosave"),
         true,
         AUTOSAVE_ENABLED.load(Ordering::Relaxed),
         None::<&str>,
     )?;
 
-    let file = SubmenuBuilder::with_id(app, "file", "File")
+    let file = SubmenuBuilder::with_id(app, "file", crate::locale::t("File"))
         .item(&new_window)
         .item(&open_project)
         .item(&open_search)
@@ -478,7 +478,7 @@ fn build(
         .item(&forward_tab)
         .build()?;
 
-    let view = SubmenuBuilder::new(app, "View")
+    let view = SubmenuBuilder::new(app, crate::locale::t("View"))
         .item(&toggle_sidebar)
         .item(&toggle_session_sidebar)
         .item(&open_inbox)
@@ -499,7 +499,7 @@ fn build(
         .item(&sidebar_opacity)
         .build()?;
 
-    let edit = SubmenuBuilder::new(app, "Edit")
+    let edit = SubmenuBuilder::new(app, crate::locale::t("Edit"))
         .undo()
         .redo()
         .separator()
@@ -513,7 +513,7 @@ fn build(
 
     #[cfg(target_os = "macos")]
     {
-        let quit = MenuItemBuilder::with_id("quit", "Quit MonoCode")
+        let quit = MenuItemBuilder::with_id("quit", crate::locale::t("Quit MonoCode"))
             .accelerator("CmdOrCtrl+Q")
             .build(app)?;
         let app_menu = SubmenuBuilder::new(app, "MonoCode")
@@ -530,16 +530,16 @@ fn build(
             .build()?;
         // Tauri registers this submenu via NSApp.setWindowsMenu:, which throws
         // on macOS 12 when the menu is empty and aborts the app at launch.
-        let window_menu = SubmenuBuilder::with_id(app, tauri::menu::WINDOW_SUBMENU_ID, "Window")
+        let window_menu = SubmenuBuilder::with_id(app, tauri::menu::WINDOW_SUBMENU_ID, crate::locale::t("Window"))
             .minimize()
             .maximize()
             .build()?;
-        let website = MenuItemBuilder::with_id("help_website", "MonoCode Website").build(app)?;
-        let github = MenuItemBuilder::with_id("help_github", "View on GitHub").build(app)?;
-        let report_bug = MenuItemBuilder::with_id("help_report_bug", "Report a Bug…").build(app)?;
+        let website = MenuItemBuilder::with_id("help_website", crate::locale::t("MonoCode Website")).build(app)?;
+        let github = MenuItemBuilder::with_id("help_github", crate::locale::t("View on GitHub")).build(app)?;
+        let report_bug = MenuItemBuilder::with_id("help_report_bug", crate::locale::t("Report a Bug…")).build(app)?;
         let request_feature =
-            MenuItemBuilder::with_id("help_request_feature", "Request a Feature…").build(app)?;
-        let help = SubmenuBuilder::with_id(app, tauri::menu::HELP_SUBMENU_ID, "Help")
+            MenuItemBuilder::with_id("help_request_feature", crate::locale::t("Request a Feature…")).build(app)?;
+        let help = SubmenuBuilder::with_id(app, tauri::menu::HELP_SUBMENU_ID, crate::locale::t("Help"))
             .item(&website)
             .item(&github)
             .separator()

@@ -274,13 +274,13 @@ fn menu(
     monos: &[MonoEntry],
     mascots: &[menu_bar::MenuMascot],
 ) -> tauri::Result<Menu<tauri::Wry>> {
-    let header = MenuItemBuilder::with_id("mono-chat-header", "Monos")
+    let header = MenuItemBuilder::with_id("mono-chat-header", crate::locale::t("Monos"))
         .enabled(false)
         .build(app)?;
     let mut builder = MenuBuilder::new(app).item(&header).separator();
     if monos.is_empty() {
         let empty =
-            MenuItemBuilder::with_id("mono-chat-empty", "Create a Mono in MonoCode to chat here")
+            MenuItemBuilder::with_id("mono-chat-empty", crate::locale::t("Create a Mono in MonoCode to chat here"))
                 .enabled(false)
                 .build(app)?;
         builder = builder.item(&empty);
@@ -299,7 +299,7 @@ fn menu(
     for action in &menu_bar::ACTIONS {
         builder = builder
             .separator()
-            .item(&MenuItemBuilder::with_id(action.id, action.title).build(app)?);
+            .item(&MenuItemBuilder::with_id(action.id, crate::locale::t(action.title)).build(app)?);
     }
     builder.build()
 }

@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import { loadRateLimits } from "./rateLimitsCache";
@@ -40,7 +41,7 @@ export function identityOrganizationTag(
 ): string | null {
   const name = identity?.organization?.trim();
   if (!name) return null;
-  return /['’]s Organization$/.test(name) ? "Personal" : name;
+  return /['’]s Organization$/.test(name) ? t("Personal") : name;
 }
 
 export function identityKey(account: ProviderAccount): string {

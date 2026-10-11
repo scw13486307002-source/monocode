@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   useCallback,
   useEffect,
@@ -165,15 +166,15 @@ export function QuickGitPopupPicker({
       <div className="flex items-center gap-3 px-3 py-3 text-xs">
         <p role="status" className="flex-1 text-content/60">
           {settled
-            ? "Couldn’t load branches for this project."
-            : "Loading branches…"}
+            ? t("Couldn’t load branches for this project.")
+            : t("Loading branches…")}
         </p>
         <button
           type="button"
           className="rounded-md px-2 py-1 text-content/70 hover:bg-content/10"
           onClick={() => finish()}
         >
-          Close
+          {t("Close")}
         </button>
       </div>
     );

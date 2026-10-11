@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Plus, RefreshCw, X } from "../../../shared/ui/icons";
 
@@ -406,7 +407,7 @@ export function useBtwConversation({
 }
 
 function compactQuestion(text: string | undefined): string {
-  const compact = text?.replace(/\s+/g, " ").trim() || "New question";
+  const compact = text?.replace(/\s+/g, " ").trim() || t("New question");
   return compact.length > 48 ? `${compact.slice(0, 45)}…` : compact;
 }
 
@@ -695,7 +696,7 @@ export function BtwSheet({
       <section
         ref={sheetRef}
         role="dialog"
-        aria-label="By-the-way conversations"
+        aria-label={t("By-the-way conversations")}
         className="btw-sheet absolute inset-x-0 bottom-0 isolate mx-auto w-full max-w-4xl"
       >
         <GlassBackdrop
@@ -709,7 +710,7 @@ export function BtwSheet({
           <div className="btw-sheet-body flex h-11 shrink-0 items-center gap-1 border-b border-content/8 pr-2 pl-2.5">
             <div
               role="tablist"
-              aria-label="Side questions"
+              aria-label={t("Side questions")}
               className="scrollbar-none flex min-w-0 flex-1 items-center gap-1 overflow-x-auto"
             >
               {tabs.map((tab) => {
@@ -744,10 +745,10 @@ export function BtwSheet({
                       type="button"
                       aria-label={
                         tab.thread
-                          ? `Delete “${label}”`
-                          : "Discard new question"
+                          ? t("Delete “{0}”", { "0": label })
+                          : t("Discard new question")
                       }
-                      title={tab.thread ? "Delete" : "Discard"}
+                      title={tab.thread ? t("Delete") : t("Discard")}
                       onClick={() => btw.closeTab(tab)}
                       className={`mr-1 grid size-5 shrink-0 place-items-center rounded text-content/40 transition-opacity hover:bg-content/10 hover:text-content focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-accent ${
                         selected ? "" : "opacity-0 group-hover:opacity-100"
@@ -762,8 +763,8 @@ export function BtwSheet({
             {btw.canStartDraft ? (
               <button
                 type="button"
-                aria-label="New side question"
-                title="New side question"
+                aria-label={t("New side question")}
+                title={t("New side question")}
                 onClick={btw.startDraft}
                 className="grid size-7 shrink-0 place-items-center rounded-md text-content/45 transition-colors hover:bg-content/8 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent"
               >
@@ -772,8 +773,8 @@ export function BtwSheet({
             ) : null}
             <button
               type="button"
-              aria-label="Back to the conversation"
-              title="Back to the conversation (Esc)"
+              aria-label={t("Back to the conversation")}
+              title={t("Back to the conversation (Esc)")}
               onClick={btw.close}
               className="grid size-7 shrink-0 place-items-center rounded-md text-content/45 transition-colors hover:bg-content/8 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent"
             >
@@ -801,7 +802,7 @@ export function BtwSheet({
               <div className="btw-error" role="alert">
                 <div className="min-w-0">
                   <div className="text-[10px] font-medium uppercase tracking-[0.08em] text-red-200/70">
-                    Couldn’t finish
+                    {t("Couldn’t finish")}
                   </div>
                   <div className="mt-1 text-[12px] leading-4.5 text-red-100/75">
                     {persisted.error ||
@@ -814,7 +815,7 @@ export function BtwSheet({
                   className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md px-2 text-[11px] font-medium text-red-100/80 transition-colors hover:bg-red-200/10 hover:text-red-50 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-red-200/60"
                 >
                   <RefreshCw className="size-3" strokeWidth={1.75} />
-                  Retry
+                  {t("Retry")}
                 </button>
               </div>
             </div>
@@ -839,7 +840,7 @@ export function BtwSheet({
                 hideProjectPicker
                 hideBranchPicker
                 hideTopBar
-                placeholder="Ask a side question…"
+                placeholder={t("Ask a side question…")}
                 inputAriaLabel="By-the-way question"
                 allowedModelHarnesses={[harness]}
                 initialDraft={btw.seed.text}

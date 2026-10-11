@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   useEffect,
   useMemo,
@@ -159,7 +160,7 @@ export function TranscriptFind({
     >
       <div
         role="search"
-        aria-label="Find in conversation"
+        aria-label={t("Find in conversation")}
         className="pointer-events-auto flex w-[min(360px,calc(100cqw-24px))] items-center gap-1 rounded-lg border border-content/10 bg-content/5 p-1 shadow-lg backdrop-blur-xl"
       >
         <Search
@@ -170,8 +171,8 @@ export function TranscriptFind({
           ref={input}
           type="text"
           value={query}
-          aria-label="Find in conversation"
-          placeholder="Find in conversation"
+          aria-label={t("Find in conversation")}
+          placeholder={t("Find in conversation")}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
@@ -193,30 +194,30 @@ export function TranscriptFind({
           className="min-w-[10ch] shrink-0 whitespace-nowrap text-right font-mono text-[11px] tabular-nums text-content/50"
         >
           {searching
-            ? "Searching…"
+            ? t("Searching…")
             : searchError
-              ? "Search failed"
+              ? t("Search failed")
               : query.trim()
                 ? matches.length
                   ? `${Math.min(active, matches.length - 1) + 1} of ${matches.length}`
-                  : "No results"
+                  : t("No results")
                 : ""}
         </span>
         <FindButton
-          label="Previous match"
+          label={t("Previous match")}
           onClick={() => step(-1)}
           disabled={!matches.length}
         >
           <ChevronUp className="size-3.5" strokeWidth={1.75} />
         </FindButton>
         <FindButton
-          label="Next match"
+          label={t("Next match")}
           onClick={() => step(1)}
           disabled={!matches.length}
         >
           <ChevronDown className="size-3.5" strokeWidth={1.75} />
         </FindButton>
-        <FindButton label="Close find" onClick={closeFind}>
+        <FindButton label={t("Close find")} onClick={closeFind}>
           <X className="size-3.5" strokeWidth={1.75} />
         </FindButton>
       </div>

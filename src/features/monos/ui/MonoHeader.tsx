@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   monoProjectsPhrase,
   type MonoLook,
@@ -43,8 +44,13 @@ export function MonoHeader({
       {greeting ? (
         <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-content/50">
           {agent.projects.length
-            ? `I can see every session, note and folder in ${monoProjectsPhrase(agent.projects)}. Ask what’s going on, or hand me work.`
-            : "Add the projects I should work on from my details, or just ask me something."}
+            ? t(
+                "I can see every session, note and folder in {0}. Ask what’s going on, or hand me work.",
+                { "0": monoProjectsPhrase(agent.projects) },
+              )
+            : t(
+                "Add the projects I should work on from my details, or just ask me something.",
+              )}
         </p>
       ) : (
         <MonoStatus

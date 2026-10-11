@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { HarnessId } from "../model/session";
 import { HARNESS_TITLE } from "../model/session";
 import { HarnessIcon } from "./HarnessIcon";
@@ -34,12 +35,14 @@ export function ProviderSignInPanel({
         <HarnessIcon harness={harness} className="size-9" />
       </span>
       <h2 className="mt-3.5 text-[15px] font-medium leading-5 text-content">
-        {complete ? `Signed in to ${title}` : "Authentication required"}
+        {complete
+          ? t("Signed in to {0}", { "0": title })
+          : t("Authentication required")}
       </h2>
       <p className="mt-1 max-w-56 text-[11px] leading-4 text-content/45">
         {complete
-          ? "You can retry your last message now."
-          : `Sign in to continue using ${title}.`}
+          ? t("You can retry your last message now.")
+          : t("Sign in to continue using {0}.", { "0": title })}
       </p>
       <button
         type="button"
@@ -54,10 +57,10 @@ export function ProviderSignInPanel({
           <Check className="size-3.5" aria-hidden />
         ) : null}
         {state === "running"
-          ? "Waiting for browser…"
+          ? t("Waiting for browser…")
           : complete
-            ? (completeActionLabel ?? "Signed in")
-            : `Sign in to ${title}`}
+            ? (completeActionLabel ?? t("Signed in"))
+            : t("Sign in to {0}", { "0": title })}
       </button>
       {state === "error" && error ? (
         <p

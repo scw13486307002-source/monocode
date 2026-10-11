@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { projectKey, projectName } from "../../../shared/lib/paths";
 import {
   loadTabGroupColors,
@@ -446,7 +447,7 @@ export function monoState(
       status: "needs-you",
       activity: approval?.tool?.title
         ? `Approve ${plainLine(approval.tool.title)}`
-        : "Waiting for approval",
+        : t("Waiting for approval"),
     };
   }
   if (!session.worktreeRemoved && session.usageLimit) {

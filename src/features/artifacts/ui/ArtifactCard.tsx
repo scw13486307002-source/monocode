@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { File, ExternalLink } from "../../../shared/ui/icons";
 import { artifactLabel, type ArtifactCard as Card } from "../artifacts";
 
@@ -28,7 +29,7 @@ export function ArtifactCard({
           {card.title}
         </span>
         <span className="mt-1 flex items-center gap-1 text-[12px] text-content/65">
-          Open {label.toLowerCase()} <ExternalLink className="size-3" />
+          {t("Open")} {label.toLowerCase()} <ExternalLink className="size-3" />
         </span>
       </span>
     </button>

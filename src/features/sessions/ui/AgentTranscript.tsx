@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   ArrowUp,
   Chatting,
@@ -628,13 +629,7 @@ function AgentTranscriptComponent({
       scrollerEl.removeEventListener("touchstart", onTouchStart);
       scrollerEl.removeEventListener("touchmove", onTouchMove);
     };
-  }, [
-    scrollerEl,
-    followTranscript,
-    setShowJump,
-    syncPinned,
-    visible,
-  ]);
+  }, [scrollerEl, followTranscript, setShowJump, syncPinned, visible]);
 
   useLayoutEffect(() => {
     stickToBottom.current = true;
@@ -1031,7 +1026,7 @@ function AgentTranscriptComponent({
                 onReturnToLatest();
               }}
             >
-              Back to latest messages
+              {t("Back to latest messages")}
             </button>
           </div>
         ) : null}
@@ -1042,8 +1037,8 @@ function AgentTranscriptComponent({
           >
             <span className="inline-block rounded-md bg-background-base px-2.5 py-1.5">
               {loadingEarlier
-                ? "Loading earlier messages…"
-                : "Couldn't load earlier messages. Scroll up to retry."}
+                ? t("Loading earlier messages…")
+                : t("Couldn't load earlier messages. Scroll up to retry.")}
             </span>
           </div>
         ) : null}
@@ -1056,10 +1051,10 @@ function AgentTranscriptComponent({
               disabled={loadingEarlier}
             >
               {loadingEarlier
-                ? "Loading earlier messages…"
+                ? t("Loading earlier messages…")
                 : loadEarlierError
-                  ? "Couldn't load messages. Try again"
-                  : "Load earlier messages"}
+                  ? t("Couldn't load messages. Try again")
+                  : t("Load earlier messages")}
             </button>
           </div>
         ) : null}
@@ -1378,15 +1373,14 @@ function AgentTranscriptComponent({
                   workExpanded={activeWorkTurnId === turnId}
                   searchCurrent={
                     turn.some((block) => block.id === searchCurrent) &&
-                    !items.some(
-                      (item) =>
-                        item.type === "block"
-                          ? item.block.id === searchCurrent
-                          : item.blocks.some(
-                              (block) =>
-                                block.id === searchCurrent &&
-                                needsApproval(block),
-                            ),
+                    !items.some((item) =>
+                      item.type === "block"
+                        ? item.block.id === searchCurrent
+                        : item.blocks.some(
+                            (block) =>
+                              block.id === searchCurrent &&
+                              needsApproval(block),
+                          ),
                     )
                   }
                 />
@@ -1645,9 +1639,9 @@ export function dayStamp(at: number, now = Date.now()): [string, string] {
   yesterday.setDate(today.getDate() - 1);
   const day =
     date.toDateString() === today.toDateString()
-      ? "Today"
+      ? t("Today")
       : date.toDateString() === yesterday.toDateString()
-        ? "Yesterday"
+        ? t("Yesterday")
         : new Intl.DateTimeFormat(undefined, {
             weekday: "short",
             month: "short",
@@ -1688,7 +1682,11 @@ function InitialThinking({
     <div
       className={`min-w-0 pt-3 pb-1 font-sans text-sm text-content/50 ${embedded ? "" : "px-4"}`}
     >
-      {live ? <Shimmer duration={1.6}>Thinking…</Shimmer> : "Thinking…"}
+      {live ? (
+        <Shimmer duration={1.6}>{t("Thinking…")}</Shimmer>
+      ) : (
+        t("Thinking…")
+      )}
     </div>
   );
 }
@@ -1716,7 +1714,7 @@ function LiveFoldTitle({
   // Yielding with a command still going is not the end of the turn. The clock
   // keeps running and the line says what it is waiting on.
   const text = paused
-    ? (waitingLabel ?? "Waiting for approval")
+    ? (waitingLabel ?? t("Waiting for approval"))
     : background?.length
       ? `${formatWorkingDuration(elapsedMs, modelName)} · ${backgroundLabel(background)}`
       : formatWorkingDuration(elapsedMs, modelName);
@@ -1816,8 +1814,8 @@ function TurnDuration({
         {onShowWork ? (
           <button
             type="button"
-            title={workExpanded ? "Hide activity" : "Show activity"}
-            aria-label={workExpanded ? "Hide activity" : "Show activity"}
+            title={workExpanded ? t("Hide activity") : t("Show activity")}
+            aria-label={workExpanded ? t("Hide activity") : t("Show activity")}
             aria-expanded={!!workExpanded}
             onClick={onShowWork}
             className={`rounded-md p-1 outline-none hover:bg-content/8 hover:text-content/70 focus-visible:ring-1 focus-visible:ring-accent ${workExpanded ? "bg-content/8 text-content/70" : "text-content/40"}`}
@@ -1828,8 +1826,10 @@ function TurnDuration({
         {onShowSessions ? (
           <button
             type="button"
-            title={`${sessionsExpanded ? "Hide" : "Show"} sessions (${sessionCount})`}
-            aria-label={sessionsExpanded ? "Hide sessions" : "Show sessions"}
+            title={`${sessionsExpanded ? t("Hide") : t("Show")} sessions (${sessionCount})`}
+            aria-label={
+              sessionsExpanded ? t("Hide sessions") : t("Show sessions")
+            }
             aria-expanded={!!sessionsExpanded}
             onClick={onShowSessions}
             className={`flex items-center gap-1 rounded-md p-1 outline-none hover:bg-content/8 hover:text-content/70 focus-visible:ring-1 focus-visible:ring-accent ${sessionsExpanded ? "bg-content/8 text-content/70" : "text-content/40"}`}
@@ -1896,14 +1896,14 @@ function TurnMetricsBadge({
   const headline =
     [
       metrics.cacheHitPercent != null
-        ? `Cache hit ${Math.round(metrics.cacheHitPercent)}%`
+        ? t("Cache hit {0}%", { "0": Math.round(metrics.cacheHitPercent) })
         : null,
       outputRate != null
-        ? `Output ${formatMetricCount(outputRate)} tok/s`
+        ? t("Output {0} tok/s", { "0": formatMetricCount(outputRate) })
         : null,
     ]
       .filter(Boolean)
-      .join(" · ") || "Turn tokens";
+      .join(" · ") || t("Turn tokens");
   const detail = [
     metrics.inputTokens != null
       ? `${formatMetricCount(metrics.inputTokens)} input`
@@ -1931,8 +1931,8 @@ function TurnMetricsBadge({
       <span
         role="img"
         tabIndex={0}
-        aria-label={`Turn metrics: ${label}`}
-        title="Turn metrics"
+        aria-label={t("Turn metrics: {0}", { "0": label })}
+        title={t("Turn metrics")}
         className="grid rounded-md p-1 text-content/40 outline-none hover:bg-content/8 hover:text-content/70 focus-visible:ring-1 focus-visible:ring-accent"
       >
         <ChartBreakoutSquare className="size-3.5" strokeWidth={1.75} />
@@ -2008,8 +2008,8 @@ function CopyTurnButton({
       <button
         type="button"
         disabled={pending}
-        title={copied ? "Copied" : label}
-        aria-label={copied ? "Copied" : label}
+        title={copied ? t("Copied") : label}
+        aria-label={copied ? t("Copied") : label}
         className="-ml-1 rounded-md p-1 text-content/40 hover:bg-content/8 hover:text-content/70"
         onClick={(event) => {
           event.stopPropagation();
@@ -2039,7 +2039,7 @@ function CopyTurnButton({
       </button>
       {error && (
         <span role="alert" className="max-w-xs text-xs text-content/70">
-          Copy failed. {error}
+          {t("Copy failed.")} {error}
         </span>
       )}
     </>
@@ -2071,8 +2071,8 @@ function SaveNoteButton({
       <button
         type="button"
         disabled={pending}
-        title={saved ? "Saved to Notes" : "Save as note"}
-        aria-label={saved ? "Saved to Notes" : "Save as note"}
+        title={saved ? t("Saved to Notes") : t("Save as note")}
+        aria-label={saved ? t("Saved to Notes") : t("Save as note")}
         className="rounded-md p-1 text-content/40 hover:bg-content/8 hover:text-content/70"
         onClick={async () => {
           setError(null);
@@ -2099,7 +2099,7 @@ function SaveNoteButton({
       </button>
       {error && (
         <span role="alert" className="max-w-xs text-xs text-content/70">
-          Could not save note. {error}
+          {t("Could not save note.")} {error}
         </span>
       )}
     </>
@@ -2113,7 +2113,7 @@ function EditLastTurnButton({
   onEdit: () => void;
   editing?: boolean;
 }) {
-  const label = editing ? "Cancel edit" : "Edit and resend";
+  const label = editing ? t("Cancel edit") : t("Edit and resend");
   return (
     <button
       type="button"
@@ -2496,7 +2496,9 @@ function UserMessageBlock({
     delivery && delivery.status !== "pending" ? (
       <div className="flex max-w-full items-center gap-2 px-3 pt-1 font-sans text-xs text-content/50">
         <span role={delivery.error ? "alert" : "status"}>
-          {delivery.error ? `Not sent · ${delivery.error}` : "Not sent"}
+          {delivery.error
+            ? t("Not sent · {0}", { "0": delivery.error })
+            : t("Not sent")}
         </span>
         {onRetryMessage ? (
           <button
@@ -2504,7 +2506,7 @@ function UserMessageBlock({
             onClick={() => onRetryMessage(block.id)}
             className="shrink-0 rounded px-1 py-0.5 text-content/70 hover:bg-content/8"
           >
-            {delivery.status === "failed" ? "Retry" : "Resume"}
+            {delivery.status === "failed" ? t("Retry") : t("Resume")}
           </button>
         ) : null}
       </div>
@@ -2646,7 +2648,7 @@ function UserMessageBlock({
                   className="mt-1 rounded px-1 py-0.5 text-xs text-content/60 hover:bg-content/8 hover:text-content"
                   onClick={toggle}
                 >
-                  {expanded ? "Show less" : "Show more"}
+                  {expanded ? t("Show less") : t("Show more")}
                 </button>
               ) : null}
               {block.ciContext ? (
@@ -2656,11 +2658,12 @@ function UserMessageBlock({
                 >
                   <summary className="flex w-fit cursor-pointer list-none items-center gap-1.5 rounded text-xs text-content/50 transition-colors hover:text-content/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-content/40 [&::-webkit-details-marker]:hidden">
                     <ChevronRight className="size-3 shrink-0 transition-transform group-open/ci:rotate-90" />
-                    <span>CI context</span>
+                    <span>{t("CI context")}</span>
                   </summary>
                   <p className="mt-2 text-xs text-content/50">
-                    CI instructions and failure details included with this
-                    request.
+                    {t(
+                      "CI instructions and failure details included with this request.",
+                    )}
                   </p>
                   <pre className="mt-2 max-h-72 min-w-0 overflow-auto overscroll-contain rounded-md bg-content/5 p-2.5 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-content/70">
                     {block.ciContext}
@@ -2671,27 +2674,27 @@ function UserMessageBlock({
                 <div className="mt-2 flex items-center justify-between gap-4 border-t border-dashed border-content/20 pt-2">
                   <span className="flex items-center gap-1.5 text-xs text-content/50">
                     <CircleDashed className="size-3.5" strokeWidth={1.75} />
-                    Draft
+                    {t("Draft")}
                   </span>
                   <span className="flex items-center gap-1">
                     <button
                       type="button"
-                      title="Remove draft"
-                      aria-label="Remove draft"
+                      title={t("Remove draft")}
+                      aria-label={t("Remove draft")}
                       onClick={() => onRemoveDraft?.(block)}
                       className="flex h-7 items-center gap-1.5 rounded-md px-2 text-xs text-content/55 hover:bg-content/10 hover:text-content"
                     >
                       <Trash2 className="size-3.5" strokeWidth={1.75} />
-                      Remove
+                      {t("Remove")}
                     </button>
                     <button
                       type="button"
-                      title="Send draft"
-                      aria-label="Send draft"
+                      title={t("Send draft")}
+                      aria-label={t("Send draft")}
                       onClick={() => onSendDraft?.(block)}
                       className="primary-action flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium transition-transform duration-150 active:scale-[0.97]"
                     >
-                      Send
+                      {t("Send")}
                       <ArrowUp className="size-3.5" strokeWidth={2.25} />
                     </button>
                   </span>
@@ -2730,7 +2733,7 @@ function UserMessageBlock({
               <CopyTurnButton
                 text={text}
                 attachments={block.attachments}
-                label="Copy message"
+                label={t("Copy message")}
               />
             ) : null}
             {onEdit ? (
@@ -2925,7 +2928,7 @@ function WorkFoldLine({
     <button
       type="button"
       aria-expanded={open}
-      aria-label={open ? "Hide the work" : "Show the work"}
+      aria-label={open ? t("Hide the work") : t("Show the work")}
       aria-live={live ? "polite" : undefined}
       onClick={onToggle}
       className={`group ${row}`}
@@ -3178,17 +3181,22 @@ function MonoTurnHeader({
     () => blocks.filter((block) => !block.internal && !block.draft),
     [blocks],
   );
-  let status = useMemo(() => monoWorkStatus(activity, active), [activity, active]);
+  let status = useMemo(
+    () => monoWorkStatus(activity, active),
+    [activity, active],
+  );
   if (active && waitingForAnswers && !activity.some(needsApproval)) {
-    status = { ...status, key: "question", label: "Waiting for answers…" };
+    status = { ...status, key: "question", label: t("Waiting for answers…") };
   } else if (active && backgroundTasks?.length && status.kind === "think") {
     status = {
       ...status,
       key: "background",
       label:
         backgroundTasks.length === 1
-          ? "Waiting for background task…"
-          : `Waiting for ${backgroundTasks.length} background tasks…`,
+          ? t("Waiting for background task…")
+          : t("Waiting for {0} background tasks…", {
+              "0": backgroundTasks.length,
+            }),
     };
   }
   const mark = agentMascot ? (
@@ -3249,8 +3257,10 @@ function MonoTurnHeader({
           {onShowWork ? (
             <button
               type="button"
-              title={workExpanded ? "Hide activity" : "Show activity"}
-              aria-label={workExpanded ? "Hide activity" : "Show activity"}
+              title={workExpanded ? t("Hide activity") : t("Show activity")}
+              aria-label={
+                workExpanded ? t("Hide activity") : t("Show activity")
+              }
               aria-expanded={!!workExpanded}
               onClick={onShowWork}
               className="min-w-0 flex-1 cursor-pointer text-left outline-none transition-opacity duration-150 hover:opacity-70 focus-visible:opacity-70"
@@ -3337,7 +3347,7 @@ export function MonoActivityTrail({
   }
   return (
     <ol
-      aria-label="Activity in chronological order"
+      aria-label={t("Activity in chronological order")}
       className="flex min-w-0 flex-col gap-3"
     >
       {segments.map((segment) => {
@@ -3507,7 +3517,9 @@ function ActivityPhaseGroup({
         type="button"
         aria-expanded={open}
         aria-label={
-          open ? `Hide the steps for ${title}` : `Show the steps for ${title}`
+          open
+            ? t("Hide the steps for {0}", { "0": title })
+            : t("Show the steps for {0}", { "0": title })
         }
         onClick={() => setOverride(!open)}
         className="group flex w-full min-w-0 items-center gap-1.5 py-1 text-left"
@@ -3835,7 +3847,11 @@ function SubagentPanel({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={open ? `Hide ${name}'s work` : `Show ${name}'s work`}
+        aria-label={
+          open
+            ? t("Hide {0}'s work", { "0": name })
+            : t("Show {0}'s work", { "0": name })
+        }
         title={brief}
         onClick={onToggle}
         // An open row keeps the wash it lit up under the cursor, so the panel
@@ -4134,7 +4150,9 @@ function ActivityInterjectionRow({ block }: { block: Block }) {
         type="button"
         aria-expanded={open}
         aria-label={
-          open ? `Hide the ${chrome.label} note` : `${chrome.label}: ${summary}`
+          open
+            ? t("Hide the {0} note", { "0": chrome.label })
+            : `${chrome.label}: ${summary}`
         }
         onClick={() => setOpen((value) => !value)}
         className="group flex min-w-0 items-center gap-1.5 py-1 text-left"
@@ -4169,7 +4187,7 @@ function ActivityThinkingRow({
   onOpenFile?: (path: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const text = proseSummary(block.text) || "Thinking";
+  const text = proseSummary(block.text) || t("Thinking");
   // In a group the rail is the bullet, so there is nothing to breathe while
   // reasoning streams in — the line itself does.
   const pulse = block.streaming ? "zen-thinking-pulse" : "";
@@ -4192,7 +4210,7 @@ function ActivityThinkingRow({
   if (!expandable) {
     return (
       <div
-        aria-label={`Thinking: ${text}`}
+        aria-label={t("Thinking: {0}", { "0": text })}
         className="flex min-w-0 items-center gap-1.5 py-1"
       >
         {icon}
@@ -4206,7 +4224,9 @@ function ActivityThinkingRow({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={open ? "Hide thinking" : `Show thinking: ${text}`}
+        aria-label={
+          open ? t("Hide thinking") : t("Show thinking: {0}", { "0": text })
+        }
         onClick={() => setOpen((value) => !value)}
         className="group flex min-w-0 items-center gap-1.5 py-1 text-left"
       >
@@ -4217,7 +4237,7 @@ function ActivityThinkingRow({
           }`}
         >
           {/* Open, the body starts with the paragraph the summary came from. */}
-          {open ? "Thinking" : text}
+          {open ? t("Thinking") : text}
         </span>
       </button>
       {open ? (
@@ -4276,7 +4296,7 @@ function ActivityNoteRow({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={open ? "Hide the full note" : `Agent said: ${text}`}
+        aria-label={open ? t("Hide the full note") : `Agent said: ${text}`}
         onClick={() => setOpen((value) => !value)}
         className="group flex min-w-0 items-center gap-1.5 py-1 text-left"
       >
@@ -4354,7 +4374,7 @@ function ActivityToolRow({
           <button
             type="button"
             aria-expanded={errorOpen}
-            aria-label={`${errorOpen ? "Hide" : "Show"} error details for ${label}`}
+            aria-label={`${errorOpen ? t("Hide") : t("Show")} error details for ${label}`}
             onClick={() => setErrorOpen((value) => !value)}
             className="-m-1 shrink-0 rounded p-1"
           >
@@ -4410,10 +4430,10 @@ function MonoCodeCallRow({
   const pendingApproval = needsApproval(block);
   const command = `monocode app ${call.action}`;
   const verb = pendingApproval
-    ? "Run"
+    ? t("Run")
     : state === "pending"
-      ? "Running"
-      : "Ran";
+      ? t("Running")
+      : t("Ran");
   const summary = (
     <>
       <span
@@ -4443,7 +4463,7 @@ function MonoCodeCallRow({
         <button
           type="button"
           aria-expanded={errorOpen}
-          aria-label={`${errorOpen ? "Hide" : "Show"} error details for MonoCode: ${call.label}`}
+          aria-label={`${errorOpen ? t("Hide") : t("Show")} error details for MonoCode: ${call.label}`}
           onClick={() => setErrorOpen((value) => !value)}
           className="flex w-full min-w-0 items-center gap-1.5 py-1 text-left"
         >
@@ -4544,7 +4564,13 @@ function formatWorkingDuration(
 ): string {
   const who = modelName?.trim();
   const elapsed = formatElapsed(elapsedMs);
-  const verb = done ? (who ? "worked" : "Worked") : who ? "working" : "Working";
+  const verb = done
+    ? who
+      ? "worked"
+      : t("Worked")
+    : who
+      ? "working"
+      : t("Working");
   if (elapsed == null) {
     if (done) return who ? `${who} ${verb}` : verb;
     return who ? `${who} ${verb}…` : `${verb}…`;
@@ -4584,10 +4610,10 @@ function ToolCall({
   const state = toolCallState(block);
   const stateLabel =
     state === "accepted"
-      ? "Accepted"
+      ? t("Accepted")
       : state === "rejected"
-        ? "Rejected"
-        : "Pending";
+        ? t("Rejected")
+        : t("Pending");
   const editTool = isEditTool(
     block.tool?.kind,
     block.text || block.tool?.title,
@@ -4838,14 +4864,14 @@ function ApprovalControls({
         className="rounded-md bg-content px-2.5 py-0.5 text-[11px] hover:bg-content/80     text-background-base"
         onClick={() => onApproval(approval.requestId, "allow")}
       >
-        Allow
+        {t("Allow")}
       </button>
       <button
         type="button"
         className="rounded-md bg-content/10 px-2.5 py-0.5 text-[11px] text-content/70 hover:bg-content/20"
         onClick={() => onApproval(approval.requestId, "deny")}
       >
-        Deny
+        {t("Deny")}
       </button>
     </div>
   );
@@ -4856,7 +4882,7 @@ function HandoffDivider({ block }: { block: Block }) {
   if (!meta) return null;
 
   const preparing = meta.status === "preparing";
-  const label = preparing ? "Preparing a handoff" : HARNESS_TITLE[meta.to];
+  const label = preparing ? t("Preparing a handoff") : HARNESS_TITLE[meta.to];
 
   return (
     <div className="px-4 py-5">
@@ -4866,8 +4892,8 @@ function HandoffDivider({ block }: { block: Block }) {
           role="separator"
           aria-label={
             preparing
-              ? `Preparing a handoff to ${HARNESS_TITLE[meta.to]}`
-              : `Continued with ${label}`
+              ? t("Preparing a handoff to {0}", { "0": HARNESS_TITLE[meta.to] })
+              : t("Continued with {0}", { "0": label })
           }
           className="flex max-w-[min(100%,20rem)] items-center gap-1.5 px-1.5 font-sans text-[12px] text-content/55"
         >
@@ -4896,17 +4922,17 @@ function interjectionChrome(meta: InterjectionMeta): {
 } {
   const label =
     meta.customType === "advisor"
-      ? "Advisor"
+      ? t("Advisor")
       : meta.customType === "custom"
-        ? "Notice"
+        ? t("Notice")
         : meta.customType;
   const severityText =
     meta.severity === "blocker"
-      ? "Blocker"
+      ? t("Blocker")
       : meta.severity === "concern"
-        ? "Concern"
+        ? t("Concern")
         : meta.severity === "nit"
-          ? "Nit"
+          ? t("Nit")
           : undefined;
   const severityClass =
     meta.severity === "blocker"
@@ -4981,7 +5007,7 @@ function InterjectionDivider({ block }: { block: Block }) {
               onClick={() => setExpanded((value) => !value)}
               className="mt-1 py-1 font-sans text-xs text-content/55 hover:text-content"
             >
-              {expanded ? "Show less" : "Show more"}
+              {expanded ? t("Show less") : t("Show more")}
             </button>
           ) : null}
         </div>

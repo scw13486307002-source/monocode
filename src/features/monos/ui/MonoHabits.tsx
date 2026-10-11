@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useState, type ReactNode } from "react";
 import { Clock, Pause, Play, Trash2, Zap } from "../../../shared/ui/icons";
 import { mascotPath } from "../../projects/model/projectMascots";
@@ -134,14 +135,14 @@ export function HabitRow({
           <span className="truncate text-[11px] leading-4 text-content/40">
             {running ? (
               <>
-                Running now · <RunningFor since={runningSince} />
+                {t("Running now ·")} <RunningFor since={runningSince} />
               </>
             ) : starting ? (
-              "Starting…"
+              t("Starting…")
             ) : habit.enabled ? (
               habitScheduleLabel(habit.schedule)
             ) : (
-              `Paused · ${habitScheduleLabel(habit.schedule)}`
+              t("Paused · {0}", { "0": habitScheduleLabel(habit.schedule) })
             )}
           </span>
         </span>
@@ -149,7 +150,11 @@ export function HabitRow({
       <span className="flex shrink-0 items-center pr-2 opacity-0 transition-opacity group-hover/habit:opacity-100 focus-within:opacity-100">
         <HabitButton
           label={
-            running ? "Already running" : starting ? "Starting" : "Run now"
+            running
+              ? t("Already running")
+              : starting
+                ? t("Starting")
+                : t("Run now")
           }
           disabled={running || starting}
           onClick={() => actions.runNow(habit.id)}
@@ -157,7 +162,7 @@ export function HabitRow({
           <Zap className="size-3.5" strokeWidth={1.75} />
         </HabitButton>
         <HabitButton
-          label={habit.enabled ? "Pause" : "Resume"}
+          label={habit.enabled ? t("Pause") : t("Resume")}
           onClick={() => actions.toggle(habit.id)}
         >
           {habit.enabled ? (
@@ -166,7 +171,10 @@ export function HabitRow({
             <Play className="size-3.5" strokeWidth={1.75} />
           )}
         </HabitButton>
-        <HabitButton label="Remove" onClick={() => actions.remove(habit.id)}>
+        <HabitButton
+          label={t("Remove")}
+          onClick={() => actions.remove(habit.id)}
+        >
           <Trash2 className="size-3.5" strokeWidth={1.75} />
         </HabitButton>
       </span>
@@ -208,8 +216,8 @@ export function HabitsList({
   actions: HabitActions;
   onOpen: (id: string) => void;
 }) {
-  if (!habits) return <Empty>Loading…</Empty>;
-  if (habits.length === 0) return <Empty>No habits yet</Empty>;
+  if (!habits) return <Empty>{t("Loading…")}</Empty>;
+  if (habits.length === 0) return <Empty>{t("No habits yet")}</Empty>;
   return (
     <ul className="flex flex-col gap-px">
       {habits.map((habit) => (
@@ -274,9 +282,9 @@ export function TodayHabits({
   return (
     <>
       {upcoming.length ? (
-        <Section title="Upcoming">{cards(upcoming)}</Section>
+        <Section title={t("Upcoming")}>{cards(upcoming)}</Section>
       ) : null}
-      {done.length ? <Section title="Done">{cards(done)}</Section> : null}
+      {done.length ? <Section title={t("Done")}>{cards(done)}</Section> : null}
     </>
   );
 }
@@ -332,7 +340,7 @@ export function HabitsEmpty() {
         <path d={CLOCK_GLOW_PATH} opacity={0.4} />
         <path d={CLOCK_PATH} />
       </svg>
-      <p className="text-[12px] text-content/45">No habits yet</p>
+      <p className="text-[12px] text-content/45">{t("No habits yet")}</p>
     </div>
   );
 }

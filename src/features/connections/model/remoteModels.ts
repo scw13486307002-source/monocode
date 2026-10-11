@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type {
   AgentModel,
   ModelSetting,
@@ -58,7 +59,7 @@ const LABELS: Record<string, string> = {
 };
 const effort = (id: string, values: string[]): ModelSetting => ({
   id,
-  label: "Reasoning",
+  label: t("Reasoning"),
   kind: "select",
   value: "high",
   options: values.map((value) => choice(value, LABELS[value] ?? value)),
@@ -83,7 +84,7 @@ function knownSetting(
     if (id === "serviceTier")
       return {
         id,
-        label: "Service Tier",
+        label: t("Service Tier"),
         kind: "select",
         value: "default",
         options: [choice("default", "Standard"), choice("fast", "Fast")],
@@ -98,7 +99,7 @@ function knownSetting(
   if (id === "context")
     return {
       id,
-      label: "Context",
+      label: t("Context"),
       kind: "select",
       value: "200k",
       options: [choice("200k"), choice("1m", "1M")],

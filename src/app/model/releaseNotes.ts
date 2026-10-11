@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import bundledChangelog from "../../../CHANGELOG.md?raw";
 
 export type ReleaseNotesTabSource = {
@@ -10,7 +11,7 @@ export type ReleaseNotesDocument = {
 };
 
 export function releaseNotesTitle(version: string): string {
-  return `What's new in MonoCode ${version}`;
+  return t("What's new in MonoCode {0}", { "0": version });
 }
 
 export function releaseNotesForVersion(

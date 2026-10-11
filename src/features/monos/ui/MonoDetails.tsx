@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useState, type ReactNode } from "react";
 import type { HarnessId, RuntimeMode } from "../../sessions/model/session";
 import { AccessPicker } from "../../sessions/ui/AccessPicker";
@@ -86,12 +87,12 @@ export function MonoDetails({
           key: "habits",
           node: (
             <div className="flex min-h-0 flex-1 flex-col" data-mono-habits>
-              <PageHeader title="Habits" onBack={back}>
+              <PageHeader title={t("Habits")} onBack={back}>
                 <IconButton
                   label={
                     (habits?.length ?? 0) >= HABITS_MAX
                       ? `At most ${HABITS_MAX} habits`
-                      : "New habit"
+                      : t("New habit")
                   }
                   disabled={!habits || habits.length >= HABITS_MAX}
                   onClick={() => push({ kind: "new-habit" })}
@@ -187,7 +188,7 @@ export function MonoDetails({
     >
       <PanelStack pages={pages}>
         {/* Pages replace this header too, keeping their back button at the top. */}
-        <MonoSidebarHeader title="Details" onClose={onClose} />
+        <MonoSidebarHeader title={t("Details")} onClose={onClose} />
         <MonoSettingsPage
           monoId={monoId}
           agent={agent}
@@ -198,7 +199,7 @@ export function MonoDetails({
           }}
         >
           <dl className="flex flex-col gap-0.5 border-t border-stroke px-4 py-3">
-            <Property label="Model">
+            <Property label={t("Model")}>
               <ModelPicker
                 harness={harness}
                 model={model}
@@ -221,7 +222,7 @@ export function MonoDetails({
                 <Property label={label}>{control}</Property>
               )}
             />
-            <Property label="Permissions">
+            <Property label={t("Permissions")}>
               <AccessPicker
                 value={runtimeMode}
                 onChange={onRuntimeModeChange}
@@ -230,7 +231,7 @@ export function MonoDetails({
                 variant="plain"
               />
             </Property>
-            <Property label="Projects">
+            <Property label={t("Projects")}>
               <MonoProjects monoId={monoId} projects={agent.projects} />
             </Property>
           </dl>

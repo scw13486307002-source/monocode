@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { RefreshCw, Search } from "../../../shared/ui/icons";
 import {
   useEffect,
@@ -18,9 +19,7 @@ import {
 } from "../model/fileIndex";
 import { LAYER } from "../../../shared/lib/layers";
 import { fuzzyMatch, type FuzzyHit } from "../../../shared/lib/fuzzy";
-import {
-  looksLikeProject,
-} from "../../projects/model/recents";
+import { looksLikeProject } from "../../projects/model/recents";
 import type { OpenFileFn } from "../../search/model/search";
 import { useLockOverscroll } from "../../../shared/hooks/useLockOverscroll";
 import { FileTypeIcon } from "./FileTypeIcon";
@@ -38,7 +37,7 @@ export function reloadActionHint(mod = MOD, shift = SHIFT) {
 }
 
 const ACTIONS: Action[] = [
-  { id: "reload", label: "Reload MonoCode", hint: reloadActionHint() },
+  { id: "reload", label: t("Reload MonoCode"), hint: reloadActionHint() },
 ];
 
 type Props = {
@@ -216,7 +215,7 @@ export function FilePicker({
       <div className="absolute inset-0" onMouseDown={onClose} />
       <div
         role="dialog"
-        aria-label={paletteMode ? "Command Palette" : "Go to File"}
+        aria-label={paletteMode ? t("Command Palette") : t("Go to File")}
         data-file-picker
         onMouseDown={(e) => e.stopPropagation()}
         className="absolute left-1/2 top-[12%] flex w-[min(560px,calc(100vw-24px))] -translate-x-1/2 flex-col overflow-hidden rounded-lg border border-content/10 bg-content/5 backdrop-blur-xl"
@@ -228,8 +227,8 @@ export function FilePicker({
               ref={search}
               type="text"
               value={query}
-              placeholder="Go to File (type > for commands)"
-              aria-label={paletteMode ? "Command Palette" : "Go to File"}
+              placeholder={t("Go to File (type > for commands)")}
+              aria-label={paletteMode ? t("Command Palette") : t("Go to File")}
               spellCheck={false}
               autoComplete="off"
               autoCorrect="off"
@@ -287,13 +286,15 @@ function emptyLabel({
   paletteMode: boolean;
   actionCount: number;
 }): string | null {
-  if (paletteMode) return actionCount === 0 ? "No matching commands" : null;
+  if (paletteMode) return actionCount === 0 ? t("No matching commands") : null;
   if (error && fileCount === 0) return error;
-  if (!looksLikeProject(cwd)) return "Open a project to search files";
-  if (loading && fileCount === 0) return "Indexing files…";
-  if (fileCount === 0) return "No files found";
+  if (!looksLikeProject(cwd)) return t("Open a project to search files");
+  if (loading && fileCount === 0) return t("Indexing files…");
+  if (fileCount === 0) return t("No files found");
   if (matchCount === 0) {
-    return query.trim() ? "No matching files" : "Type a file name to search";
+    return query.trim()
+      ? t("No matching files")
+      : t("Type a file name to search");
   }
   return null;
 }
@@ -322,7 +323,7 @@ function ActionList({
     <div
       ref={lockOverscroll}
       role="listbox"
-      aria-label="Commands"
+      aria-label={t("Commands")}
       className="max-h-[min(380px,50vh)] overflow-y-auto overscroll-none px-1.5 pb-1.5"
     >
       {actions.map((action, index) => {
@@ -411,7 +412,7 @@ function FileList({
     <div
       ref={lockOverscroll}
       role="listbox"
-      aria-label="Files"
+      aria-label={t("Files")}
       onMouseMove={onListMouseMove}
       className="max-h-[min(380px,50vh)] overflow-y-auto overscroll-none px-1.5 pb-1.5"
     >

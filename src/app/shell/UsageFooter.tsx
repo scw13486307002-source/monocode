@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { RefreshCw, Terminal } from "../../shared/ui/icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HarnessIcon } from "../../features/sessions/ui/HarnessIcon";
@@ -199,7 +200,7 @@ export function UsageFooter({
           const message =
             error instanceof Error
               ? error.message
-              : "Could not use Codex reset";
+              : t("Could not use Codex reset");
           setCachedRateLimits(
             "codex",
             codexAccountId,
@@ -243,7 +244,7 @@ export function UsageFooter({
           const message =
             error instanceof Error
               ? error.message
-              : "Could not complete sign-in";
+              : t("Could not complete sign-in");
           setCachedRateLimits(
             provider,
             accountId,
@@ -305,18 +306,19 @@ export function UsageFooter({
   const showTerminals = terminals.length > 0;
   const showTerminalButton = Boolean(onNewTerminal || onShowTerminal);
   const terminalLabel = projectTerminalActive
-    ? "Terminal"
-    : `New Terminal (${MOD}\`)`;
+    ? t("Terminal")
+    : t("New Terminal ({0}`)", { "0": MOD });
   const onTerminalClick = projectTerminalActive
     ? (onShowTerminal ?? onNewTerminal)
     : (onNewTerminal ?? onShowTerminal);
-  const ariaLabel = showUsage || session?.harness === "pi"
-    ? "Provider usage"
-    : showTerminals || showTerminalButton
-      ? "Terminals"
-      : session
-        ? "Session"
-        : undefined;
+  const ariaLabel =
+    showUsage || session?.harness === "pi"
+      ? t("Provider usage")
+      : showTerminals || showTerminalButton
+        ? t("Terminals")
+        : session
+          ? t("Session")
+          : undefined;
 
   return (
     <footer
@@ -324,7 +326,11 @@ export function UsageFooter({
       className="flex h-7 shrink-0 items-center gap-1.5 overflow-x-auto border-t border-stroke px-3 text-[11px] text-content/55"
     >
       {session?.harness === "pi" ? (
-        <PiUsage key={`${session.id}:${session.model}`} model={session.model} now={now} />
+        <PiUsage
+          key={`${session.id}:${session.model}`}
+          model={session.model}
+          now={now}
+        />
       ) : showUsage ? (
         <>
           {wantClaude ? (
@@ -374,8 +380,8 @@ export function UsageFooter({
           <button
             type="button"
             className="grid size-4.5 shrink-0 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content disabled:opacity-50"
-            aria-label="Refresh usage"
-            title="Refresh usage"
+            aria-label={t("Refresh usage")}
+            title={t("Refresh usage")}
             disabled={refreshing}
             onClick={() => void refresh()}
           >
@@ -411,7 +417,7 @@ export function UsageFooter({
               onClick={onTerminalClick}
             >
               <Terminal className="size-3.5" strokeWidth={1.75} aria-hidden />
-              <span>Terminal</span>
+              <span>{t("Terminal")}</span>
             </button>
           ) : null}
         </div>
@@ -462,7 +468,9 @@ function SessionChip({ session }: { session: UsageFooterSession }) {
       setLoginState("complete");
     } catch (error) {
       setLoginError(
-        error instanceof Error ? error.message : "Could not complete sign-in",
+        error instanceof Error
+          ? error.message
+          : t("Could not complete sign-in"),
       );
       setLoginState("error");
     }
@@ -496,7 +504,7 @@ function SessionChip({ session }: { session: UsageFooterSession }) {
         <span>{HARNESS_LABEL[session.harness]}</span>
         {authRequired ? (
           <span className="text-[10px] text-amber-600 dark:text-amber-300">
-            sign in
+            {t("sign in")}
           </span>
         ) : null}
       </button>
@@ -545,10 +553,10 @@ function RunningTerminalChip({
   const ariaLabel =
     terminals.length === 1
       ? panelOpen
-        ? `Hide ${terminals[0]?.process}`
-        : `Show ${terminals[0]?.process}`
+        ? t("Hide {0}", { "0": terminals[0]?.process })
+        : t("Show {0}", { "0": terminals[0]?.process })
       : panelOpen
-        ? "Hide running terminals"
+        ? t("Hide running terminals")
         : `${terminals.length} terminals are running processes`;
 
   const toggle = (fileId: string) => {
@@ -589,7 +597,7 @@ function RunningTerminalChip({
           autoFocus
           onDismiss={() => setMenuOpen(false)}
           role="menu"
-          aria-label="Running terminals"
+          aria-label={t("Running terminals")}
           className="min-w-[12rem] p-1"
         >
           {terminals.map((terminal) => (

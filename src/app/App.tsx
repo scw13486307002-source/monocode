@@ -1,3 +1,4 @@
+import { t } from "../shared/i18n/index";
 import { sessionConversationPage } from "../features/agent-app/model/sessionConversation";
 import { readMonoConversation } from "../features/monos/model/monoConversation";
 import {
@@ -2682,7 +2683,7 @@ function Workspace({
     const document = releaseNotesForVersion(version);
     if (!document) {
       void message(
-        "Release notes for this version are not available in this build.",
+        t("Release notes for this version are not available in this build."),
         { title: "MonoCode" },
       );
       return;
@@ -3497,7 +3498,7 @@ function Workspace({
       void (async () => {
         if (needsUnsavedConfirm) {
           const ok = await confirmDiscardUnsaved(
-            `Close ${basename(file.path)} without saving?`,
+            t("Close {0} without saving?", { "0": basename(file.path) }),
           );
           if (!ok) return;
         }
@@ -4611,7 +4612,7 @@ function Workspace({
                   : undefined;
           session = {
             ...newDefaultSession(cwd),
-            title: `Ask · ${item.title}`,
+            title: t("Ask · {0}", { "0": item.title }),
             inboxAsk: {
               key,
               title: item.title,
@@ -5407,7 +5408,7 @@ function Workspace({
             if (
               unsaved &&
               !(await confirmDiscardUnsaved(
-                `${removalMode === "archive" ? "Archive" : "Delete"} this conversation with unsaved files?`,
+                `${removalMode === "archive" ? t("Archive") : t("Delete")} this conversation with unsaved files?`,
               ))
             )
               return false;
@@ -5650,7 +5651,10 @@ function Workspace({
       if (!mono) return;
       const { name } = monoLook(mono);
       const confirmed = await ask(
-        `Delete ${name}? Its conversation will be deleted and its habits stop. This can’t be undone.`,
+        t(
+          "Delete {0}? Its conversation will be deleted and its habits stop. This can’t be undone.",
+          { "0": name },
+        ),
         { title: "MonoCode", kind: "warning" },
       );
       if (!confirmed) return;
@@ -5681,7 +5685,9 @@ function Workspace({
       if (sessionIds.length === 0) return;
       if (
         !window.confirm(
-          `Delete ${sessionIds.length} selected conversations? This can’t be undone.`,
+          t("Delete {0} selected conversations? This can’t be undone.", {
+            "0": sessionIds.length,
+          }),
         )
       )
         return;
@@ -6904,7 +6910,8 @@ function Workspace({
         flushHarnessEvents();
         return false;
       }
-      const submittedText = intent === "build" ? "Build approved plan" : text;
+      const submittedText =
+        intent === "build" ? t("Build approved plan") : text;
       const operatorCommand = consumeOperatorCommand(submittedText);
       if (
         operatorCommand.matched &&
@@ -7224,7 +7231,7 @@ function Workspace({
             const message =
               error instanceof Error
                 ? error.message
-                : "The project folder could not be opened.";
+                : t("The project folder could not be opened.");
             enqueueHarnessEvent(sessionId, {
               type: "session.error",
               message,
@@ -7274,7 +7281,7 @@ function Workspace({
             },
             settings: { choices: [], maxWorkers: 2 },
             status: "planning",
-            title: "Orchestration plan",
+            title: t("Orchestration plan"),
             summary: "",
             tasks: [],
           }
@@ -7998,7 +8005,7 @@ function Workspace({
                 if (providerFailureSeen)
                   throw new Error(
                     controlOutcome.error ??
-                      "The lead could not repair the proposal.",
+                      t("The lead could not repair the proposal."),
                   );
                 return nativeProposalText || proposalText;
               },
@@ -8082,7 +8089,7 @@ function Workspace({
                             nativeProposalText || proposalText,
                             providerFailed || !buildSucceeded
                               ? (controlOutcome.error ??
-                                  "The lead could not finish planning.")
+                                  t("The lead could not finish planning."))
                               : undefined,
                           ),
                     )
@@ -9400,7 +9407,7 @@ function Workspace({
                   error:
                     error instanceof Error
                       ? error.message
-                      : "The completed turn is no longer available.",
+                      : t("The completed turn is no longer available."),
                 }
               : undefined,
         );
@@ -12292,7 +12299,7 @@ function Workspace({
             entry.id === shellId
               ? {
                   ...entry,
-                  title: "New remote session",
+                  title: t("New remote session"),
                   blocks: [],
                   busy: false,
                 }

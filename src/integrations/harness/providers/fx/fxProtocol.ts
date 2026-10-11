@@ -1,6 +1,14 @@
+import { t } from "../../../../shared/i18n/index";
 import type { PromptContentBlock } from "../../../../features/sessions/model/attachments";
-import type { AgentModel, ModelSetting, ModelSettingChoice } from "../../../../features/sessions/model/models";
-import type { RuntimeMode, ToolPreview } from "../../../../features/sessions/model/session";
+import type {
+  AgentModel,
+  ModelSetting,
+  ModelSettingChoice,
+} from "../../../../features/sessions/model/models";
+import type {
+  RuntimeMode,
+  ToolPreview,
+} from "../../../../features/sessions/model/session";
 import { normalizeTaskListStatus } from "../../../../features/sessions/model/taskList";
 import type { ApprovalDecision, HarnessEvent } from "../../core/types";
 import {
@@ -104,9 +112,7 @@ export function permissionOptionId(
   );
 }
 
-export function permissionRequestFromAcp(
-  params: unknown,
-): FxPermissionRequest {
+export function permissionRequestFromAcp(params: unknown): FxPermissionRequest {
   const rec = asRecord(params);
   const subject = asRecord(rec?.subject);
   const tool =
@@ -274,12 +280,12 @@ export function modelsFromFxOutput(stdout: string): AgentModel[] {
     const start = trimmed.indexOf("{");
     const arrayStart = trimmed.indexOf("[");
     const jsonAt =
-      start >= 0 && (arrayStart < 0 || start < arrayStart)
-        ? start
-        : arrayStart;
+      start >= 0 && (arrayStart < 0 || start < arrayStart) ? start : arrayStart;
     if (jsonAt >= 0) {
       try {
-        return uniqueFxModels(modelsFromFxJson(JSON.parse(trimmed.slice(jsonAt))));
+        return uniqueFxModels(
+          modelsFromFxJson(JSON.parse(trimmed.slice(jsonAt))),
+        );
       } catch {
         // Fall through to line parsing.
       }
@@ -354,9 +360,7 @@ export function readConfigOptions(raw: unknown): SessionConfigOption[] {
   });
 }
 
-export function extractModelConfigId(
-  options: SessionConfigOption[],
-): string {
+export function extractModelConfigId(options: SessionConfigOption[]): string {
   const exact = options.find((option) => option.id === "model");
   if (exact) return exact.id;
   // fx lists provider first with category "model"; that is not the model picker.
@@ -418,7 +422,8 @@ function modelFromJson(item: unknown): AgentModel | null {
   if (!nativeId) return null;
   const name = String(rec.name ?? rec.displayName ?? rec.title ?? "").trim();
   const settings = settingsFromJson(rec);
-  const window = numberField(rec, "contextWindow") ??
+  const window =
+    numberField(rec, "contextWindow") ??
     numberField(rec, "context_window") ??
     numberField(rec, "window");
   return {
@@ -437,21 +442,25 @@ function settingsFromJson(rec: Record<string, unknown>): ModelSetting[] {
   if (effortOptions.length > 1) {
     settings.push({
       id: "effort",
-      label: "Effort",
+      label: t("Effort"),
       kind: "select",
       value: stringField(rec, "effort") ?? effortOptions[0]?.value ?? "auto",
       options: effortOptions,
     });
   }
-  if (rec.fast === true || rec.fast_mode === true || rec.supportsFast === true) {
+  if (
+    rec.fast === true ||
+    rec.fast_mode === true ||
+    rec.supportsFast === true
+  ) {
     settings.push({
       id: "fast",
-      label: "Fast",
+      label: t("Fast"),
       kind: "toggle",
       value: rec.fast_mode === true || rec.fast === true ? "true" : "false",
       options: [
-        { value: "true", label: "On" },
-        { value: "false", label: "Off" },
+        { value: "true", label: t("On") },
+        { value: "false", label: t("Off") },
       ],
     });
   }
@@ -512,9 +521,7 @@ function displayName(nativeId: string): string {
   const slug = nativeId.includes("/")
     ? nativeId.slice(nativeId.indexOf("/") + 1)
     : nativeId;
-  return slug
-    .replace(/[-_]+/g, " ")
-    .replace(/\b\w/g, (ch) => ch.toUpperCase());
+  return slug.replace(/[-_]+/g, " ").replace(/\b\w/g, (ch) => ch.toUpperCase());
 }
 
 function usageFromUpdate(update: Record<string, unknown>): HarnessEvent[] {
@@ -528,7 +535,12 @@ function usageFromUpdate(update: Record<string, unknown>): HarnessEvent[] {
     numberField(usage, "used") ??
     numberField(usage, "usedTokens") ??
     numberField(usage, "used_tokens") ??
-    sumNumbers(usage, ["inputTokens", "outputTokens", "input_tokens", "output_tokens"]);
+    sumNumbers(usage, [
+      "inputTokens",
+      "outputTokens",
+      "input_tokens",
+      "output_tokens",
+    ]);
   const window =
     numberField(usage, "window") ??
     numberField(usage, "size") ??
@@ -657,9 +669,7 @@ function looksLikeCallId(value: string): boolean {
   const text = value.trim();
   return (
     /^(call[-_]?|tool[-_])[a-z0-9_-]+$/i.test(text) ||
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      text,
-    )
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(text)
   );
 }
 
@@ -667,7 +677,8 @@ function textFromContent(content: unknown, separator = ""): string {
   if (typeof content === "string") return content;
   const rec = asRecord(content);
   if (rec && typeof rec.text === "string") return rec.text;
-  if (rec && rec.content != null) return textFromContent(rec.content, separator);
+  if (rec && rec.content != null)
+    return textFromContent(rec.content, separator);
   if (Array.isArray(content)) {
     return content
       .map((item) => textFromContent(item, separator))
@@ -697,7 +708,9 @@ function numberField(
   key: string,
 ): number | undefined {
   const value = rec[key];
-  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+  return typeof value === "number" && Number.isFinite(value)
+    ? value
+    : undefined;
 }
 
 function sumNumbers(

@@ -1,4 +1,10 @@
-import { HARNESSES, type Block, type HarnessId, type Session } from "../../sessions/model/session";
+import { t } from "../../../shared/i18n/index";
+import {
+  HARNESSES,
+  type Block,
+  type HarnessId,
+  type Session,
+} from "../../sessions/model/session";
 import { isEqualOrInside, pathKey } from "../../../shared/lib/paths";
 
 export type OrchestrationChoice = {
@@ -326,7 +332,7 @@ export function proposalMarkdown(proposal: OrchestrationProposal): string {
     proposal.summary,
     ...proposal.tasks.map(
       (task) =>
-        `## ${task.title}\n${task.harness} · ${proposal.settings.choices.find((choice) => choice.harness === task.harness && choice.model === task.model)?.name ?? task.model}\n${task.prompt}\nFiles: ${task.files.join(", ")}\nDepends on: ${task.dependsOn.join(", ") || "None"}`,
+        `## ${task.title}\n${task.harness} · ${proposal.settings.choices.find((choice) => choice.harness === task.harness && choice.model === task.model)?.name ?? task.model}\n${task.prompt}\nFiles: ${task.files.join(", ")}\nDepends on: ${task.dependsOn.join(", ") || t("None")}`,
     ),
   ].join("\n\n");
 }

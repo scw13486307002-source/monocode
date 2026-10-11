@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { pathKey } from "../../../shared/lib/paths";
 import type { HarnessId } from "../../sessions/model/session";
 
@@ -110,7 +111,8 @@ export function newProviderAccount(
     id: `account-${crypto.randomUUID()}`,
     provider,
     label:
-      cleanLabel(label) || `Account ${providerAccounts(provider).length + 1}`,
+      cleanLabel(label) ||
+      t("Account {0}", { "0": providerAccounts(provider).length + 1 }),
   };
 }
 

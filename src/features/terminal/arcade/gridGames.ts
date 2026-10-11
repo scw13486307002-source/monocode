@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { GridArcade } from "./gridArcade";
 import { createPacmanArcade } from "./pacmanArcade";
 import { createSnakeArcade } from "./snakeArcade";
@@ -26,7 +27,7 @@ export type GridGame = {
 export const GRID_GAMES: readonly GridGame[] = [
   {
     id: "pacman",
-    label: "pac-man",
+    label: t("pac-man"),
     playLabel: "Pac-man. Arrow keys or WASD to move. Escape to release.",
     idleDim: 0.2,
     lives: true,
@@ -34,7 +35,7 @@ export const GRID_GAMES: readonly GridGame[] = [
   },
   {
     id: "snake",
-    label: "snake",
+    label: t("snake"),
     playLabel: "Snake. Arrow keys or WASD to move. Escape to release.",
     idleDim: 0.65,
     lives: false,

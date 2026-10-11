@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   useLayoutEffect,
   useRef,
@@ -46,7 +47,7 @@ export function PageHeader({
       }}
       data-tauri-drag-region="deep"
     >
-      <IconButton label="Back" onClick={onBack}>
+      <IconButton label={t("Back")} onClick={onBack}>
         <ChevronLeft className="size-3.5" strokeWidth={1.75} />
       </IconButton>
       <h3 className="min-w-0 flex-1 truncate text-[13px] font-medium text-content">
@@ -193,7 +194,7 @@ export function MascotPicker({
   return (
     <div
       role="radiogroup"
-      aria-label="Mascot"
+      aria-label={t("Mascot")}
       className="grid grid-cols-10 gap-0.5 px-1"
     >
       {PROJECT_MASCOTS.map(({ name }) => {
@@ -241,20 +242,20 @@ export function ColorPicker({
   const anchor = useRef<HTMLDivElement>(null);
   const presetIndex = MONO_COLORS.findIndex((color) => color === current);
   return (
-    <div ref={anchor} role="group" aria-label="Color">
+    <div ref={anchor} role="group" aria-label={t("Color")}>
       <ColorSwatchRow
         className="grid grid-cols-10 place-items-center gap-0.5 px-1"
         colors={MONO_COLORS}
         labels={[
-          "Blue",
-          "Coral",
-          "Yellow",
-          "Green",
-          "Pink",
-          "Purple",
-          "Teal",
-          "Orange",
-          "Indigo",
+          t("Blue"),
+          t("Coral"),
+          t("Yellow"),
+          t("Green"),
+          t("Pink"),
+          t("Purple"),
+          t("Teal"),
+          t("Orange"),
+          t("Indigo"),
         ]}
         colorIndex={presetIndex >= 0 ? presetIndex : undefined}
         customColor={presetIndex < 0 ? current : undefined}
@@ -331,7 +332,7 @@ export function FileField({
       setConflict(false);
     } catch (error) {
       if (error instanceof MonoFileConflict) setConflict(true);
-      else console.warn(`Could not save ${label}`, error);
+      else console.warn(t("Could not save {0}", { "0": label }), error);
     }
   };
   return (
@@ -351,7 +352,7 @@ export function FileField({
       {conflict ? (
         <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 px-2 text-[11px] leading-4 text-content/60">
           <span className="min-w-0 flex-1">
-            {author} changed this while you were editing.
+            {author} {t("changed this while you were editing.")}
           </span>
           <button
             type="button"
@@ -362,14 +363,14 @@ export function FileField({
             }}
             className="rounded px-1.5 py-0.5 text-content/70 hover:bg-content/8 hover:text-content"
           >
-            Use theirs
+            {t("Use theirs")}
           </button>
           <button
             type="button"
             onClick={() => void save(true)}
             className="rounded px-1.5 py-0.5 text-content/70 hover:bg-content/8 hover:text-content"
           >
-            Keep mine
+            {t("Keep mine")}
           </button>
         </div>
       ) : null}

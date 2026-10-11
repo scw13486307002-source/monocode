@@ -1,3 +1,4 @@
+import { initLocale } from "./shared/i18n";
 import React, { useLayoutEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { listen } from "@tauri-apps/api/event";
@@ -26,6 +27,7 @@ performance.mark("monocode:bootstrap");
 // Let local boot IPC overlap loading/evaluating the workspace UI.
 const appLoaded = import("./app/App");
 
+initLocale();
 initAppearance();
 initSounds();
 // Prime the real home directory before the first render so every `~/` file

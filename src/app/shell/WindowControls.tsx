@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Copy, Minus, Square, X } from "../../shared/ui/icons";
 import { useEffect, useState } from "react";
@@ -10,22 +11,28 @@ export function WindowControls() {
     let mounted = true;
 
     const win = getCurrentWindow();
-    void win.isMaximized().then((max) => {
-      if (mounted) setIsMaximized(max);
-    }).catch(() => {});
-
-    void win.onResized(async () => {
-      try {
-        const max = await win.isMaximized();
+    void win
+      .isMaximized()
+      .then((max) => {
         if (mounted) setIsMaximized(max);
-      } catch {}
-    }).then((unlistenFn) => {
-      if (mounted) {
-        unlisten = unlistenFn;
-      } else {
-        unlistenFn();
-      }
-    }).catch(() => {});
+      })
+      .catch(() => {});
+
+    void win
+      .onResized(async () => {
+        try {
+          const max = await win.isMaximized();
+          if (mounted) setIsMaximized(max);
+        } catch {}
+      })
+      .then((unlistenFn) => {
+        if (mounted) {
+          unlisten = unlistenFn;
+        } else {
+          unlistenFn();
+        }
+      })
+      .catch(() => {});
 
     return () => {
       mounted = false;
@@ -58,8 +65,8 @@ export function WindowControls() {
     >
       <button
         type="button"
-        title="Minimize"
-        aria-label="Minimize window"
+        title={t("Minimize")}
+        aria-label={t("Minimize window")}
         data-tauri-drag-region="false"
         onClick={handleMinimize}
         className="flex w-10 items-center justify-center text-content/60 transition-colors hover:bg-content/10 hover:text-content"
@@ -68,8 +75,8 @@ export function WindowControls() {
       </button>
       <button
         type="button"
-        title={isMaximized ? "Restore" : "Maximize"}
-        aria-label={isMaximized ? "Restore window" : "Maximize window"}
+        title={isMaximized ? t("Restore") : t("Maximize")}
+        aria-label={isMaximized ? t("Restore window") : t("Maximize window")}
         data-tauri-drag-region="false"
         onClick={handleToggleMaximize}
         className="flex w-10 items-center justify-center text-content/60 transition-colors hover:bg-content/10 hover:text-content"
@@ -82,8 +89,8 @@ export function WindowControls() {
       </button>
       <button
         type="button"
-        title="Close"
-        aria-label="Close window"
+        title={t("Close")}
+        aria-label={t("Close window")}
         data-tauri-drag-region="false"
         onClick={handleClose}
         className="flex w-10 items-center justify-center text-content/60 transition-colors hover:bg-red-600 hover:text-white"

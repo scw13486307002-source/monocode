@@ -1,3 +1,4 @@
+import { t } from "../i18n/index";
 import { useState } from "react";
 import { useMaskEmails } from "../../features/settings/model/displayPrefs";
 
@@ -21,7 +22,7 @@ export function PrivateEmail({ email }: { email: string }) {
       </span>
     );
   }
-  const action = revealed ? "Hide email" : "Reveal email";
+  const action = revealed ? t("Hide email") : t("Reveal email");
 
   return (
     <button

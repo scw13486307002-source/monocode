@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { isImeComposition } from "../../../shared/lib/keyboard";
 import { ChevronRight } from "../../../shared/ui/icons";
@@ -40,7 +41,7 @@ export function MonoSettingsPage({
   const lock = useLockOverscroll<HTMLDivElement>();
   return (
     <div className="flex min-h-0 flex-1 flex-col" data-mono-settings>
-      {onBack ? <PageHeader title="Settings" onBack={onBack} /> : null}
+      {onBack ? <PageHeader title={t("Settings")} onBack={onBack} /> : null}
       <div
         ref={lock}
         className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-none"
@@ -72,27 +73,29 @@ export function MonoSettingsPage({
 
         <nav className="flex flex-col gap-px border-t border-stroke p-2">
           <NavRow
-            label="Soul"
-            description="Defines who this bot is and the rules it follows. Always included in its context."
+            label={t("Soul")}
+            description={t(
+              "Defines who this bot is and the rules it follows. Always included in its context.",
+            )}
             onClick={() => onOpen("soul")}
           />
           <NavRow
-            label="Habits"
-            description="Recurring tasks this bot runs on its own."
+            label={t("Habits")}
+            description={t("Recurring tasks this bot runs on its own.")}
             count={counts?.habits}
             onClick={() => onOpen("habits")}
           />
           <NavRow
-            label="Memory"
-            description="Facts and preferences this bot remembers."
+            label={t("Memory")}
+            description={t("Facts and preferences this bot remembers.")}
             count={counts?.memory}
             onClick={() => onOpen("memory")}
           />
         </nav>
         <div className="mt-auto p-2">
           <NavRow
-            label="Settings"
-            description="Its sessions, and resetting its chat."
+            label={t("Settings")}
+            description={t("Its sessions, and resetting its chat.")}
             onClick={() => onOpen("settings")}
           />
         </div>
@@ -161,7 +164,7 @@ function NameField({ monoId, fallback }: { monoId: string; fallback: string }) {
   };
   return (
     <input
-      aria-label="Name"
+      aria-label={t("Name")}
       value={draft}
       placeholder={placeholder}
       maxLength={40}

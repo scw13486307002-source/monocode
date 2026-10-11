@@ -1,5 +1,10 @@
+import { t } from "../../../shared/i18n/index";
 import type { OrchestrationRun, TaskStatus } from "./orchestration";
-import { sessionNeedsInput, type HarnessId, type Session } from "../../sessions/model/session";
+import {
+  sessionNeedsInput,
+  type HarnessId,
+  type Session,
+} from "../../sessions/model/session";
 
 /** Small history projection; never includes prompts, results or credentials. */
 export type OrchestrationSummary = {
@@ -39,13 +44,14 @@ export function orchestrationTaskLabel(
   task: OrchestrationSummary["tasks"][number],
   summary: OrchestrationSummary,
 ): string {
-  if (task.needsInput) return "Needs input";
+  if (task.needsInput) return t("Needs input");
   if (
     !summary.live &&
     ["running", "cancelling", "queued"].includes(task.status)
   )
-    return "Saved";
-  if (summary.status === "paused" && task.status === "queued") return "Paused";
+    return t("Saved");
+  if (summary.status === "paused" && task.status === "queued")
+    return t("Paused");
   return {
     queued: "Queued",
     running: "Working",

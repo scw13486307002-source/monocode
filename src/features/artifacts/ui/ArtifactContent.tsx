@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useState } from "react";
 import { AgentMarkdown } from "../../sessions/ui/AgentMarkdown";
 import {
@@ -28,7 +29,7 @@ export function useArtifact(id: string) {
         },
         () => {
           if (!live || token !== request) return;
-          setError("Could not load this document.");
+          setError(t("Could not load this document."));
           setLoaded(true);
         },
       );

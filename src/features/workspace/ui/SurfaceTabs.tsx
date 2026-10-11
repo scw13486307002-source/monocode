@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   GitCompare,
   GripVertical,
@@ -71,10 +72,10 @@ type SurfaceTabMenu = {
 };
 
 const REVEAL_LABEL = IS_MAC
-  ? "Reveal in Finder"
+  ? t("Reveal in Finder")
   : IS_WIN
-    ? "Reveal in File Explorer"
-    : "Open Containing Folder";
+    ? t("Reveal in File Explorer")
+    : t("Open Containing Folder");
 
 export function surfaceTabMenuItems(
   file: FilePaneTab,
@@ -83,12 +84,12 @@ export function surfaceTabMenuItems(
   const close: ExplorerMenuItem = {
     kind: "item",
     id: "close",
-    label: "Close",
+    label: t("Close"),
   };
   const closeOthers: ExplorerMenuItem = {
     kind: "item",
     id: "close-others",
-    label: "Close Others",
+    label: t("Close Others"),
     disabled: !canCloseOthers,
   };
   if (!isFilesystemTab(file) || isChangesTab(file)) {
@@ -96,16 +97,16 @@ export function surfaceTabMenuItems(
   }
 
   return [
-    { kind: "item", id: "open-default", label: "Open in Default App" },
+    { kind: "item", id: "open-default", label: t("Open in Default App") },
     { kind: "item", id: "reveal", label: REVEAL_LABEL },
     { kind: "sep" },
-    { kind: "item", id: "copy-path", label: "Copy Path" },
+    { kind: "item", id: "copy-path", label: t("Copy Path") },
     {
       kind: "item",
       id: "copy-relative-path",
-      label: "Copy Relative Path",
+      label: t("Copy Relative Path"),
     },
-    { kind: "item", id: "copy-name", label: "Copy File Name" },
+    { kind: "item", id: "copy-name", label: t("Copy File Name") },
     { kind: "sep" },
     close,
     closeOthers,
@@ -128,24 +129,24 @@ export function surfaceTabPresentation(
   if (isChangesTab(file)) {
     const staged = file.changeKind === "staged";
     return {
-      name: staged ? "Staged Changes" : "Changes",
-      label: staged ? "Staged Changes" : "Changes",
+      name: staged ? t("Staged Changes") : t("Changes"),
+      label: staged ? t("Staged Changes") : t("Changes"),
       iconName: "CHANGES",
-      tooltip: staged ? "Staged changes" : "Working tree changes",
+      tooltip: staged ? t("Staged changes") : t("Working tree changes"),
     };
   }
 
   if (isSessionChangesTab(file)) {
     return {
       name: "Session Changes",
-      label: "Session Changes",
+      label: t("Session Changes"),
       iconName: "CHANGES",
-      tooltip: "Changes captured for this session only",
+      tooltip: t("Changes captured for this session only"),
     };
   }
 
   if (isAgentTab(file)) {
-    const name = file.path.trim() || "Agent";
+    const name = file.path.trim() || t("Agent");
     return {
       name,
       label: name,
@@ -167,7 +168,7 @@ export function surfaceTabPresentation(
   const review = isReviewTab(file);
   const terminal = isTerminalTab(file);
   const name = isPlanTab(file)
-    ? file.plan.title.trim() || "Plan"
+    ? file.plan.title.trim() || t("Plan")
     : terminal
       ? terminalTabLabel(file)
       : basename(file.path);
@@ -277,8 +278,8 @@ export function SurfaceTabs({
         {onPaneDragStart ? (
           <div
             role="button"
-            title="Drag to reorder pane"
-            aria-label="Drag to reorder pane"
+            title={t("Drag to reorder pane")}
+            aria-label={t("Drag to reorder pane")}
             tabIndex={-1}
             className="grid h-7.5 w-5 shrink-0 cursor-grab place-items-center rounded-md text-content/35 hover:bg-content/5 hover:text-content/70 active:cursor-grabbing touch-none"
             onPointerDown={(event) => {
@@ -398,15 +399,15 @@ export function SurfaceTabs({
                 {dirty ? (
                   <span
                     className="size-1.5 shrink-0 rounded-full bg-content/70"
-                    title="Unsaved changes"
-                    aria-label="Unsaved changes"
+                    title={t("Unsaved changes")}
+                    aria-label={t("Unsaved changes")}
                   />
                 ) : null}
               </button>
               <button
                 type="button"
-                title={`Close ${label}`}
-                aria-label={`Close ${label}`}
+                title={t("Close {0}", { "0": label })}
+                aria-label={t("Close {0}", { "0": label })}
                 data-no-drag
                 onPointerDown={(event) => event.stopPropagation()}
                 onClick={(event) => {
@@ -453,7 +454,7 @@ export function SurfaceTabs({
           x={menu.x}
           y={menu.y}
           items={surfaceTabMenuItems(menuFile, files.length > 1)}
-          ariaLabel="File tab actions"
+          ariaLabel={t("File tab actions")}
           onPick={onMenuPick}
           onClose={() => setMenu(null)}
         />

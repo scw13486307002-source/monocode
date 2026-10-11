@@ -1,10 +1,13 @@
+import { t } from "../../../shared/i18n/index";
 import type { BuiltinSkill } from "../../skills/model/skills";
 
 export const PLAN_COMMAND: BuiltinSkill = {
   kind: "builtin",
   name: "plan",
   invocation: "plan",
-  description: "Create a reviewable implementation plan before changing files.",
+  description: t(
+    "Create a reviewable implementation plan before changing files.",
+  ),
   scope: "builtin",
   source: "monocode",
 };
@@ -80,9 +83,9 @@ export function planTitle(text: string): string {
   for (const line of text.split(/\r?\n/)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("```") || trimmed === "---") continue;
-    return unwrapMarkdown(trimmed).slice(0, 80) || "Plan";
+    return unwrapMarkdown(trimmed).slice(0, 80) || t("Plan");
   }
-  return "Plan";
+  return t("Plan");
 }
 
 /** First prose paragraph that is not the title heading. */

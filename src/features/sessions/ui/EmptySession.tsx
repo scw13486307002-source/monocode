@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { type ReactNode, useSyncExternalStore } from "react";
 import { basename } from "../../../platform/tauri/fs";
 import { projectKey } from "../../../shared/lib/paths";
@@ -41,8 +42,8 @@ export function EmptySession({ cwd, composer, hasChatBackground }: Props) {
     getProjectLabel,
   );
   const title = project
-    ? `What should we work on in ${project}?`
-    : "What should we work on?";
+    ? t("What should we work on in {0}?", { "0": project })
+    : t("What should we work on?");
 
   return (
     <div

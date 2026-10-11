@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useSyncExternalStore } from "react";
 import { useLockOverscroll } from "../../../shared/hooks/useLockOverscroll";
 import {
@@ -35,15 +36,17 @@ export function MonoPreferencesPage({
   );
   return (
     <div className="flex min-h-0 flex-1 flex-col" data-mono-preferences>
-      <PageHeader title="Settings" onBack={onBack} />
+      <PageHeader title={t("Settings")} onBack={onBack} />
       <div
         ref={lock}
         className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-none"
       >
         <div className="flex flex-col gap-px p-2">
           <SwitchRow
-            label="Show sessions in sidebar"
-            description="Sessions it starts appear in your project sidebar. Hidden ones stay saved and open from its chat."
+            label={t("Show sessions in sidebar")}
+            description={t(
+              "Sessions it starts appear in your project sidebar. Hidden ones stay saved and open from its chat.",
+            )}
             on={shown}
             onChange={(on) =>
               updateMono(monoId, (mono) => ({
@@ -54,8 +57,11 @@ export function MonoPreferencesPage({
           />
           {/* Hidden sessions have no sidebar folder to go in. */}
           <SwitchRow
-            label="Group in a folder"
-            description={`Sessions it starts go in a “${agent.name}” folder in your project sidebar.`}
+            label={t("Group in a folder")}
+            description={t(
+              "Sessions it starts go in a “{0}” folder in your project sidebar.",
+              { "0": agent.name },
+            )}
             on={shown && folders}
             disabled={!shown}
             onChange={(on) =>
@@ -68,8 +74,8 @@ export function MonoPreferencesPage({
         {onReset ? (
           <div className="mt-auto p-2">
             <ConfirmReset
-              label="Reset conversation"
-              title={`Reset ${agent.name}'s conversation?`}
+              label={t("Reset conversation")}
+              title={t("Reset {0}'s conversation?", { "0": agent.name })}
               body="All messages in this Mono's conversation will be deleted and any active reply will be stopped. This can't be undone."
               kept="Its soul, memory and habits will be kept."
               failure="Could not reset the conversation."
@@ -83,10 +89,10 @@ export function MonoPreferencesPage({
                   className="flex w-full flex-col rounded-lg px-3 py-2 text-left hover:bg-content/5"
                 >
                   <span className="text-[13px] leading-5 text-red-400">
-                    Reset conversation
+                    {t("Reset conversation")}
                   </span>
                   <span className="text-[12px] leading-5 text-content/40">
-                    Clear all messages and start fresh
+                    {t("Clear all messages and start fresh")}
                   </span>
                 </button>
               )}

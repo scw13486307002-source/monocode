@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import { clearKnownInboxItems } from "./inboxSeen";
 import {
@@ -585,7 +586,7 @@ export async function githubPrAction(
 export function githubReviewDecisionLabel(decision: string): string {
   switch (decision.trim().toUpperCase()) {
     case "APPROVED":
-      return "Approved";
+      return t("Approved");
     case "CHANGES_REQUESTED":
       return "Changes requested";
     case "REVIEW_REQUIRED":
@@ -598,7 +599,7 @@ export function githubReviewDecisionLabel(decision: string): string {
 export function githubReviewStateLabel(state: string): string {
   switch (state.trim().toUpperCase()) {
     case "APPROVED":
-      return "Approved";
+      return t("Approved");
     case "CHANGES_REQUESTED":
       return "Requested changes";
     case "DISMISSED":
@@ -1162,16 +1163,18 @@ export function inboxItemStatus(item: {
 }): string {
   if (item.kind === "linear") {
     const type = item.stateType?.trim().toLowerCase();
-    if (type === "completed" || type === "canceled") return "Closed";
-    return "Open";
+    if (type === "completed" || type === "canceled") return t("Closed");
+    return t("Open");
   }
   if (item.kind === "jira") {
-    return item.stateType?.trim().toLowerCase() === "done" ? "Closed" : "Open";
+    return item.stateType?.trim().toLowerCase() === "done"
+      ? t("Closed")
+      : t("Open");
   }
-  if (item.draft) return "Draft";
-  if (item.state === "merged") return "Merged";
-  if (item.state === "closed") return "Closed";
-  return "Open";
+  if (item.draft) return t("Draft");
+  if (item.state === "merged") return t("Merged");
+  if (item.state === "closed") return t("Closed");
+  return t("Open");
 }
 
 export function matchesInboxQuery(item: InboxItem, query: string): boolean {

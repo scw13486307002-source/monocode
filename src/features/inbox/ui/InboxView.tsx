@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useGithubPrChecks } from "../hooks/useGithubPrChecks";
 import { summarizePrChecks } from "../model/githubPrChecks";
 import type { CiRepairRequest } from "../model/ciRepair";
@@ -911,7 +912,7 @@ export function InboxView({
         {visibleSources.length > 0 ? (
           <div
             role="tablist"
-            aria-label="Inbox source"
+            aria-label={t("Inbox source")}
             className="flex min-w-0 basis-0 items-center gap-px"
             style={{ flexGrow: visibleSources.length }}
           >
@@ -929,10 +930,10 @@ export function InboxView({
           <button
             ref={connectButtonRef}
             type="button"
-            aria-label="Connect an inbox source"
+            aria-label={t("Connect an inbox source")}
             aria-haspopup="menu"
             aria-expanded={connectMenuOpen}
-            title="Connect an inbox source"
+            title={t("Connect an inbox source")}
             onClick={() => setConnectMenuOpen((open) => !open)}
             className={`flex h-6 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md px-2 text-[12px] leading-none ${
               connectMenuOpen
@@ -941,7 +942,7 @@ export function InboxView({
             }`}
           >
             <Plus className="size-3.5 shrink-0" strokeWidth={1.75} />
-            <span className="min-w-0 truncate">Add connection</span>
+            <span className="min-w-0 truncate">{t("Add connection")}</span>
           </button>
         ) : null}
       </div>
@@ -952,8 +953,8 @@ export function InboxView({
             <input
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Filter inbox"
-              aria-label="Filter inbox"
+              placeholder={t("Filter inbox")}
+              aria-label={t("Filter inbox")}
               spellCheck={false}
               autoComplete="off"
               className="h-7 w-full rounded-md bg-transparent pl-7 pr-2 text-[12px] text-content outline-none placeholder:text-content/40"
@@ -961,8 +962,8 @@ export function InboxView({
           </div>
           <button
             type="button"
-            title="Filter inbox"
-            aria-label="Filter inbox"
+            title={t("Filter inbox")}
+            aria-label={t("Filter inbox")}
             aria-expanded={!!filterMenu}
             aria-haspopup="menu"
             onClick={onFilterButtonClick}
@@ -974,8 +975,8 @@ export function InboxView({
           </button>
           <button
             type="button"
-            title="Mark all as read"
-            aria-label="Mark all as read"
+            title={t("Mark all as read")}
+            aria-label={t("Mark all as read")}
             disabled={!sourceHasUnseen}
             onClick={() =>
               setReadStatusError(
@@ -990,7 +991,7 @@ export function InboxView({
           </button>
           <button
             type="button"
-            aria-label="Refresh"
+            aria-label={t("Refresh")}
             onClick={() => setRefresh((value) => value + 1)}
             className="grid size-6 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
           >
@@ -1016,7 +1017,7 @@ export function InboxView({
       >
         {noSourcesConnected ? (
           <p className="px-3 py-3 text-[12px] text-content/50">
-            Add a connection to start using the Inbox.
+            {t("Add a connection to start using the Inbox.")}
           </p>
         ) : sourceError && visibleItems.length === 0 ? (
           <p className="px-3 py-2 text-[12px] text-content/50">{sourceError}</p>
@@ -1029,28 +1030,32 @@ export function InboxView({
             {narrowedByUser
               ? searchNarrowed
                 ? isTrackerSource(source)
-                  ? `No matching ${INBOX_SOURCE_LABELS[source]} issues`
+                  ? t("No matching {0} issues", {
+                      "0": INBOX_SOURCE_LABELS[source],
+                    })
                   : source === "gitlab"
-                    ? "No matching issues or merge requests"
-                    : "No matching issues or pull requests"
+                    ? t("No matching issues or merge requests")
+                    : t("No matching issues or pull requests")
                 : isTrackerSource(source)
-                  ? `No ${INBOX_SOURCE_LABELS[source]} issues match these filters`
+                  ? t("No {0} issues match these filters", {
+                      "0": INBOX_SOURCE_LABELS[source],
+                    })
                   : source === "gitlab" || source === "azuredevops"
                     ? activeFilters.assignedToMe
-                      ? "Nothing needs your attention"
+                      ? t("Nothing needs your attention")
                       : source === "gitlab"
-                        ? "No GitLab items match these filters"
-                        : "No ADO items match these filters"
-                    : "No issues or pull requests match these filters"
+                        ? t("No GitLab items match these filters")
+                        : t("No ADO items match these filters")
+                    : t("No issues or pull requests match these filters")
               : isTrackerSource(source)
-                ? `No ${INBOX_SOURCE_LABELS[source]} issues`
+                ? t("No {0} issues", { "0": INBOX_SOURCE_LABELS[source] })
                 : source === "gitlab"
                   ? projects.length === 0
-                    ? "Open a project to fill the inbox"
-                    : "No matching issues or merge requests"
+                    ? t("Open a project to fill the inbox")
+                    : t("No matching issues or merge requests")
                   : projects.length === 0
-                    ? "Open a project to fill the inbox"
-                    : "No matching issues or pull requests"}
+                    ? t("Open a project to fill the inbox")
+                    : t("No matching issues or pull requests")}
           </p>
         ) : (
           <ul className="flex flex-col gap-0.5 p-1.5">
@@ -1095,7 +1100,7 @@ export function InboxView({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label="Resize inbox list"
+        aria-label={t("Resize inbox list")}
         className={`absolute inset-y-0 -right-px z-10 w-1.5 cursor-col-resize touch-none ${
           resize.dragging ? "bg-content/15" : "hover:bg-content/10"
         }`}
@@ -1137,7 +1142,7 @@ export function InboxView({
   return (
     <div
       role="region"
-      aria-label="Inbox"
+      aria-label={t("Inbox")}
       data-app-inbox
       className="flex min-h-0 min-w-0 flex-1 flex-col text-content"
     >
@@ -1155,7 +1160,7 @@ export function InboxView({
             className="size-3.5 shrink-0 text-content/45"
             strokeWidth={1.75}
           />
-          <span className="min-w-0 truncate text-content">Inbox</span>
+          <span className="min-w-0 truncate text-content">{t("Inbox")}</span>
         </div>
         {IS_MAC ? null : <WindowControls />}
       </div>
@@ -1311,11 +1316,14 @@ export function LinkedWorkItemPanel({
   const contentKey = item ? inboxItemKey(item) : error ? "error" : "loading";
   const [revealedKey, setRevealedKey] = useState<string | null>(null);
 
-  const kindLabel = target.kind === "pr" ? "Pull request" : "Issue";
+  const kindLabel = target.kind === "pr" ? t("Pull request") : t("Issue");
   return (
     <aside
       ref={resize.setPaneRef}
-      aria-label={`Linked ${kindLabel.toLowerCase()} #${target.number}`}
+      aria-label={t("Linked {0} #{1}", {
+        "0": kindLabel.toLowerCase(),
+        "1": target.number,
+      })}
       aria-busy={loading}
       aria-hidden={!visible}
       inert={!visible || undefined}
@@ -1329,7 +1337,9 @@ export function LinkedWorkItemPanel({
     >
       <div
         role="separator"
-        aria-label={`Resize linked ${kindLabel.toLowerCase()} panel`}
+        aria-label={t("Resize linked {0} panel", {
+          "0": kindLabel.toLowerCase(),
+        })}
         aria-orientation="vertical"
         onPointerDown={resize.onPointerDown}
         onDoubleClick={resize.onDoubleClick}
@@ -1344,7 +1354,7 @@ export function LinkedWorkItemPanel({
       >
         <div className="absolute top-[5px] right-2 z-30">
           <IconButton
-            label={`Close ${kindLabel.toLowerCase()} panel`}
+            label={t("Close {0} panel", { "0": kindLabel.toLowerCase() })}
             onClick={onClose}
           >
             <PanelLeft className="size-3.5" strokeWidth={1.75} />
@@ -1388,7 +1398,7 @@ export function LinkedWorkItemPanel({
                 className={ACTION_OUTLINE}
               >
                 <ExternalLink className="size-3.5" strokeWidth={1.75} />
-                Open on GitHub
+                {t("Open on GitHub")}
               </button>
             </div>
           ) : (
@@ -1434,7 +1444,9 @@ function InboxDetailBody({
     return (
       <div className="flex h-full flex-col items-center justify-center px-6 text-center">
         <Inbox className="mb-3 size-6 text-content/30" strokeWidth={1.75} />
-        <p className="text-[13px] text-content/45">Select an inbox item</p>
+        <p className="text-[13px] text-content/45">
+          {t("Select an inbox item")}
+        </p>
       </div>
     );
   }
@@ -1519,9 +1531,9 @@ function InboxCard({
   const kindLabel =
     item.kind === "pr"
       ? item.provider === "gitlab"
-        ? "Merge request"
-        : "Pull request"
-      : "Issue";
+        ? t("Merge request")
+        : t("Pull request")
+      : t("Issue");
   const time = formatRelativeTime(item.updatedAt);
   const name = projectName(item.projectPath);
   const tracker = item.provider === "linear" || item.provider === "jira";
@@ -1636,18 +1648,18 @@ const GITHUB_PR_MERGE_OPTIONS: Array<{
 }> = [
   {
     action: "merge",
-    label: "Create a merge commit",
-    description: "Add every commit to the base branch.",
+    label: t("Create a merge commit"),
+    description: t("Add every commit to the base branch."),
   },
   {
     action: "squash",
-    label: "Squash and merge",
-    description: "Combine the commits into one.",
+    label: t("Squash and merge"),
+    description: t("Combine the commits into one."),
   },
   {
     action: "rebase",
-    label: "Rebase and merge",
-    description: "Add the commits without a merge commit.",
+    label: t("Rebase and merge"),
+    description: t("Add the commits without a merge commit."),
   },
 ];
 
@@ -1664,53 +1676,65 @@ function githubPrActionCopy(
   switch (action) {
     case "merge":
       return {
-        title: "Merge this pull request?",
-        detail: `Every commit from ${source} will be added to ${destination} with a merge commit.`,
+        title: t("Merge this pull request?"),
+        detail: t(
+          "Every commit from {0} will be added to {1} with a merge commit.",
+          { "0": source, "1": destination },
+        ),
         confirm: "Merge pull request",
         progress: "Merging…",
       };
     case "squash":
       return {
-        title: "Squash and merge?",
-        detail: `The commits from ${source} will be combined into one commit on ${destination}.`,
+        title: t("Squash and merge?"),
+        detail: t(
+          "The commits from {0} will be combined into one commit on {1}.",
+          { "0": source, "1": destination },
+        ),
         confirm: "Squash and merge",
         progress: "Merging…",
       };
     case "rebase":
       return {
-        title: "Rebase and merge?",
-        detail: `The commits from ${source} will be rebased individually onto ${destination}.`,
+        title: t("Rebase and merge?"),
+        detail: t(
+          "The commits from {0} will be rebased individually onto {1}.",
+          { "0": source, "1": destination },
+        ),
         confirm: "Rebase and merge",
         progress: "Merging…",
       };
     case "draft":
       return {
-        title: "Convert to draft?",
-        detail:
+        title: t("Convert to draft?"),
+        detail: t(
           "Reviewers will see that this pull request is not ready to merge.",
+        ),
         confirm: "Convert to draft",
         progress: "Converting…",
       };
     case "ready":
       return {
-        title: "Mark as ready for review?",
-        detail:
+        title: t("Mark as ready for review?"),
+        detail: t(
           "Reviewers will see that this pull request is ready for feedback.",
+        ),
         confirm: "Ready for review",
         progress: "Updating…",
       };
     case "close":
       return {
-        title: "Close this pull request?",
-        detail:
+        title: t("Close this pull request?"),
+        detail: t(
           "The pull request will close without merging. You can reopen it later.",
+        ),
         confirm: "Close pull request",
         progress: "Closing…",
       };
     case "reopen":
       return {
-        title: "Reopen this pull request?",
-        detail: "The pull request will return to the open state.",
+        title: t("Reopen this pull request?"),
+        detail: t("The pull request will return to the open state."),
         confirm: "Reopen pull request",
         progress: "Reopening…",
       };
@@ -1772,7 +1796,7 @@ export function GithubPrActions({
       setNotice(
         (action === "merge" || action === "squash" || action === "rebase") &&
           next.state.trim().toLowerCase() !== "merged"
-          ? "Merge queued or auto-merge enabled."
+          ? t("Merge queued or auto-merge enabled.")
           : null,
       );
       onChange?.({
@@ -1799,7 +1823,7 @@ export function GithubPrActions({
         <div
           ref={mergeGroup}
           role="group"
-          aria-label="Merge pull request"
+          aria-label={t("Merge pull request")}
           className="inline-flex h-7 overflow-hidden rounded-md bg-content text-background-base"
         >
           <button
@@ -1810,13 +1834,13 @@ export function GithubPrActions({
           >
             <GitMerge className="size-3.5" strokeWidth={1.75} />
             {selectedMerge?.action === "merge"
-              ? "Merge pull request"
+              ? t("Merge pull request")
               : selectedMerge?.label}
           </button>
           <button
             type="button"
-            title="Merge options"
-            aria-label="Merge options"
+            title={t("Merge options")}
+            aria-label={t("Merge options")}
             aria-haspopup="menu"
             aria-expanded={mergeMenuOpen}
             disabled={busy}
@@ -1835,7 +1859,7 @@ export function GithubPrActions({
           className={stateButton}
         >
           <GitPullRequest className="size-3.5" strokeWidth={1.75} />
-          Ready for review
+          {t("Ready for review")}
         </button>
       ) : null}
       {state === "open" && !item.draft ? (
@@ -1846,7 +1870,7 @@ export function GithubPrActions({
           className={stateButton}
         >
           <GitPullRequestDraft className="size-3.5" strokeWidth={1.75} />
-          Convert to draft
+          {t("Convert to draft")}
         </button>
       ) : null}
       {state === "open" ? (
@@ -1857,7 +1881,7 @@ export function GithubPrActions({
           className={`${stateButton} hover:text-rose-400`}
         >
           <GitPullRequestClosed className="size-3.5" strokeWidth={1.75} />
-          Close pull request
+          {t("Close pull request")}
         </button>
       ) : null}
       {state === "closed" ? (
@@ -1868,7 +1892,7 @@ export function GithubPrActions({
           className={stateButton}
         >
           <GitPullRequest className="size-3.5" strokeWidth={1.75} />
-          Reopen pull request
+          {t("Reopen pull request")}
         </button>
       ) : null}
       {notice ? (
@@ -1885,7 +1909,7 @@ export function GithubPrActions({
           onDismiss={() => setMergeMenuOpen(false)}
           role="menu"
           tabIndex={-1}
-          aria-label="Merge method"
+          aria-label={t("Merge method")}
           className="p-1"
         >
           {GITHUB_PR_MERGE_OPTIONS.map((option) => (
@@ -1960,7 +1984,7 @@ export function GithubPrActions({
               onClick={dismissConfirmation}
               className={`h-7 rounded-md px-3 text-[12px] text-content/65 hover:bg-content/8 hover:text-content disabled:cursor-default disabled:opacity-40 ${PR_ACTION_PRESS}`}
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="button"
@@ -2036,19 +2060,19 @@ export function InboxDetail({
   const externalActionLabel =
     item.kind === "pr"
       ? gitlab
-        ? "Review on GitLab"
+        ? t("Review on GitLab")
         : azuredevops
-          ? "Review on ADO"
-          : "Review on GitHub"
+          ? t("Review on ADO")
+          : t("Review on GitHub")
       : linear
-        ? "Open in Linear"
+        ? t("Open in Linear")
         : jira
-          ? "Open in Jira"
+          ? t("Open in Jira")
           : gitlab
-            ? "Open on GitLab"
+            ? t("Open on GitLab")
             : azuredevops
-              ? "Open on ADO"
-              : "Open on GitHub";
+              ? t("Open on ADO")
+              : t("Open on GitHub");
   const gitlabKind =
     gitlab && (item.kind === "issue" || item.kind === "pr") ? item.kind : null;
   const azureDevOpsKind =
@@ -2620,9 +2644,9 @@ export function InboxDetail({
       <span className="shrink-0">
         {item.kind === "pr"
           ? gitlab
-            ? "Merge request"
-            : "Pull request"
-          : "Issue"}
+            ? t("Merge request")
+            : t("Pull request")
+          : t("Issue")}
       </span>
       <span className="shrink-0 tabular-nums">{inboxItemRef(item)}</span>
       <span
@@ -2638,7 +2662,7 @@ export function InboxDetail({
       {panel ? (
         <button
           type="button"
-          title={item.url ? externalActionLabel : "No link available"}
+          title={item.url ? externalActionLabel : t("No link available")}
           aria-label={externalActionLabel}
           disabled={!item.url}
           onClick={() => void openUrl(item.url)}
@@ -2717,7 +2741,7 @@ export function InboxDetail({
                         ))}
                       </span>
                     ) : (
-                      <span>Unassigned</span>
+                      <span>{t("Unassigned")}</span>
                     )}
                   </>
                 ) : null}
@@ -2728,14 +2752,16 @@ export function InboxDetail({
                       dateTime={item.createdAt}
                       title={new Date(item.createdAt).toLocaleString()}
                     >
-                      Created {formatRelativeTime(item.createdAt)}
+                      {t("Created")} {formatRelativeTime(item.createdAt)}
                     </time>
                   </>
                 ) : null}
                 {formatRelativeTime(item.updatedAt) ? (
                   <>
                     <span aria-hidden>·</span>
-                    <span>Updated {formatRelativeTime(item.updatedAt)}</span>
+                    <span>
+                      {t("Updated")} {formatRelativeTime(item.updatedAt)}
+                    </span>
                   </>
                 ) : null}
                 {baseRef && headRef ? (
@@ -2764,7 +2790,7 @@ export function InboxDetail({
                 <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
                   <span className="mr-0.5 inline-flex shrink-0 items-center gap-1 text-[11px] text-content/45">
                     <MessageMultiple className="size-3.5" strokeWidth={1.75} />
-                    Related{" "}
+                    {t("Related")}{" "}
                     {relatedSessions.length === 1 ? "thread" : "threads"}
                   </span>
                   {relatedSessions.map((session) => {
@@ -2776,14 +2802,14 @@ export function InboxDetail({
                       <button
                         key={session.id}
                         type="button"
-                        title={`Open thread: ${title}`}
+                        title={t("Open thread: {0}", { "0": title })}
                         onClick={() => void onOpenSession?.(session.id)}
                         className="inline-flex min-w-0 max-w-64 items-center gap-1 rounded-md bg-content/5 px-2 py-1 text-[11px] text-content/70 hover:bg-content/10 hover:text-content"
                       >
                         <span className="truncate">{title}</span>
                         {session.archived ? (
                           <span className="shrink-0 text-content/40">
-                            Archived
+                            {t("Archived")}
                           </span>
                         ) : null}
                       </button>
@@ -2823,7 +2849,7 @@ export function InboxDetail({
                       }}
                       className={`${ACTION_FILLED} disabled:cursor-default disabled:opacity-40`}
                     >
-                      {starting ? "Sending..." : "Send to agent"}
+                      {starting ? t("Sending...") : t("Send to agent")}
                     </button>
                     {chooseStartProject ? (
                       <InboxProjectPicker
@@ -2849,13 +2875,15 @@ export function InboxDetail({
                     className={ACTION_OUTLINE}
                   >
                     <MessageSquare className="size-3.5" strokeWidth={1.75} />{" "}
-                    Ask
+                    {t("Ask")}
                   </button>
                 ) : null}
                 {panel ? null : (
                   <button
                     type="button"
-                    title={item.url ? externalActionLabel : "No link available"}
+                    title={
+                      item.url ? externalActionLabel : t("No link available")
+                    }
                     disabled={!item.url}
                     onClick={() => void openUrl(item.url)}
                     className={`${ACTION_GHOST} disabled:opacity-40`}
@@ -2874,17 +2902,19 @@ export function InboxDetail({
                 <div
                   role="tablist"
                   aria-label={
-                    gitlab ? "Merge request sections" : "Pull request sections"
+                    gitlab
+                      ? t("Merge request sections")
+                      : t("Pull request sections")
                   }
                   className="flex items-stretch gap-4"
                 >
                   <InboxDetailTab
-                    label="Summary"
+                    label={t("Summary")}
                     selected={tab === "summary"}
                     onSelect={() => setTab("summary")}
                   />
                   <InboxDetailTab
-                    label="Code"
+                    label={t("Code")}
                     count={panel ? prDiff?.files.length : undefined}
                     selected={tab === "code"}
                     onSelect={() => {
@@ -2903,7 +2933,7 @@ export function InboxDetail({
                 {tab === "code" && inboxShowsFullFileDiff(item) ? (
                   <div
                     role="group"
-                    aria-label="Diff context"
+                    aria-label={t("Diff context")}
                     className="ml-auto flex items-center self-center rounded-md border border-content/10 bg-content/[0.03] p-0.5"
                   >
                     <button
@@ -2916,7 +2946,7 @@ export function InboxDetail({
                           : "text-content/45 hover:text-content/70"
                       }`}
                     >
-                      Hunks
+                      {t("Hunks")}
                     </button>
                     <button
                       type="button"
@@ -2928,7 +2958,7 @@ export function InboxDetail({
                           : "text-content/45 hover:text-content/70"
                       }`}
                     >
-                      Full file
+                      {t("Full file")}
                     </button>
                   </div>
                 ) : null}
@@ -2975,7 +3005,9 @@ export function InboxDetail({
                   focusPath={diffFocusPath}
                 />
               ) : (
-                <p className="text-[13px] text-content/45">No file changes</p>
+                <p className="text-[13px] text-content/45">
+                  {t("No file changes")}
+                </p>
               )
             ) : isPr && tab === "checks" ? (
               <InboxPrChecks
@@ -3025,7 +3057,9 @@ export function InboxDetail({
                     allowRemoteMedia
                   />
                 ) : (
-                  <p className="text-[13px] text-content/45">No description</p>
+                  <p className="text-[13px] text-content/45">
+                    {t("No description")}
+                  </p>
                 )}
                 {panel && isPr ? (
                   <InboxPrChangesGlance
@@ -3086,8 +3120,8 @@ function CopyBranchNameButton({ branch }: { branch: string }) {
   return (
     <button
       type="button"
-      title={copied ? "Copied" : "Copy branch name"}
-      aria-label={copied ? "Copied" : "Copy branch name"}
+      title={copied ? t("Copied") : t("Copy branch name")}
+      aria-label={copied ? t("Copied") : t("Copy branch name")}
       className="shrink-0 rounded p-0.5 text-content/40 hover:bg-content/8 hover:text-content/70"
       onClick={() => {
         void copyText(branch).then(
@@ -3210,7 +3244,7 @@ function InboxProjectPicker({
       >
         {selected ? <InboxProjectMark project={selected} /> : null}
         <span className="min-w-0 truncate">
-          {selected?.name ?? "Choose project"}
+          {selected?.name ?? t("Choose project")}
         </span>
         <ChevronDown
           className="size-3 shrink-0 text-content/45"

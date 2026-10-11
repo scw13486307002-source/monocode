@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useContext } from "react";
 import { NativePopupHost } from "../../../shared/ui/NativePopupHost";
 import type { ComponentPropsWithoutRef } from "react";
@@ -44,7 +45,7 @@ export function GitPickerTrigger({
       </span>
       {worktree && (
         <span className="shrink-0 rounded bg-content/8 px-1 text-[10px] text-content/45">
-          Worktree
+          {t("Worktree")}
         </span>
       )}
     </button>

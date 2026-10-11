@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { CSSProperties } from "react";
 import { PROJECT_MASCOTS } from "../../projects/model/projectMascots";
 import { PixelMascot } from "../../projects/ui/PixelMascot";
@@ -47,7 +48,7 @@ export function MonoIntroPopover({ anchor, look, onCreate, onLater }: Props) {
       rounded="rounded-md"
       width={360}
       role="dialog"
-      aria-label="Meet Monos"
+      aria-label={t("Meet Monos")}
     >
       <div
         aria-hidden
@@ -96,15 +97,15 @@ export function MonoIntroPopover({ anchor, look, onCreate, onLater }: Props) {
 
       <div className="px-5 pb-5 text-center">
         <h3 className="flex items-center justify-center gap-2 text-xl font-semibold text-content">
-          Meet Monos
+          {t("Meet Monos")}
           <span className="rounded-full bg-content/8 px-1.5 py-px text-[10px] font-medium text-content/55">
-            Experimental
+            {t("Experimental")}
           </span>
         </h3>
         <p className="mx-auto mt-1.5 text-[13px] leading-relaxed text-content/55">
-          Agents of your own that live on the rail and work across your
-          projects. They remember what matters and pick up habits they run on
-          their own.
+          {t(
+            "Agents of your own that live on the rail and work across your projects. They remember what matters and pick up habits they run on their own.",
+          )}
         </p>
         <div className="mt-6 flex flex-col gap-1">
           <button
@@ -113,14 +114,14 @@ export function MonoIntroPopover({ anchor, look, onCreate, onLater }: Props) {
             onClick={onCreate}
             className="w-full rounded-lg bg-content py-2 text-[13px] font-medium text-background-base hover:bg-content/85 active:scale-[0.98]"
           >
-            Create your mono
+            {t("Create your mono")}
           </button>
           <button
             type="button"
             onClick={onLater}
             className="w-full rounded-lg py-2 text-[13px] text-content/60 hover:bg-content/8 hover:text-content"
           >
-            Not now
+            {t("Not now")}
           </button>
         </div>
       </div>

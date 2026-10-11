@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
@@ -6,14 +7,15 @@ import {
   loadNotificationsEnabled,
   NOTIFICATIONS_CHANGE_EVENT,
 } from "../model/notifications";
-import { loadSoundsEnabled, SOUNDS_CHANGE_EVENT } from "../../settings/model/sounds";
+import {
+  loadSoundsEnabled,
+  SOUNDS_CHANGE_EVENT,
+} from "../../settings/model/sounds";
 import {
   getProjectNotificationRule,
   subscribeNotificationPreferences,
 } from "../model/notificationPreferences";
-import {
-  knownNotificationProject,
-} from "../model/notificationProjects";
+import { knownNotificationProject } from "../model/notificationProjects";
 import {
   clearReminders,
   listReminders,
@@ -93,7 +95,7 @@ export function useSessionReminders(
   }, [configure]);
 
   const report = (error: unknown) => {
-    void message(String(error), { title: "Reminder", kind: "error" });
+    void message(String(error), { title: t("Reminder"), kind: "error" });
   };
 
   const schedule = useCallback(

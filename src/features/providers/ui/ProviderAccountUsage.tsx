@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   clampUsedPercent,
   DAILY_WINDOW_MINUTES,
@@ -43,7 +44,9 @@ export function AccountStatusLabel({
   return (
     <span
       className={`inline-flex min-w-0 items-center gap-1.5 ${className}`}
-      title={status.detail ? `${status.label} · ${status.detail}` : status.label}
+      title={
+        status.detail ? `${status.label} · ${status.detail}` : status.label
+      }
     >
       <span
         className={`size-1.5 shrink-0 rounded-full ${STATUS_DOT[status.tone]}`}
@@ -69,8 +72,8 @@ export function AccountUsageRefresh({ usage }: { usage: AccountUsage }) {
       type="button"
       disabled={usage.refreshing}
       onClick={usage.refresh}
-      aria-label="Refresh usage limits"
-      title="Refresh usage limits"
+      aria-label={t("Refresh usage limits")}
+      title={t("Refresh usage limits")}
       className="grid size-7 place-items-center rounded-md text-content/40 transition-transform duration-150 hover:bg-content/10 hover:text-content active:scale-[0.96] disabled:opacity-40"
     >
       <RefreshCw
@@ -89,12 +92,15 @@ export function meterWindows(
     limits?.session
       ? {
           // Devin's short window is a day, not five hours.
-          title: limits.session.windowMinutes === DAILY_WINDOW_MINUTES ? "Daily" : "5h",
+          title:
+            limits.session.windowMinutes === DAILY_WINDOW_MINUTES
+              ? t("Daily")
+              : "5h",
           window: limits.session,
         }
       : null,
-    limits?.weekly ? { title: "Weekly", window: limits.weekly } : null,
-    limits?.monthly ? { title: "Monthly", window: limits.monthly } : null,
+    limits?.weekly ? { title: t("Weekly"), window: limits.weekly } : null,
+    limits?.monthly ? { title: t("Monthly"), window: limits.monthly } : null,
   ].filter((entry) => entry != null);
 }
 
@@ -137,8 +143,11 @@ export function AccountUsageMeters({
         />
       ))}
       {limits?.extraUsageBalance != null ? (
-        <div className="w-16 text-[10px] leading-3" title="Extra usage balance">
-          <div className="truncate text-content/40">Extra</div>
+        <div
+          className="w-16 text-[10px] leading-3"
+          title={t("Extra usage balance")}
+        >
+          <div className="truncate text-content/40">{t("Extra")}</div>
           <div className="mt-1 font-medium tabular-nums text-content/70">
             {formatExtraUsageBalance(limits.extraUsageBalance)}
           </div>
@@ -176,7 +185,7 @@ export function UsageMeter({
       title={
         window.resetsAt == null
           ? undefined
-          : `Resets ${new Date(window.resetsAt).toLocaleString()}`
+          : t("Resets {0}", { "0": new Date(window.resetsAt).toLocaleString() })
       }
     >
       <div className="flex items-baseline justify-between gap-2 text-[10px] leading-3">
@@ -189,7 +198,7 @@ export function UsageMeter({
           {showRemaining
             ? `${formatUsagePercent(remaining)} left`
             : full
-              ? "Full"
+              ? t("Full")
               : formatUsagePercent(pct)}
         </span>
       </div>

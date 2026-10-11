@@ -1,7 +1,15 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
-import { HARNESSES, type HarnessId, type Session } from "../../sessions/model/session";
+import {
+  HARNESSES,
+  type HarnessId,
+  type Session,
+} from "../../sessions/model/session";
 import { pathKey } from "../../../shared/lib/paths";
-import type { ApprovalDecision, HarnessEvent } from "../../../integrations/harness/core/types";
+import type {
+  ApprovalDecision,
+  HarnessEvent,
+} from "../../../integrations/harness/core/types";
 import { pendingApprovalForSession } from "../../notifications/model/approvalToast";
 import type { UserQuestionReply } from "../../sessions/model/userQuestion";
 import {
@@ -937,11 +945,12 @@ export class Orchestrator {
     const dependency = run.tasks.find(
       (entry) => task.dependsOn.includes(entry.id) && !entry.accepted,
     );
-    if (dependency) return `Waiting for review: ${dependency.title}`;
+    if (dependency)
+      return t("Waiting for review: {0}", { "0": dependency.title });
     const owner = run.tasks.find(
       (entry) => activeTask(entry) && scopesOverlap(entry.scopes, task.scopes),
     );
-    if (owner) return `Waiting for files: ${owner.title}`;
+    if (owner) return t("Waiting for files: {0}", { "0": owner.title });
     return "Waiting for a worker slot";
   }
   private async execute(

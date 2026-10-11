@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import type { Block } from "./session";
 
 /** A vertical span in viewport coordinates. */
@@ -54,9 +55,9 @@ export function promptLabel(block: Block): string {
   const text = textShown ? firstLine(block.text) : "";
   if (text) return text;
   if (card) {
-    if (card.kind === "handoff") return "Handoff";
+    if (card.kind === "handoff") return t("Handoff");
     const request = firstLine(card.request ?? "");
-    return request ? `Second opinion: ${request}` : "Second opinion";
+    return request ? `Second opinion: ${request}` : t("Second opinion");
   }
   if (block.noteCard?.title) return block.noteCard.title;
   const files = block.attachments ?? [];

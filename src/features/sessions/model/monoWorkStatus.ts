@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { isReadTool } from "../../../integrations/harness/core/preview";
 import type { Block } from "./session";
 import {
@@ -43,7 +44,7 @@ export function monoWorkStatus(
   if (waiting) {
     return {
       key: `approval:${waiting.id}`,
-      label: "Waiting for approval…",
+      label: t("Waiting for approval…"),
       kind: toolCategory(waiting),
       active: true,
     };

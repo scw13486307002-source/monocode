@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useState, type ReactNode } from "react";
 import { projectName } from "../../../shared/lib/paths";
 import { IconButton } from "../../../app/shell/TitleBar";
@@ -128,7 +129,9 @@ export function MonoSessionsPanel({
       await onOpenSession(id);
     } catch (cause) {
       setError(
-        cause instanceof Error ? cause.message : "Could not open this session.",
+        cause instanceof Error
+          ? cause.message
+          : t("Could not open this session."),
       );
     } finally {
       setOpening(undefined);
@@ -162,11 +165,15 @@ export function MonoSessionsPanel({
       windowControls={windowControls}
     >
       <PanelStack pages={pages}>
-        <MonoSidebarHeader title="Sessions" onClose={onClose} />
+        <MonoSidebarHeader title={t("Sessions")} onClose={onClose} />
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-none px-3 py-3">
           <p className="px-1 pb-3 text-[11px] text-content/45">
-            {launches.length} {launches.length === 1 ? "session" : "sessions"}{" "}
-            launched in this turn
+            {t(
+              launches.length === 1
+                ? "{count} session launched in this turn"
+                : "{count} sessions launched in this turn",
+              { count: launches.length },
+            )}
           </p>
           <div className="flex flex-col gap-2">
             {launches.map((launch) => {
@@ -189,21 +196,21 @@ export function MonoSessionsPanel({
                 harness,
               );
               const status = unavailable
-                ? "No longer available"
+                ? t("No longer available")
                 : live &&
                     (hasPendingApproval(live.blocks) || live.pendingQuestion)
-                  ? "Needs input"
+                  ? t("Needs input")
                   : live?.busy
-                    ? "Working"
+                    ? t("Working")
                     : saved?.archived
-                      ? "Archived"
+                      ? t("Archived")
                       : (live ? !!sessionDraftBlock(live) : saved?.draft)
-                        ? "Draft"
+                        ? t("Draft")
                         : session
-                          ? "Ready"
+                          ? t("Ready")
                           : stored.failed.has(launch.cwd)
-                            ? "Status unavailable"
-                            : "Loading…";
+                            ? t("Status unavailable")
+                            : t("Loading…");
               return (
                 <button
                   key={launch.sessionId}
@@ -242,7 +249,7 @@ export function MonoSessionsPanel({
                         aria-hidden
                         className={`size-1.5 rounded-full ${status === "Working" ? "animate-pulse bg-[var(--mono-color)]" : status === "Needs input" ? "bg-amber-500/70" : "bg-content/30"}`}
                       />
-                      {opening === launch.sessionId ? "Opening…" : status}
+                      {opening === launch.sessionId ? t("Opening…") : status}
                     </p>
                   </div>
                   <ChevronRight
@@ -282,7 +289,7 @@ function LaunchedSessionPage({
     <>
       <PageHeader title={title} onBack={onBack}>
         <IconButton
-          label="Open in workspace"
+          label={t("Open in workspace")}
           onClick={() => {
             setError(undefined);
             void Promise.resolve(onOpenInWorkspace()).catch((cause) =>
@@ -296,7 +303,7 @@ function LaunchedSessionPage({
         >
           <ExternalLink className="size-3.5" strokeWidth={1.75} />
         </IconButton>
-        <IconButton label="Hide sessions" active onClick={onClose}>
+        <IconButton label={t("Hide sessions")} active onClick={onClose}>
           <PanelRightToggle className="size-3.5" strokeWidth={1.75} />
         </IconButton>
       </PageHeader>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +9,8 @@
       (function () {
         try {
           var root = document.documentElement;
+          root.lang =
+            localStorage.getItem("monocode.locale") === "en" ? "en" : "zh-CN";
           var hue = localStorage.getItem("monocode.themeHue");
           var sat = localStorage.getItem("monocode.themeSaturation");
           var darkLightness = localStorage.getItem(

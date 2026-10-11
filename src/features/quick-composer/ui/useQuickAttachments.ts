@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   useCallback,
   useEffect,
@@ -37,8 +38,7 @@ function releaseCaptures(files: Attachment[]) {
 }
 
 type CapturedClipboardPaste =
-  | { files: Attachment[]; warning?: string }
-  | { error: unknown };
+  { files: Attachment[]; warning?: string } | { error: unknown };
 
 function discardCapturedPaste(paste: CapturedClipboardPaste) {
   if ("files" in paste) paste.files.forEach(revokeAttachment);
@@ -106,7 +106,9 @@ export function useQuickAttachments(
           incoming.length > accepted.length &&
           next.length + accepted.length >= MAX_ATTACHMENTS
         )
-          onError(`You can attach up to ${MAX_ATTACHMENTS} files.`);
+          onError(
+            t("You can attach up to {0} files.", { "0": MAX_ATTACHMENTS }),
+          );
         const stored = await storeQuickAttachments(accepted);
         if (!alive.current) {
           stored.forEach(revokeAttachment);

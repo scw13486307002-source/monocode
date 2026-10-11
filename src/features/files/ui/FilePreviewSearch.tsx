@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   useCallback,
   useEffect,
@@ -333,9 +334,9 @@ export function FilePreviewSearch({
   };
 
   const count = result.invalid
-    ? "Invalid regex"
+    ? t("Invalid regex")
     : query && total === 0
-      ? "No results"
+      ? t("No results")
       : total > 0
         ? `${current + 1} of ${total}${result.capped ? "+" : ""}`
         : "";
@@ -349,7 +350,7 @@ export function FilePreviewSearch({
       {open ? (
         <div
           role="search"
-          aria-label="Find in preview"
+          aria-label={t("Find in preview")}
           className="relative z-30 flex h-[35px] shrink-0 items-center gap-1 border-b border-stroke px-2 py-1 text-content"
           onKeyDown={onKeyDown}
         >
@@ -364,8 +365,8 @@ export function FilePreviewSearch({
               ref={inputRef}
               type="text"
               value={query}
-              aria-label="Find"
-              placeholder="Find"
+              aria-label={t("Find")}
+              placeholder={t("Find")}
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
@@ -386,41 +387,41 @@ export function FilePreviewSearch({
           </div>
           <FindToggle
             label="Aa"
-            title={`Match Case (${ALT}C)`}
+            title={t("Match Case ({0}C)", { "0": ALT })}
             pressed={caseSensitive}
             onClick={() => toggle(setCaseSensitive)}
           />
           <FindToggle
             label="ab"
-            title={`Match Whole Word (${ALT}W)`}
+            title={t("Match Whole Word ({0}W)", { "0": ALT })}
             pressed={wholeWord}
             onClick={() => toggle(setWholeWord)}
           />
           <FindToggle
             label=".*"
-            title={`Use Regular Expression (${ALT}R)`}
+            title={t("Use Regular Expression ({0}R)", { "0": ALT })}
             pressed={regexp}
             onClick={() => toggle(setRegexp)}
           />
           <FindButton
-            label="Previous Match"
-            title={`Previous Match (${MOD}${SHIFT}G)`}
+            label={t("Previous Match")}
+            title={t("Previous Match ({0}{1}G)", { "0": MOD, "1": SHIFT })}
             disabled={total === 0}
             onClick={() => step(-1)}
           >
             <ChevronUp className="size-3.5" strokeWidth={1.75} />
           </FindButton>
           <FindButton
-            label="Next Match"
-            title={`Next Match (${MOD}G)`}
+            label={t("Next Match")}
+            title={t("Next Match ({0}G)", { "0": MOD })}
             disabled={total === 0}
             onClick={() => step(1)}
           >
             <ChevronDown className="size-3.5" strokeWidth={1.75} />
           </FindButton>
           <FindButton
-            label="Close"
-            title="Close (Escape)"
+            label={t("Close")}
+            title={t("Close (Escape)")}
             onClick={closeSearch}
           >
             <X className="size-3.5" strokeWidth={1.75} />

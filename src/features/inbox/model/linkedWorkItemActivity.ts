@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   githubReviewStateLabel,
   type GithubWorkItemComment,
@@ -196,7 +197,7 @@ export function linkedWorkItemActivityPrompt(
     const actor = entry.author ? ` by @${entry.author}` : "";
     const type =
       entry.kind === "review_comment" ? "review comment" : entry.kind;
-    return `- ${type}${actor}: ${entry.text || "No message"}`;
+    return `- ${type}${actor}: ${entry.text || t("No message")}`;
   });
   if (details.length === 0) {
     details.push(

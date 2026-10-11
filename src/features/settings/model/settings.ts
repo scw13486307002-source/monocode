@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   ALT,
   IS_MAC,
@@ -35,9 +36,9 @@ export type SettingsSectionId =
 export type SettingsGroupId = "app" | "agents" | "workspace";
 
 export const SETTINGS_GROUPS: { id: SettingsGroupId; label: string }[] = [
-  { id: "app", label: "App" },
-  { id: "agents", label: "Agents" },
-  { id: "workspace", label: "Workspace" },
+  { id: "app", label: t("App") },
+  { id: "agents", label: t("Agents") },
+  { id: "workspace", label: t("Workspace") },
 ];
 
 export type SettingsSection = {
@@ -53,50 +54,57 @@ export const SETTINGS_SECTIONS: SettingsSection[] = [
   {
     id: "general",
     group: "app",
-    label: "General",
-    description:
+    label: t("General"),
+    description: t(
       "The build you are running, how MonoCode reaches you, and the panels it shows.",
+    ),
     keywords: "version update sounds notifications notes rail",
   },
   {
     id: "connections",
     group: "app",
-    label: "Connections",
-    description: "Connect your machines and run agents remotely through SSH.",
+    label: t("Connections"),
+    description: t(
+      "Connect your machines and run agents remotely through SSH.",
+    ),
     keywords: "ssh remote host machine server environment always on",
   },
   {
     id: "appearance",
     group: "app",
-    label: "Appearance",
-    description:
+    label: t("Appearance"),
+    description: t(
       "Theme, tint, translucency, workspace layout, and conversation backgrounds.",
+    ),
     keywords:
       "theme dark light color accent glass blur zoom scale wallpaper rail sidebar",
   },
   {
     id: "keybindings",
     group: "app",
-    label: "Keybindings",
-    description:
+    label: t("Keybindings"),
+    description: t(
       "Every shortcut the workspace handles, from the app menu and the key handler.",
+    ),
     keywords: "shortcut hotkey keyboard binding",
   },
   {
     id: "chat",
     group: "agents",
-    label: "Chat",
-    description:
+    label: t("Chat"),
+    description: t(
       "How transcripts read, what the composer does with a follow-up, how files save, and how diffs open.",
+    ),
     keywords:
       "transcript composer prompt message diff review layout format save editor",
   },
   {
     id: "providers",
     group: "agents",
-    label: "Providers",
-    description:
+    label: t("Providers"),
+    description: t(
       "Provider accounts, agent CLIs MonoCode can drive, and the model new sessions start with.",
+    ),
     keywords:
       "account sign in login model harness claude codex gemini cli default hooks",
   },
@@ -104,48 +112,52 @@ export const SETTINGS_SECTIONS: SettingsSection[] = [
     id: "mcp",
     group: "agents",
     label: "MCP",
-    description:
+    description: t(
       "Find MCP servers across providers and manage their connections.",
+    ),
     keywords:
       "tools servers connections oauth authenticate login claude codex cursor opencode",
   },
   {
     id: "skills",
     group: "agents",
-    label: "Skills",
-    description:
+    label: t("Skills"),
+    description: t(
       "Discover and manage file skills from project, personal, and harness folders.",
+    ),
     keywords: "skill instructions prompt",
   },
   {
     id: "monos",
     group: "agents",
-    label: "Monos",
-    description:
+    label: t("Monos"),
+    description: t(
       "The resident agent beside your tabs, and which projects have one.",
+    ),
     keywords: "mono resident agent mascot claim project title bar",
   },
   {
     id: "inbox",
     group: "workspace",
-    label: "Inbox",
-    description:
+    label: t("Inbox"),
+    description: t(
       "Manage Inbox services and notification preferences for each project.",
+    ),
     keywords:
       "github gitlab linear jira atlassian azure devops connect token integration",
   },
   {
     id: "archive",
     group: "workspace",
-    label: "Archive",
-    description: "Projects and conversations you have archived.",
+    label: t("Archive"),
+    description: t("Projects and conversations you have archived."),
     keywords: "archived restore delete hidden",
   },
   {
     id: "worktrees",
     group: "workspace",
-    label: "Worktrees",
-    description: "Manage additional worktrees for each project.",
+    label: t("Worktrees"),
+    description: t("Manage additional worktrees for each project."),
     keywords: "git branch worktree working copy project create delete",
   },
 ];
@@ -174,64 +186,70 @@ export type SettingsEntry = {
 
 export const SETTINGS_INDEX: SettingsEntry[] = [
   {
+    id: "language",
+    section: "general",
+    label: t("Interface language"),
+    keywords: "language locale Chinese English 中文 汉化 语言",
+  },
+  {
     id: "remote-machines",
     section: "connections",
-    label: "Your machines",
+    label: t("Your machines"),
     keywords: "ssh remote connect host server environment",
   },
   {
     id: "mcp-servers",
     section: "mcp",
-    label: "MCP servers",
+    label: t("MCP servers"),
     keywords: "claude tools connections oauth authenticate login add remove",
   },
   {
     id: "monos-enabled",
     section: "monos",
-    label: "Show monos",
+    label: t("Show monos"),
     keywords: "mono agent rail hide",
   },
   {
     id: "rail-monos-pinned",
     section: "monos",
-    label: "Pin monos to the icon rail",
+    label: t("Pin monos to the icon rail"),
     keywords: "mono rail compact collapsed icons top divider project picker",
   },
   {
     id: "mono-list",
     section: "monos",
-    label: "Your monos",
+    label: t("Your monos"),
     keywords:
       "mono reset soul name projects sessions sidebar visibility hidden show",
   },
   {
     id: "project-worktrees",
     section: "worktrees",
-    label: "Project worktrees",
+    label: t("Project worktrees"),
     keywords: "git branch working copy create delete manage",
   },
   {
     id: "update",
     section: "general",
-    label: "Version",
+    label: t("Version"),
     keywords: "update upgrade release what's new build changelog",
   },
   {
     id: "sounds",
     section: "general",
-    label: "Sounds",
+    label: t("Sounds"),
     keywords: "audio cue chime mute volume",
   },
   {
     id: "notifications",
     section: "general",
-    label: "Notifications",
+    label: t("Notifications"),
     keywords: "notify alert toast permission reminder background",
   },
   {
     id: "notes",
     section: "general",
-    label: "Notes",
+    label: t("Notes"),
     keywords: "notebook markdown rail scratchpad",
   },
   ...(IS_MAC
@@ -239,7 +257,7 @@ export const SETTINGS_INDEX: SettingsEntry[] = [
         {
           id: "quick-composer",
           section: "general" as const,
-          label: "Quick composer",
+          label: t("Quick composer"),
           keywords: "spotlight global shortcut hotkey floating prompt anywhere",
         },
       ]
@@ -247,19 +265,19 @@ export const SETTINGS_INDEX: SettingsEntry[] = [
   {
     id: "working-agents",
     section: "general",
-    label: "Working agents",
+    label: t("Working agents"),
     keywords: "live running sessions rail card",
   },
   {
     id: "file-tabs",
     section: "general",
-    label: "File tabs",
+    label: t("File tabs"),
     keywords: "editor open top workspace normal session pane beside chat",
   },
   {
     id: "tab-animations",
     section: "general",
-    label: "Tab animations",
+    label: t("Tab animations"),
     keywords: "motion open close resize transition",
   },
   ...(IS_WIN
@@ -267,7 +285,7 @@ export const SETTINGS_INDEX: SettingsEntry[] = [
         {
           id: "close-to-tray",
           section: "general" as const,
-          label: "Close to tray",
+          label: t("Close to tray"),
           keywords: "minimize background quit exit window taskbar windows",
         },
       ]
@@ -275,179 +293,179 @@ export const SETTINGS_INDEX: SettingsEntry[] = [
   {
     id: "theme",
     section: "appearance",
-    label: "Theme",
+    label: t("Theme"),
     keywords: "dark light system appearance mode",
   },
   {
     id: "accent-color",
     section: "appearance",
-    label: "Accent color",
+    label: t("Accent color"),
     keywords: "highlight bubble send button tint",
   },
   {
     id: "diff-colors",
     section: "appearance",
-    label: "Diff colors",
+    label: t("Diff colors"),
     keywords:
       "colorblind color blind accessibility added removed red green blue orange high contrast changes",
   },
   {
     id: "hue",
     section: "appearance",
-    label: "Hue",
+    label: t("Hue"),
     keywords: "tint color chrome",
   },
   {
     id: "saturation",
     section: "appearance",
-    label: "Saturation",
+    label: t("Saturation"),
     keywords: "tint color neutral grey gray",
   },
   {
     id: "dark-lightness",
     section: "appearance",
-    label: "Dark-mode lightness",
+    label: t("Dark-mode lightness"),
     keywords: "black brightness contrast background",
   },
   {
     id: "sidebar-opacity",
     section: "appearance",
-    label: "Sidebar opacity",
+    label: t("Sidebar opacity"),
     keywords: "glass translucent transparency vibrancy",
   },
   {
     id: "blur",
     section: "appearance",
-    label: "Blur radius",
+    label: t("Blur radius"),
     keywords: "glass translucent vibrancy backdrop",
   },
   {
     id: "main-pane-glass",
     section: "appearance",
-    label: "Main pane glass",
+    label: t("Main pane glass"),
     keywords: "translucent transparency body window",
   },
   {
     id: "interface-scale",
     section: "appearance",
-    label: "Interface scale",
+    label: t("Interface scale"),
     keywords: "zoom font size bigger smaller ui",
   },
   {
     id: "collapsed-project-rail",
     section: "appearance",
-    label: "Collapsed project rail",
+    label: t("Collapsed project rail"),
     keywords: "sidebar compact icons hidden navigation layout",
   },
   {
     id: "show-excluded-files",
     section: "appearance",
-    label: "Show excluded files",
+    label: t("Show excluded files"),
     keywords: "explorer gitignore ignored hidden files tree",
   },
   {
     id: "chat-background",
     section: "appearance",
-    label: "Chat background",
+    label: t("Chat background"),
     keywords: "wallpaper image picture opacity backdrop",
   },
   {
     id: "transcript-layout",
     section: "chat",
-    label: "Transcript layout",
+    label: t("Transcript layout"),
     keywords: "full width chat bubble message",
   },
   {
     id: "anchor-prompts",
     section: "chat",
-    label: "Anchor prompts to top",
+    label: t("Anchor prompts to top"),
     keywords: "scroll position sticky message",
   },
   {
     id: "follow-up",
     section: "chat",
-    label: "Follow-up behavior",
+    label: t("Follow-up behavior"),
     keywords: "queue steer interrupt send while running",
   },
   {
     id: "model-controls",
     section: "chat",
-    label: "Model controls",
+    label: t("Model controls"),
     keywords:
       "effort thinking reasoning fast service tier model picker composer",
   },
   {
     id: "composer-autocorrect",
     section: "chat",
-    label: "Autocorrect",
+    label: t("Autocorrect"),
     keywords: "spelling spell check autocorrect typo macos composer",
   },
   {
     id: "composer-mascot",
     section: "chat",
-    label: "Composer mascot",
+    label: t("Composer mascot"),
     keywords: "runner animation coin fun",
   },
   {
     id: "format-on-save",
     section: "chat",
-    label: "Format on save",
+    label: t("Format on save"),
     keywords: "prettier quotes editor save format",
   },
   {
     id: "diff-view",
     section: "chat",
-    label: "Diff view",
+    label: t("Diff view"),
     keywords: "unified editor review changes working tree",
   },
   {
     id: "empty-session-games",
     section: "chat",
-    label: "Empty session games",
+    label: t("Empty session games"),
     keywords: "pacman snake arcade grid fun",
   },
   {
     id: "agent-clis",
     section: "providers",
-    label: "Agent CLIs",
+    label: t("Agent CLIs"),
     keywords:
       "codex opencode cursor grok pi omp fx hermes antigravity devin binary path",
   },
   {
     id: "provider-accounts",
     section: "providers",
-    label: "Provider accounts",
+    label: t("Provider accounts"),
     keywords:
       "account sign in login rename remove delete credentials profile usage limit quota exhausted",
   },
   {
     id: "show-remaining-usage",
     section: "providers",
-    label: "Show remaining usage",
+    label: t("Show remaining usage"),
     keywords: "usage limit meter bar left used quota percent",
   },
   {
     id: "mask-emails",
     section: "providers",
-    label: "Mask account emails",
+    label: t("Mask account emails"),
     keywords: "email privacy blur hide screenshot account",
   },
   {
     id: "claude-hooks",
     section: "providers",
-    label: "Claude Code hooks",
+    label: t("Claude Code hooks"),
     keywords: "pretooluse settings.json block command notification",
   },
   {
     id: "idle-agents",
     section: "providers",
-    label: "Keep idle agents ready",
+    label: t("Keep idle agents ready"),
     keywords: "memory ram cpu performance process warm park background",
   },
   {
     id: "project-notifications",
     section: "inbox",
-    label: "Project notifications",
+    label: t("Project notifications"),
     keywords: "mute resume sounds banners reminders categories",
   },
   {
@@ -483,7 +501,7 @@ export const SETTINGS_INDEX: SettingsEntry[] = [
   {
     id: "show-archived",
     section: "archive",
-    label: "Show archived in the sidebar",
+    label: t("Show archived in the sidebar"),
     keywords: "hidden conversations list",
   },
 ];
@@ -569,7 +587,8 @@ export function isSettingsSectionId(
 
 export function settingsSectionLabel(id: SettingsSectionId): string {
   return (
-    SETTINGS_SECTIONS.find((section) => section.id === id)?.label ?? "General"
+    SETTINGS_SECTIONS.find((section) => section.id === id)?.label ??
+    t("General")
   );
 }
 
@@ -1306,7 +1325,7 @@ export function validateKeybindingShortcut(
   const canonical = validateShortcut(command, shortcut);
   const owner = shortcutOwners().get(canonical);
   if (owner && owner !== command) {
-    throw new Error(`Already used by ${owner}`);
+    throw new Error(t("Already used by {0}", { "0": owner }));
   }
   return canonical;
 }
@@ -1458,14 +1477,14 @@ export function currentKeybindings(): KeybindingRow[] {
         ...row,
         keys: loadQuickComposerEnabled()
           ? quickComposerShortcutLabel(loadQuickComposerShortcut())
-          : "Disabled",
+          : t("Disabled"),
       };
     }
     const override = overrides[row.command];
     return {
       ...row,
       keys: override?.disabled
-        ? "Disabled"
+        ? t("Disabled")
         : override?.shortcut
           ? quickComposerShortcutLabel(override.shortcut)
           : row.keys,
@@ -1482,7 +1501,9 @@ export function filterKeybindings(
   return rows.filter(
     (row) =>
       row.command.toLowerCase().includes(needle) ||
+      t(row.command).toLowerCase().includes(needle) ||
       row.keys.toLowerCase().includes(needle) ||
-      row.when.toLowerCase().includes(needle),
+      row.when.toLowerCase().includes(needle) ||
+      t(row.when).toLowerCase().includes(needle),
   );
 }

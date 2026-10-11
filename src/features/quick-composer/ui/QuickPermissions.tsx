@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   Check,
@@ -60,7 +61,7 @@ export function QuickPermissions({
     <div
       ref={root}
       role="listbox"
-      aria-label="Permissions"
+      aria-label={t("Permissions")}
       aria-activedescendant={`${id}-${active}`}
       tabIndex={-1}
       className="min-h-0 overflow-y-auto overscroll-none border-t border-stroke p-2 outline-none"

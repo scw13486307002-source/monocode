@@ -1,9 +1,17 @@
-import type { Attachment, ToolPreview, TurnMetrics } from "../../../../features/sessions/model/session";
+import { t } from "../../../../shared/i18n/index";
+import type {
+  Attachment,
+  ToolPreview,
+  TurnMetrics,
+} from "../../../../features/sessions/model/session";
 import {
   attachmentPathText,
   promptText,
 } from "../../../../features/sessions/model/attachments";
-import type { AgentModel, ModelSetting } from "../../../../features/sessions/model/models";
+import type {
+  AgentModel,
+  ModelSetting,
+} from "../../../../features/sessions/model/models";
 import { isTaskListToolName } from "../../../../features/sessions/model/taskList";
 import type { PiFlavor } from "./piFlavor";
 import { extractToolPreview, titleFromToolInput } from "../../core/preview";
@@ -783,7 +791,7 @@ export function thinkingSetting(reasoning: boolean): ModelSetting | undefined {
   if (!reasoning) return undefined;
   return {
     id: "thinking",
-    label: "Thinking",
+    label: t("Thinking"),
     kind: "select",
     value: "medium",
     options: PI_THINKING_LEVELS.map((value) => ({
@@ -796,13 +804,15 @@ export function thinkingSetting(reasoning: boolean): ModelSetting | undefined {
 export function fastModeSetting(): ModelSetting {
   return {
     id: "fast",
-    label: "Fast",
-    description: "Use priority processing when the current model supports it",
+    label: t("Fast"),
+    description: t(
+      "Use priority processing when the current model supports it",
+    ),
     kind: "toggle",
     value: "false",
     options: [
-      { value: "true", label: "On" },
-      { value: "false", label: "Off" },
+      { value: "true", label: t("On") },
+      { value: "false", label: t("Off") },
     ],
   };
 }

@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
@@ -143,13 +144,14 @@ export function QuickWorkspaceControls({
   };
   const disabled = !enabled || !ready || !branches?.current;
   const Icon = value.mode === "worktree" ? FolderTree : Folder;
-  const label = value.mode === "worktree" ? "New worktree" : "Current checkout";
+  const label =
+    value.mode === "worktree" ? t("New worktree") : t("Current checkout");
   return (
     <div className="flex min-w-0 items-center gap-2">
       <button
         type="button"
         disabled={disabled}
-        aria-label={`Workspace ${label}`}
+        aria-label={t("Workspace {0}", { "0": label })}
         aria-haspopup="dialog"
         aria-expanded={open === "workspace"}
         onMouseDown={(event) => {
@@ -165,13 +167,13 @@ export function QuickWorkspaceControls({
       <GitPickerTrigger
         label={
           value.mode === "worktree"
-            ? `From ${base}`
-            : branches?.current || (settled ? "No repo" : "Loading…")
+            ? t("From {0}", { "0": base })
+            : branches?.current || (settled ? t("No repo") : t("Loading…"))
         }
         aria-label={
           value.mode === "worktree"
-            ? `Create worktree from ${base}`
-            : "Choose branch"
+            ? t("Create worktree from {0}", { "0": base })
+            : t("Choose branch")
         }
         aria-haspopup="dialog"
         aria-expanded={open === "branch" || open === "base"}

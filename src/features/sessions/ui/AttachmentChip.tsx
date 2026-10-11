@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useState } from "react";
 import { X } from "../../../shared/ui/icons";
 import { attachmentPreviewSrc, isAttachmentFolder } from "../model/attachments";
@@ -28,8 +29,8 @@ export function AttachmentChip({ attachment, onRemove, photo = false }: Props) {
         {image ? (
           <button
             type="button"
-            aria-label={`Open ${attachment.name} full screen`}
-            title={`Open ${attachment.name} full screen`}
+            aria-label={t("Open {0} full screen", { "0": attachment.name })}
+            title={t("Open {0} full screen", { "0": attachment.name })}
             onClick={(event) => {
               event.stopPropagation();
               setPreviewOpen(true);
@@ -64,8 +65,8 @@ export function AttachmentChip({ attachment, onRemove, photo = false }: Props) {
         {onRemove ? (
           <button
             type="button"
-            title="Remove"
-            aria-label={`Remove ${attachment.name}`}
+            title={t("Remove")}
+            aria-label={t("Remove {0}", { "0": attachment.name })}
             onClick={(event) => {
               event.stopPropagation();
               onRemove();

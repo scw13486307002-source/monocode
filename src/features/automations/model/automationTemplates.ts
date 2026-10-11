@@ -1,12 +1,16 @@
-import type { AutomationScheduleKind, AutomationTriggerKind } from "./automations";
+import { t } from "../../../shared/i18n/index";
+import type {
+  AutomationScheduleKind,
+  AutomationTriggerKind,
+} from "./automations";
 
 export const AUTOMATION_TEMPLATE_CATEGORIES = [
-  { id: "popular", label: "Popular" },
-  { id: "review", label: "Code Review" },
-  { id: "security", label: "Security" },
-  { id: "incidents", label: "Incidents & Triage" },
-  { id: "research", label: "Data & Research" },
-  { id: "environment", label: "Environment" },
+  { id: "popular", label: t("Popular") },
+  { id: "review", label: t("Code Review") },
+  { id: "security", label: t("Security") },
+  { id: "incidents", label: t("Incidents & Triage") },
+  { id: "research", label: t("Data & Research") },
+  { id: "environment", label: t("Environment") },
 ] as const;
 
 export type AutomationTemplateCategoryId =
@@ -359,5 +363,7 @@ export function templatesForCategory(
   if (category === "popular") {
     return AUTOMATION_TEMPLATES.filter((template) => template.popular);
   }
-  return AUTOMATION_TEMPLATES.filter((template) => template.category === category);
+  return AUTOMATION_TEMPLATES.filter(
+    (template) => template.category === category,
+  );
 }

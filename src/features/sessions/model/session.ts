@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { dropContextWindow, type ContextUsage } from "./contextUsage";
 import type { UserQuestionPrompt } from "./userQuestion";
 import type { HandoffComposerCard } from "./handoff";
@@ -778,7 +779,7 @@ export function sessionDisplayTitle(title: string, harness: HarnessId): string {
   const prefix = `${HARNESS_LABEL[harness]} · `;
   if (title.startsWith(prefix)) return title.slice(prefix.length);
   if (title === HARNESS_LABEL[harness] || title === HARNESS_TITLE[harness]) {
-    return "New session";
+    return t("New session");
   }
   return title;
 }

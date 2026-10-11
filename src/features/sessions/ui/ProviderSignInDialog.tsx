@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useCallback, useEffect, useState } from "react";
 import { loginHarness } from "../../../integrations/harness/core/auth";
 import { HARNESS_TITLE, type HarnessId } from "../model/session";
@@ -31,7 +32,7 @@ export function ProviderSignInDialog({ harness, onClose }: Props) {
         setError(
           reason instanceof Error
             ? reason.message
-            : `Could not sign in to ${HARNESS_TITLE[harness]}.`,
+            : t("Could not sign in to {0}.", { "0": HARNESS_TITLE[harness] }),
         );
       },
     );
@@ -40,8 +41,10 @@ export function ProviderSignInDialog({ harness, onClose }: Props) {
   return (
     <Modal
       onClose={onClose}
-      title="Authentication required"
-      description={`Sign in to continue using ${HARNESS_TITLE[harness]}.`}
+      title={t("Authentication required")}
+      description={t("Sign in to continue using {0}.", {
+        "0": HARNESS_TITLE[harness],
+      })}
       size="sm"
       minimalHeader
     >

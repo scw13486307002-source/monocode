@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { asRecord } from "../../../integrations/harness/providers/codex/codexProtocol";
 
 export type RateLimitProvider = "claude" | "codex" | "opencode" | "devin";
@@ -189,7 +190,9 @@ export function formatResetDuration(ms: number): string {
 
 export function formatResetCountdown(ms: number): string {
   const duration = formatResetDuration(ms);
-  return duration === "now" ? "Resets now" : `Resets in ${duration}`;
+  return duration === "now"
+    ? "Resets now"
+    : t("Resets in {0}", { "0": duration });
 }
 
 /**
@@ -361,12 +364,21 @@ export function parseDevinUsage(usage: DevinUsage): ProviderRateLimits {
         };
   return {
     provider: "devin",
-    session: window(usage.dailyRemainingPercent, usage.dailyResetsAt, DAILY_WINDOW_MINUTES),
-    weekly: window(usage.weeklyRemainingPercent, usage.weeklyResetsAt, WEEKLY_WINDOW_MINUTES),
+    session: window(
+      usage.dailyRemainingPercent,
+      usage.dailyResetsAt,
+      DAILY_WINDOW_MINUTES,
+    ),
+    weekly: window(
+      usage.weeklyRemainingPercent,
+      usage.weeklyResetsAt,
+      WEEKLY_WINDOW_MINUTES,
+    ),
     monthly: null,
     resetCredits: null,
     extraUsageBalance:
-      usage.extraUsageBalanceMicros == null || !Number.isFinite(usage.extraUsageBalanceMicros)
+      usage.extraUsageBalanceMicros == null ||
+      !Number.isFinite(usage.extraUsageBalanceMicros)
         ? null
         : usage.extraUsageBalanceMicros / 1_000_000,
     updatedAt: Date.now(),

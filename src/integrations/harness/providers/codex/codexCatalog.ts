@@ -1,3 +1,4 @@
+import { t } from "../../../../shared/i18n/index";
 import { homeDir } from "../../../../platform/tauri/fs";
 import {
   setHarnessModels,
@@ -201,7 +202,7 @@ function parseModelSettings(rec: Record<string, unknown>): ModelSetting[] {
   if (effortOptions.length > 0) {
     settings.push({
       id: "reasoningEffort",
-      label: "Reasoning",
+      label: t("Reasoning"),
       kind: "select",
       value: defaultEffort ?? effortOptions[0].value,
       options: effortOptions,
@@ -215,14 +216,14 @@ function parseModelSettings(rec: Record<string, unknown>): ModelSetting[] {
         ? rec.additionalSpeedTiers
         : []) ?? [];
   const tierOptions: ModelSettingChoice[] = [
-    { value: "default", label: "Standard" },
+    { value: "default", label: t("Standard") },
   ];
   for (const entry of tiersRaw) {
     if (typeof entry === "string") {
       if (entry === "default") continue;
       tierOptions.push({
         value: entry,
-        label: entry === "fast" ? "Fast" : entry,
+        label: entry === "fast" ? t("Fast") : entry,
       });
       continue;
     }
@@ -238,7 +239,7 @@ function parseModelSettings(rec: Record<string, unknown>): ModelSetting[] {
     const defaultTier = stringField(rec, "defaultServiceTier") ?? "default";
     settings.push({
       id: "serviceTier",
-      label: "Service Tier",
+      label: t("Service Tier"),
       kind: "select",
       value: tierOptions.some((o) => o.value === defaultTier)
         ? defaultTier

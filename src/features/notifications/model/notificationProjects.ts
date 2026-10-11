@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { pathKey, projectName } from "../../../shared/lib/paths";
 import { looksLikeProject } from "../../projects/model/recents";
 import type { InboxItem } from "../../inbox/model/githubTasks";
@@ -37,9 +38,9 @@ export function knownNotificationProject(
   );
 }
 
-export function knownNotificationProjectSelection(
-  paths: readonly string[],
-): { projects: NotificationProject[] } {
+export function knownNotificationProjectSelection(paths: readonly string[]): {
+  projects: NotificationProject[];
+} {
   const requested = new Map(
     paths.filter(looksLikeProject).map((path) => [pathKey(path), path]),
   );
@@ -159,7 +160,7 @@ export function inboxNotificationProject(
       id: project
         ? `linear:project:${project}`
         : `linear:team:${item.teamId || "unknown"}:unassigned`,
-      name: project ? item.projectName || project : "No project",
+      name: project ? item.projectName || project : t("No project"),
       detail: `Linear · ${item.teamName || item.teamId || "Unknown team"}`,
       kind: "linear",
       paths: [],

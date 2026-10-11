@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   composeToolTitle,
   isAgentTool,
@@ -76,7 +77,7 @@ export function toolCallLabel(block: Block, cwd?: string): string {
       query: preview?.query,
       previewKind: preview?.kind,
       cwd,
-    }) || "Working"
+    }) || t("Working")
   );
 }
 
@@ -203,11 +204,11 @@ export function proseSummary(text: string): string {
  */
 export function editVerb(label: string): string {
   const word = label.trim().split(/\s+/)[0]?.toLowerCase() ?? "";
-  if (/^(delete|deleted|remove|removed)$/.test(word)) return "Delete";
+  if (/^(delete|deleted|remove|removed)$/.test(word)) return t("Delete");
   if (/^(move|moved|rename|renamed)$/.test(word)) return "Move";
-  if (/^(create|created|add|added|new)$/.test(word)) return "Create";
+  if (/^(create|created|add|added|new)$/.test(word)) return t("Create");
   if (/^(write|wrote|writing)$/.test(word)) return "Write";
-  return "Edit";
+  return t("Edit");
 }
 
 export type ToolCallDisplay = {
@@ -267,7 +268,7 @@ export function resolveToolCallDisplay(
     (/^read$/i.test(label.trim()) && (preview?.path || preview?.fileName)
       ? "Read"
       : /^find$/i.test(label.trim()) && preview?.query
-        ? "Find"
+        ? t("Find")
         : /^list$/i.test(label.trim()) && (preview?.path || preview?.fileName)
           ? "List"
           : /^skill$/i.test(label.trim())
@@ -1011,19 +1012,19 @@ function workSummary(
         ? live
           ? "Running a command"
           : "Ran a command"
-        : `${live ? "Running" : "Ran"} ${tally.runs} commands`;
+        : `${live ? t("Running") : t("Ran")} ${tally.runs} commands`;
     case "agent":
       return tally.agents === 1
         ? live
           ? "Running a subagent"
           : "Ran a subagent"
-        : `${live ? "Running" : "Ran"} ${tally.agents} subagents`;
+        : `${live ? t("Running") : t("Ran")} ${tally.agents} subagents`;
     default:
       return tally.others === 1
         ? live
           ? "Running a tool"
           : "Ran a tool"
-        : `${live ? "Running" : "Ran"} ${tally.others} tools`;
+        : `${live ? t("Running") : t("Ran")} ${tally.others} tools`;
   }
 }
 
@@ -1055,7 +1056,7 @@ export function workSummaryLine(steps: Block[], live = false): string {
   if (tally.order.length === 0) {
     if (notes) return notes;
     if (steps.length > 0 && steps.every(isStatusStep)) return "Status update";
-    return live ? "Thinking" : "Thought";
+    return live ? t("Thinking") : "Thought";
   }
   const running = live ? currentWorkKind(steps) : undefined;
   return [
@@ -1085,7 +1086,7 @@ export function activityPhaseTitle(phase: ActivityPhase, live = false): string {
   if (phase.headline) {
     const summary = proseSummary(phase.headline.text);
     if (summary) return summary;
-    return phase.headline.role === "reasoning" ? "Thinking" : "Working";
+    return phase.headline.role === "reasoning" ? t("Thinking") : t("Working");
   }
   return workSummaryLine(phase.steps, live);
 }

@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import {
   useEffect,
@@ -168,7 +169,7 @@ export function InboxComments({
       <div className="flex items-center gap-2 text-[12px] text-content/50">
         {thread.commits ? (
           <>
-            <h2 className="text-content/70">Activity</h2>
+            <h2 className="text-content/70">{t("Activity")}</h2>
             <span>
               {label}
               {commitCount > 0 ? ` · ${commitLabel}` : ""}
@@ -178,7 +179,9 @@ export function InboxComments({
           <h2 className="text-content/70">{label}</h2>
         )}
         {thread.truncated ? (
-          <span>Latest comments · more on {moreOn}</span>
+          <span>
+            {t("Latest comments · more on")} {moreOn}
+          </span>
         ) : null}
         {loading ? (
           <LoaderCircle
@@ -292,12 +295,12 @@ export function InboxCommentForm({
       {replyTo ? (
         <div className="flex items-center gap-2 text-[12px] text-content/50">
           <span className="min-w-0 truncate">
-            Replying to {replyTo.author || "comment"}
+            {t("Replying to")} {replyTo.author || "comment"}
           </span>
           <button
             type="button"
-            title="Cancel reply"
-            aria-label="Cancel reply"
+            title={t("Cancel reply")}
+            aria-label={t("Cancel reply")}
             onClick={onCancelReply}
             className="grid size-5 shrink-0 place-items-center rounded-md text-content/45 hover:bg-content/10 hover:text-content"
           >
@@ -312,7 +315,9 @@ export function InboxCommentForm({
           value={draft}
           disabled={posting}
           placeholder={
-            replyTo ? `Write a reply (${MOD}↩)` : `Leave a comment (${MOD}↩)`
+            replyTo
+              ? t("Write a reply ({0}↩)", { "0": MOD })
+              : t("Leave a comment ({0}↩)", { "0": MOD })
           }
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={onKeyDown}
@@ -324,7 +329,7 @@ export function InboxCommentForm({
             disabled={!canPost}
             className="inline-flex h-7 items-center rounded-md bg-content px-3 text-[12px] text-background-base hover:bg-content/80 disabled:cursor-default disabled:opacity-40"
           >
-            {posting ? "Posting..." : replyTo ? "Reply" : "Comment"}
+            {posting ? t("Posting...") : replyTo ? t("Reply") : t("Comment")}
           </button>
         </div>
       </div>
@@ -337,7 +342,7 @@ function CommentsPending() {
   return (
     <div className="flex items-center gap-2 border-t border-stroke pt-5 text-[12px] text-content/45">
       <LoaderCircle className="size-3.5 animate-spin" strokeWidth={1.75} />
-      Loading comments
+      {t("Loading comments")}
     </div>
   );
 }
@@ -366,7 +371,7 @@ function InboxComment({
   const meta = [
     review,
     location,
-    comment.resolved ? "Resolved" : "",
+    comment.resolved ? t("Resolved") : "",
     time,
   ].filter((part) => part.length > 0);
   const hasBody = comment.body.trim().length > 0;
@@ -403,14 +408,14 @@ function InboxComment({
                 type="button"
                 title={
                   provider === "linear"
-                    ? "Open in Linear"
+                    ? t("Open in Linear")
                     : provider === "jira"
-                      ? "Open in Jira"
+                      ? t("Open in Jira")
                       : provider === "gitlab"
-                        ? "Open on GitLab"
+                        ? t("Open on GitLab")
                         : provider === "azuredevops"
-                          ? "Open on ADO"
-                          : "Open on GitHub"
+                          ? t("Open on ADO")
+                          : t("Open on GitHub")
                 }
                 onClick={() => void openUrl(comment.url)}
                 className="hover:text-content"
@@ -448,7 +453,7 @@ function InboxComment({
               }
               className="hover:text-content"
             >
-              Reply
+              {t("Reply")}
             </button>
           </span>
         ) : null}
@@ -544,7 +549,7 @@ function CollapsibleBody({ children }: { children: ReactNode }) {
           onClick={() => setExpanded((current) => !current)}
           className="mt-1.5 text-[12px] text-content/50 hover:text-content"
         >
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? t("Show less") : t("Show more")}
         </button>
       ) : null}
     </>
@@ -791,7 +796,7 @@ function InboxCommitStop({
       <div className={`min-w-0 flex-1 ${last ? "" : TIMELINE_GAP}`}>
         <button
           type="button"
-          title={commit.url ? "Open commit" : commit.messageHeadline}
+          title={commit.url ? t("Open commit") : commit.messageHeadline}
           disabled={!commit.url}
           onClick={() => void openUrl(commit.url)}
           className="group flex h-5 w-full min-w-0 items-center gap-3 text-left text-[12px]"

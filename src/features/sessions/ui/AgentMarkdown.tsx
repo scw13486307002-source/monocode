@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import {
@@ -27,7 +28,10 @@ import {
   type Components,
 } from "streamdown";
 import type { PluggableList } from "unified";
-import { ExplorerMenu, type ExplorerMenuItem } from "../../files/ui/ExplorerMenu";
+import {
+  ExplorerMenu,
+  type ExplorerMenuItem,
+} from "../../files/ui/ExplorerMenu";
 import { FileActionError } from "../../files/ui/FileActionError";
 import { FileTypeIcon } from "../../files/ui/FileTypeIcon";
 import { boundedCode } from "../../files/editor/codeHighlightPlugin";
@@ -44,7 +48,10 @@ import { useColorScheme } from "../../../shared/hooks/useColorScheme";
 import { useLockOverscroll } from "../../../shared/hooks/useLockOverscroll";
 import { copyText } from "../../../platform/tauri/clipboard";
 import { openPathWithDefaultApp, revealPath } from "../../../platform/tauri/fs";
-import { INBOX_MEDIA_PREFIXES, isInboxMediaUrl } from "../../inbox/model/inboxMedia";
+import {
+  INBOX_MEDIA_PREFIXES,
+  isInboxMediaUrl,
+} from "../../inbox/model/inboxMedia";
 import { isNoteImagePath } from "../../notes";
 import { IS_MAC, IS_WIN } from "../../../platform/tauri/platform";
 import { InboxMedia } from "../../inbox/ui/InboxMedia";
@@ -139,10 +146,10 @@ const RemoteMediaContext = createContext(false);
 const MarkdownFadeContext = createContext(false);
 
 const REVEAL_LABEL = IS_MAC
-  ? "Reveal in Finder"
+  ? t("Reveal in Finder")
   : IS_WIN
-    ? "Reveal in File Explorer"
-    : "Open Containing Folder";
+    ? t("Reveal in File Explorer")
+    : t("Open Containing Folder");
 
 function fileLinkMenuItems(
   canOpenInMonoCode: boolean,
@@ -152,19 +159,19 @@ function fileLinkMenuItems(
     {
       kind: "item",
       id: "open-monocode",
-      label: "Open in MonoCode",
+      label: t("Open in MonoCode"),
       disabled: !canOpenInMonoCode,
     },
-    { kind: "item", id: "open-default", label: "Open in Default App" },
+    { kind: "item", id: "open-default", label: t("Open in Default App") },
     { kind: "item", id: "reveal", label: REVEAL_LABEL },
     { kind: "sep" },
-    { kind: "item", id: "copy-path", label: "Copy Path" },
+    { kind: "item", id: "copy-path", label: t("Copy Path") },
     ...(canCopyRelativePath
       ? [
           {
             kind: "item" as const,
             id: "copy-relative-path",
-            label: "Copy Relative Path",
+            label: t("Copy Relative Path"),
           },
         ]
       : []),
@@ -231,7 +238,9 @@ const LANGUAGE_FILE_NAMES: Record<string, string> = {
 const PLAINTEXT_FENCE_LANGUAGES = new Set(["text", "plaintext", "txt", ""]);
 
 function highlightLanguageFor(language: string): string {
-  return PLAINTEXT_FENCE_LANGUAGES.has(language.toLowerCase()) ? "js" : language;
+  return PLAINTEXT_FENCE_LANGUAGES.has(language.toLowerCase())
+    ? "js"
+    : language;
 }
 
 type MarkdownLinkProps = ComponentProps<"a"> & { node?: unknown };
@@ -404,8 +413,8 @@ function CodeCopyButton({ code }: { code: string }) {
   return (
     <button
       type="button"
-      title={copied ? "Copied" : "Copy code"}
-      aria-label={copied ? "Copied" : "Copy code"}
+      title={copied ? t("Copied") : t("Copy code")}
+      aria-label={copied ? t("Copied") : t("Copy code")}
       className={`markdown-code-copy ${copied ? "is-copied" : ""}`}
       onClick={() => {
         void copyText(code.replace(/\r?\n$/, "")).then(
@@ -661,7 +670,7 @@ export const AgentMarkdown = memo(function AgentMarkdown({
               x={fileMenu.x}
               y={fileMenu.y}
               items={fileLinkMenuItems(!!onOpenFile, !!cwd)}
-              ariaLabel="File link actions"
+              ariaLabel={t("File link actions")}
               onPick={onFileMenuPick}
               onClose={() => setFileMenu(null)}
             />
@@ -700,7 +709,7 @@ export const MarkdownPreview = memo(function MarkdownPreview({
       ref={lockOverscroll}
       tabIndex={0}
       role="region"
-      aria-label="Markdown preview"
+      aria-label={t("Markdown preview")}
       className="markdown-preview h-full overflow-y-auto overscroll-none [overflow-anchor:none]"
     >
       <div className="px-6 py-8">
@@ -729,7 +738,7 @@ export const MarkdownSource = memo(function MarkdownSource({
       ref={lockOverscroll}
       tabIndex={0}
       role="region"
-      aria-label="Markdown source"
+      aria-label={t("Markdown source")}
       className="markdown-preview h-full overflow-y-auto overscroll-none [overflow-anchor:none]"
     >
       <pre className="min-h-full min-w-0 whitespace-pre-wrap wrap-break-word px-4 py-3 font-mono text-[13px] leading-5 text-content/85">

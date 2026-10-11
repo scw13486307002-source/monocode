@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import { parseClaudeMcpList, type McpConnection } from "./mcp";
 
@@ -75,7 +76,7 @@ async function fetchMcpSettings(cwd: string): Promise<McpSettingsSnapshot> {
     const configured = await invoke<McpConnection[]>("mcp_discover", { cwd });
     const servers = configured.map((server) => ({
       ...server,
-      status: server.enabled === false ? "Disabled" : "Configured",
+      status: server.enabled === false ? t("Disabled") : t("Configured"),
     }));
     return { servers, error: "", claudeError: "" };
   } catch (cause) {
@@ -102,9 +103,9 @@ function loadClaudeHealth(
         ...server,
         status:
           server.enabled === false
-            ? "Disabled"
+            ? t("Disabled")
             : server.provider === "claude"
-              ? (health.get(server.name) ?? "Configured")
+              ? (health.get(server.name) ?? t("Configured"))
               : server.status,
       }));
       // Claude can supply connections that are not stored in a local config file.

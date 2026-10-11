@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import {
   formatReleaseDate,
   presentReleaseNotes,
@@ -25,7 +26,7 @@ export function WhatsNewBody({ version }: { version: string }) {
         />
       ) : (
         <p className="text-[13px] text-content/60">
-          Release notes for this version are not available in this build.
+          {t("Release notes for this version are not available in this build.")}
         </p>
       )}
     </article>
@@ -39,7 +40,7 @@ export function WhatsNewDialog({ version, onClose }: Props) {
   return (
     <Modal
       onClose={onClose}
-      title="What's new"
+      title={t("What's new")}
       description={`MonoCode ${version}${date ? ` · ${date}` : ""}`}
       size="md"
       className="h-[min(72vh,640px)]"

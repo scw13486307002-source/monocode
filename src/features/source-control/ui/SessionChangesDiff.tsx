@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, Loader } from "../../../shared/ui/icons";
 import {
@@ -58,7 +59,8 @@ export function SessionChangesDiff({
       void sessionCheckpointStatus(sessionId, cwd)
         .then(async (status) => {
           if (disposed || current !== generation) return;
-          const allowed = scope == null ? null : new Set<string>(JSON.parse(scope));
+          const allowed =
+            scope == null ? null : new Set<string>(JSON.parse(scope));
           const scoped = allowed
             ? status.files.filter((file) => allowed.has(file.path))
             : status.files;
@@ -132,14 +134,14 @@ export function SessionChangesDiff({
         tooLarge: loaded?.tooLarge,
         emptyMessage:
           loaded == null
-            ? "Loading…"
+            ? t("Loading…")
             : loaded.error
               ? loaded.error
               : unified != null &&
                   unified.additions === 0 &&
                   unified.deletions === 0 &&
                   !loaded.binary
-                ? "No textual diff"
+                ? t("No textual diff")
                 : undefined,
         additions: file.additions,
         deletions: file.deletions,
@@ -163,7 +165,7 @@ export function SessionChangesDiff({
   if (!cwd || cwd === "~") {
     return (
       <p className="grid h-full place-items-center text-[13px] text-content/45">
-        No project folder
+        {t("No project folder")}
       </p>
     );
   }
@@ -172,7 +174,7 @@ export function SessionChangesDiff({
       <div className="grid h-full place-items-center p-6 text-center">
         <AlertCircle className="mx-auto mb-3 size-5 text-red-400" />
         <p className="text-[13px] text-content">
-          Couldn’t load session changes
+          {t("Couldn’t load session changes")}
         </p>
         <p className="mt-1 text-[12px] text-content/50">{error}</p>
       </div>
@@ -188,7 +190,7 @@ export function SessionChangesDiff({
   if (files.length === 0) {
     return (
       <p className="grid h-full place-items-center text-[13px] text-content/45">
-        No session changes
+        {t("No session changes")}
       </p>
     );
   }

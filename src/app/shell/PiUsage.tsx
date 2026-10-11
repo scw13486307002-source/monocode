@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { useEffect, useRef, useState } from "react";
 import { RefreshCw } from "../../shared/ui/icons";
 import { HarnessIcon } from "../../features/sessions/ui/HarnessIcon";
@@ -22,12 +23,12 @@ export function PiUsage({ model, now }: { model?: string; now: number }) {
         className="inline-flex items-center gap-1.5 whitespace-nowrap"
         title={
           !model || model === "pi:default"
-            ? "Send a message so Pi can report its configured provider."
-            : "Subscription usage is not supported for this Pi provider."
+            ? t("Send a message so Pi can report its configured provider.")
+            : t("Subscription usage is not supported for this Pi provider.")
         }
       >
         <HarnessIcon harness="pi" className="size-3 shrink-0" />
-        <span>pi · Usage unavailable</span>
+        <span>{t("pi · Usage unavailable")}</span>
       </span>
     );
   }
@@ -99,8 +100,8 @@ function PiProviderUsage({
       />
       <button
         type="button"
-        aria-label="Refresh Pi usage"
-        title="Refresh Pi usage"
+        aria-label={t("Refresh Pi usage")}
+        title={t("Refresh Pi usage")}
         disabled={fetching}
         onClick={() => refreshRef.current(true)}
         className="grid size-6 shrink-0 place-items-center rounded text-content/40 hover:bg-content/10 hover:text-content disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-accent"

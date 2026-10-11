@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useRef, useState } from "react";
 import { Internet, Loader, Plus, Trash2 } from "../../../shared/ui/icons";
@@ -241,11 +242,12 @@ export function ConnectionsSettings() {
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h2 className="text-[13px] font-semibold text-content">
-            Your machines
+            {t("Your machines")}
           </h2>
           <p className="mt-1 text-[12px] leading-relaxed text-content/45">
-            Run agents on another computer and return to them from your laptop.
-            The host keeps working when you close MonoCode here.
+            {t(
+              "Run agents on another computer and return to them from your laptop. The host keeps working when you close MonoCode here.",
+            )}
           </p>
         </div>
         {!adding && (
@@ -258,7 +260,7 @@ export function ConnectionsSettings() {
               setNotice("");
             }}
           >
-            <Plus className="size-4" /> Add machine
+            <Plus className="size-4" /> {t("Add machine")}
           </button>
         )}
       </div>
@@ -278,12 +280,13 @@ export function ConnectionsSettings() {
                       : machine.endpoint}
                   </div>
                   <div className="mt-1 text-[12px] text-content/50">
-                    {status[machine.id] ?? "Checking connection…"}
+                    {status[machine.id] ?? t("Checking connection…")}
                   </div>
                   {machine.ssh && needsUpdate[machine.id] ? (
                     <div className="mt-1 text-[11px] text-content/45">
-                      Updating restarts the host and interrupts active agent
-                      turns.
+                      {t(
+                        "Updating restarts the host and interrupts active agent turns.",
+                      )}
                     </div>
                   ) : null}
                 </div>
@@ -293,10 +296,12 @@ export function ConnectionsSettings() {
                       <button
                         className={button}
                         disabled={busy}
-                        title="Downloads the matching host package and restarts the host; active agent turns will be interrupted"
+                        title={t(
+                          "Downloads the matching host package and restarts the host; active agent turns will be interrupted",
+                        )}
                         onClick={() => void begin(machine, true)}
                       >
-                        Update Host
+                        {t("Update Host")}
                       </button>
                     ) : null}
                     <button
@@ -304,15 +309,15 @@ export function ConnectionsSettings() {
                       disabled={busy}
                       onClick={() => void begin(machine)}
                     >
-                      Reconnect
+                      {t("Reconnect")}
                     </button>
                   </div>
                 )}
                 <button
                   disabled={busy || revoking}
                   className="rounded p-2 text-content/40 hover:bg-selection hover:text-content disabled:opacity-40"
-                  aria-label={`Remove ${machine.name}`}
-                  title="Remove connection…"
+                  aria-label={t("Remove {0}", { "0": machine.name })}
+                  title={t("Remove connection…")}
                   onClick={() => {
                     setError("");
                     setRemoving(machine.id);
@@ -324,33 +329,35 @@ export function ConnectionsSettings() {
               {removing === machine.id && (
                 <div
                   role="group"
-                  aria-label={`Confirm removing ${machine.name}`}
+                  aria-label={t("Confirm removing {0}", { "0": machine.name })}
                   className="flex flex-col gap-3 border-t border-stroke bg-content/3 px-4 py-4 text-[12px] leading-relaxed text-content/60"
                 >
                   <p className="text-[13px] font-medium text-content">
-                    Remove {machine.name} from this desktop?
+                    {t("Remove")} {machine.name} {t("from this desktop?")}
                   </p>
                   <p>
-                    This closes this desktop’s connection to the machine. It
-                    does not stop the host, and its sessions keep running and
-                    stay on that machine. You can add it again later.
+                    {t(
+                      "This closes this desktop’s connection to the machine. It does not stop the host, and its sessions keep running and stay on that machine. You can add it again later.",
+                    )}
                   </p>
                   <p>
-                    Removing alone leaves this desktop’s credential valid on the
-                    host. Revoke access to invalidate it first; the machine must
-                    be reachable.
+                    {t(
+                      "Removing alone leaves this desktop’s credential valid on the host. Revoke access to invalidate it first; the machine must be reachable.",
+                    )}
                   </p>
                   <p>
-                    To stop the host and turn off its background service, run{" "}
+                    {t(
+                      "To stop the host and turn off its background service, run",
+                    )}{" "}
                     <code className="rounded bg-content/10 px-1">
                       ~/.monocode-host/bin/monocode-host service uninstall
                     </code>{" "}
-                    on that machine (
+                    {t("on that machine (")}
                     <code className="rounded bg-content/10 px-1">
                       %USERPROFILE%\.monocode-host\bin\monocode-host.cmd service
                       uninstall
                     </code>{" "}
-                    on Windows). Its sessions and history are kept.
+                    {t("on Windows). Its sessions and history are kept.")}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <button
@@ -358,21 +365,21 @@ export function ConnectionsSettings() {
                       disabled={revoking}
                       onClick={() => void remove(machine, true)}
                     >
-                      Revoke access and remove
+                      {t("Revoke access and remove")}
                     </button>
                     <button
                       className={button}
                       disabled={revoking}
                       onClick={() => void remove(machine, false)}
                     >
-                      Remove from this desktop only
+                      {t("Remove from this desktop only")}
                     </button>
                     <button
                       className="px-3 py-2 text-[13px] text-content/50"
                       disabled={revoking}
                       onClick={() => setRemoving(undefined)}
                     >
-                      Cancel
+                      {t("Cancel")}
                     </button>
                   </div>
                 </div>
@@ -382,7 +389,9 @@ export function ConnectionsSettings() {
         </div>
       ) : loaded && !adding ? (
         <div className="rounded-xl border border-dashed border-content/15 px-5 py-8 text-center text-[13px] text-content/45">
-          Add your always-on Windows, Mac, or Linux machine to get started.
+          {t(
+            "Add your always-on Windows, Mac, or Linux machine to get started.",
+          )}
         </div>
       ) : null}
       {adding && (
@@ -394,13 +403,15 @@ export function ConnectionsSettings() {
           }}
         >
           <div className="flex items-center justify-between">
-            <h3 className="text-[14px] font-medium">Connect through SSH</h3>
+            <h3 className="text-[14px] font-medium">
+              {t("Connect through SSH")}
+            </h3>
             <span className="rounded bg-selection px-2 py-1 text-[11px] text-content/60">
               SSH
             </span>
           </div>
           <label className="flex flex-col gap-1.5 text-[12px] text-content/65">
-            SSH address
+            {t("SSH address")}
             <input
               autoFocus
               required
@@ -408,19 +419,19 @@ export function ConnectionsSettings() {
               className={input}
               value={target}
               onChange={(event) => setTarget(event.target.value)}
-              placeholder="user@my-mac-mini or an SSH alias"
+              placeholder={t("user@my-mac-mini or an SSH alias")}
               autoComplete="off"
               spellCheck={false}
             />
           </label>
           <label className="flex flex-col gap-1.5 text-[12px] text-content/65">
-            Name <span className="sr-only">(optional)</span>
+            {t("Name")} <span className="sr-only">{t("(optional)")}</span>
             <input
               disabled={busy}
               className={input}
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Optional, e.g. Home Mac mini"
+              placeholder={t("Optional, e.g. Home Mac mini")}
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
@@ -428,9 +439,9 @@ export function ConnectionsSettings() {
             />
           </label>
           <details className="text-[12px] text-content/50">
-            <summary className="cursor-pointer">Advanced</summary>
+            <summary className="cursor-pointer">{t("Advanced")}</summary>
             <label className="mt-3 flex max-w-40 flex-col gap-1.5">
-              SSH port
+              {t("SSH port")}
               <input
                 disabled={busy}
                 type="number"
@@ -439,26 +450,25 @@ export function ConnectionsSettings() {
                 className={input}
                 value={port}
                 onChange={(event) => setPort(event.target.value)}
-                placeholder="From SSH config"
+                placeholder={t("From SSH config")}
               />
             </label>
           </details>
           <p className="text-[12px] leading-relaxed text-content/45">
-            MonoCode installs and starts its background host, then connects
-            securely. Your SSH keys and config are used automatically. Enable
-            SSH on the host and sign in to Codex or Claude Code there. On
-            Windows and Mac, keep the host’s desktop account signed in and the
-            machine awake. Locking the desktop is fine.
+            {t(
+              "MonoCode installs and starts its background host, then connects securely. Your SSH keys and config are used automatically. Enable SSH on the host and sign in to Codex or Claude Code there. On Windows and Mac, keep the host’s desktop account signed in and the machine awake. Locking the desktop is fine.",
+            )}
           </p>
           <p className="text-[12px] leading-relaxed text-content/45">
-            On Linux, setup installs a systemd user service and turns on
-            lingering for your account (
+            {t(
+              "On Linux, setup installs a systemd user service and turns on lingering for your account (",
+            )}
             <code className="rounded bg-content/10 px-1">
               loginctl enable-linger
             </code>
-            ), so the host and your other user services keep running after you
-            log out. The host keeps running until you stop it on that machine;
-            removing it here only disconnects this desktop.
+            {t(
+              "), so the host and your other user services keep running after you log out. The host keeps running until you stop it on that machine; removing it here only disconnects this desktop.",
+            )}
           </p>
           <div className="flex justify-end gap-2">
             <button
@@ -467,10 +477,10 @@ export function ConnectionsSettings() {
               className="px-3 py-2 text-[13px] text-content/50"
               onClick={() => setAdding(false)}
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button className={button} disabled={busy || !target.trim()}>
-              {busy ? "Connecting…" : "Connect"}
+              {busy ? t("Connecting…") : t("Connect")}
             </button>
           </div>
         </form>
@@ -483,7 +493,7 @@ export function ConnectionsSettings() {
         >
           <div className="flex items-center gap-2 text-[13px]">
             <Loader className="size-4 animate-spin" />
-            {job?.message ?? "Starting connection…"}
+            {job?.message ?? t("Starting connection…")}
           </div>
           {job?.prompt && (
             <form
@@ -501,7 +511,7 @@ export function ConnectionsSettings() {
                   key={job.prompt.id}
                   autoFocus
                   type="password"
-                  aria-label="SSH password or passphrase"
+                  aria-label={t("SSH password or passphrase")}
                   autoComplete="off"
                   disabled={answering}
                   className={input}
@@ -511,7 +521,9 @@ export function ConnectionsSettings() {
               )}
               <div className="flex gap-2">
                 <button className={button} disabled={answering}>
-                  {job.prompt.confirm ? "Trust host and continue" : "Continue"}
+                  {job.prompt.confirm
+                    ? t("Trust host and continue")
+                    : t("Continue")}
                 </button>
                 {job.prompt.confirm && (
                   <button
@@ -520,7 +532,7 @@ export function ConnectionsSettings() {
                     disabled={answering}
                     onClick={() => void respond("no")}
                   >
-                    Reject
+                    {t("Reject")}
                   </button>
                 )}
               </div>
@@ -536,7 +548,7 @@ export function ConnectionsSettings() {
                 );
             }}
           >
-            Cancel connection
+            {t("Cancel connection")}
           </button>
         </div>
       )}
@@ -555,7 +567,7 @@ export function ConnectionsSettings() {
       )}
       <details className="text-[12px] text-content/45">
         <summary className="cursor-pointer">
-          Connect to an existing host by URL
+          {t("Connect to an existing host by URL")}
         </summary>
         <form
           className="mt-4 flex flex-col gap-3"
@@ -574,7 +586,7 @@ export function ConnectionsSettings() {
           }}
         >
           <label>
-            Host URL
+            {t("Host URL")}
             <input
               required
               disabled={busy}
@@ -584,7 +596,7 @@ export function ConnectionsSettings() {
             />
           </label>
           <label>
-            Device token
+            {t("Device token")}
             <input
               required
               disabled={busy}
@@ -596,7 +608,7 @@ export function ConnectionsSettings() {
             />
           </label>
           <button className={`${button} self-start`} disabled={busy}>
-            Connect by URL
+            {t("Connect by URL")}
           </button>
         </form>
       </details>

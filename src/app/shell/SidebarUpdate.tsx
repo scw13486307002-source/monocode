@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { ArrowDownCircle, Loader } from "../../shared/ui/icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -115,7 +116,7 @@ export function SidebarUpdate({
 
   const label = busy
     ? `Downloading${snapshot.progress != null ? ` ${snapshot.progress}%` : "…"}`
-    : `Update to ${snapshot.availableVersion}`;
+    : t("Update to {0}", { "0": String(snapshot.availableVersion) });
 
   return (
     <button

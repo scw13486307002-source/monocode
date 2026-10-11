@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import {
   useId,
   useRef,
@@ -128,7 +129,7 @@ function AccountPicker({
       <button
         ref={button}
         type="button"
-        aria-label="Choose another account"
+        aria-label={t("Choose another account")}
         aria-haspopup="menu"
         aria-expanded={open}
         data-mono-account-picker
@@ -142,7 +143,7 @@ function AccountPicker({
         }}
         className="flex h-6.5 shrink-0 items-center gap-1 rounded-md bg-selection px-1.5 text-[11px] text-content hover:bg-selection-hover"
       >
-        <span>Choose another account</span>
+        <span>{t("Choose another account")}</span>
         <ChevronDown
           className={`size-3 shrink-0 text-content/50 ${open ? "rotate-180" : ""}`}
           strokeWidth={1.75}
@@ -158,7 +159,7 @@ function AccountPicker({
           onDismiss={(reason) => dismiss(reason === "escape")}
           ignore="[data-mono-account-picker]"
           role="menu"
-          aria-label="Choose another account"
+          aria-label={t("Choose another account")}
           aria-activedescendant={`${menuId}-${active}`}
           tabIndex={-1}
           onKeyDown={onKeyDown}

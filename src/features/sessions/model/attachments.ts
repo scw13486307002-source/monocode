@@ -1,5 +1,9 @@
+import { t } from "../../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
-import { basename, pickFiles as pickFilePaths } from "../../../platform/tauri/fs";
+import {
+  basename,
+  pickFiles as pickFilePaths,
+} from "../../../platform/tauri/fs";
 import type { Attachment, AttachmentKind } from "./session";
 
 export const MAX_ATTACHMENTS = 20;
@@ -316,7 +320,10 @@ export function promptBlocks(
 export function attachmentPath(file: Attachment): string {
   if (!file.path?.trim()) {
     throw new Error(
-      `Cannot attach ${JSON.stringify(file.name)}: no local file path is available. Attach the file again.`,
+      t(
+        "Cannot attach {0}: no local file path is available. Attach the file again.",
+        { "0": JSON.stringify(file.name) },
+      ),
     );
   }
   return file.path;

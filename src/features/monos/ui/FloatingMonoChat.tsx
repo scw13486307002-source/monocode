@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
@@ -200,8 +201,8 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
           {view.session?.busy ? (
             <button
               type="button"
-              aria-label="Stop reply"
-              title="Stop reply (Escape)"
+              aria-label={t("Stop reply")}
+              title={t("Stop reply (Escape)")}
               className={BUTTON}
               onClick={() => void action({ kind: "stop" })}
             >
@@ -210,8 +211,8 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
           ) : null}
           <button
             type="button"
-            aria-label="Open in MonoCode"
-            title="Open in MonoCode"
+            aria-label={t("Open in MonoCode")}
+            title={t("Open in MonoCode")}
             disabled={loading}
             className={BUTTON}
             onClick={() => void action({ kind: "reveal" })}
@@ -220,8 +221,8 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
           </button>
           <button
             type="button"
-            aria-label="Hide chat"
-            title="Hide chat"
+            aria-label={t("Hide chat")}
+            title={t("Hide chat")}
             className={BUTTON}
             onClick={() => void getCurrentWindow().hide()}
           >
@@ -248,7 +249,7 @@ export function FloatingMonoChat({ onShown }: { onShown: () => void }) {
               />
             )}
             <p className="text-[13px] text-content/50">
-              {failure ?? "Loading conversation…"}
+              {failure ?? t("Loading conversation…")}
             </p>
           </div>
         ) : (
@@ -305,7 +306,7 @@ function MonoRail({
   const [creating, setCreating] = useState(false);
   return (
     <nav
-      aria-label="Monos"
+      aria-label={t("Monos")}
       data-floating-mono-rail
       data-tauri-drag-region
       // 17px puts the first mascot's center level with the header's: the
@@ -335,7 +336,9 @@ function MonoRail({
               aria-current={selected ? "true" : undefined}
               onClick={() => onSwitch(mono.id)}
               className={`grid size-8 place-items-center rounded-lg transition-opacity ${
-                selected ? "" : "opacity-40 hover:opacity-100 focus-visible:opacity-100"
+                selected
+                  ? ""
+                  : "opacity-40 hover:opacity-100 focus-visible:opacity-100"
               }`}
             >
               <PixelMascot
@@ -354,8 +357,8 @@ function MonoRail({
       })}
       <button
         type="button"
-        title="New mono"
-        aria-label="New mono"
+        title={t("New mono")}
+        aria-label={t("New mono")}
         disabled={creating || !currentId}
         onClick={() => {
           setCreating(true);
@@ -406,7 +409,8 @@ function FloatingConversation({
               className="size-12"
             />
             <p className="text-[13px] leading-6 text-content/45">
-              Say hello to {mono.name}, ask a question, or hand over some work.
+              {t("Say hello to")} {mono.name}
+              {t(", ask a question, or hand over some work.")}
             </p>
           </div>
         ) : null}
@@ -465,13 +469,13 @@ function FloatingConversation({
       ) : null}
       {session.usageLimit ? (
         <div className="shrink-0 px-3 pb-2 text-[12px] text-content/60">
-          <p>The provider’s usage limit was reached.</p>
+          <p>{t("The provider’s usage limit was reached.")}</p>
           <button
             type="button"
             className="mt-1 text-accent hover:underline"
             onClick={() => void action({ kind: "resume" })}
           >
-            Try again
+            {t("Try again")}
           </button>
           <span className="mx-2 text-content/25">·</span>
           <button
@@ -479,7 +483,7 @@ function FloatingConversation({
             className="text-accent hover:underline"
             onClick={() => void action({ kind: "reveal" })}
           >
-            Change model in MonoCode
+            {t("Change model in MonoCode")}
           </button>
         </div>
       ) : null}
@@ -551,7 +555,7 @@ function ArtifactSheet({
     return () => window.removeEventListener("keydown", escape, true);
   }, [close]);
 
-  const label = artifact ? artifactLabel(artifact.kind) : "Document";
+  const label = artifact ? artifactLabel(artifact.kind) : t("Document");
   return (
     <div
       data-artifact-sheet={id}
@@ -582,8 +586,16 @@ function ArtifactSheet({
           {artifact ? (
             <button
               type="button"
-              aria-label={copied ? "Copied" : `Copy ${label.toLowerCase()}`}
-              title={copied ? "Copied" : `Copy ${label.toLowerCase()}`}
+              aria-label={
+                copied
+                  ? t("Copied")
+                  : t("Copy {0}", { "0": label.toLowerCase() })
+              }
+              title={
+                copied
+                  ? t("Copied")
+                  : t("Copy {0}", { "0": label.toLowerCase() })
+              }
               className={BUTTON}
               onClick={() =>
                 void copyMessage(artifact.body).then(
@@ -597,8 +609,8 @@ function ArtifactSheet({
           ) : null}
           <button
             type="button"
-            aria-label="Open in MonoCode"
-            title="Open in MonoCode"
+            aria-label={t("Open in MonoCode")}
+            title={t("Open in MonoCode")}
             className={BUTTON}
             onClick={() => void action({ kind: "openArtifact", id })}
           >
@@ -606,8 +618,8 @@ function ArtifactSheet({
           </button>
           <button
             type="button"
-            aria-label="Close document"
-            title="Close (Escape)"
+            aria-label={t("Close document")}
+            title={t("Close (Escape)")}
             className={BUTTON}
             onClick={close}
           >
@@ -617,11 +629,11 @@ function ArtifactSheet({
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pt-2 pb-8">
           {!loaded ? (
             <p role="status" className="text-[13px] text-content/50">
-              Loading document…
+              {t("Loading document…")}
             </p>
           ) : !artifact ? (
             <p role="alert" className="text-[13px] text-content/60">
-              {error ?? "This document is no longer available."}
+              {error ?? t("This document is no longer available.")}
             </p>
           ) : (
             <article data-artifact-reader={artifact.id}>
@@ -629,7 +641,7 @@ function ArtifactSheet({
                 {artifact.title}
               </h1>
               <p className="mb-5 text-[11px] text-content/45">
-                Updated {new Date(artifact.updatedAt).toLocaleString()}
+                {t("Updated")} {new Date(artifact.updatedAt).toLocaleString()}
               </p>
               <ArtifactContent
                 artifact={artifact}

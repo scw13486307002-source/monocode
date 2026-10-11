@@ -1,9 +1,27 @@
-import { promptBlocks, type PromptContentBlock } from "../../../../features/sessions/model/attachments";
-import type { AgentModel, ModelSetting } from "../../../../features/sessions/model/models";
-import type { Attachment, RuntimeMode, ToolPreview } from "../../../../features/sessions/model/session";
-import { nativeCommandInvocation, type NativeCommand } from "../../core/nativeCommands";
+import { t } from "../../../../shared/i18n/index";
+import {
+  promptBlocks,
+  type PromptContentBlock,
+} from "../../../../features/sessions/model/attachments";
+import type {
+  AgentModel,
+  ModelSetting,
+} from "../../../../features/sessions/model/models";
+import type {
+  Attachment,
+  RuntimeMode,
+  ToolPreview,
+} from "../../../../features/sessions/model/session";
+import {
+  nativeCommandInvocation,
+  type NativeCommand,
+} from "../../core/nativeCommands";
 import type { HarnessEvent } from "../../core/types";
-import { asRecord, eventsFromAcpUpdate, stringField } from "../antigravity/antigravityProtocol";
+import {
+  asRecord,
+  eventsFromAcpUpdate,
+  stringField,
+} from "../antigravity/antigravityProtocol";
 
 export const DEVIN_AUTH_HELP =
   "Run `devin auth login` in a terminal, then retry.";
@@ -60,7 +78,9 @@ export function devinAskEditsConfig(user: string | null): string {
         ),
       );
     } catch (error) {
-      throw new Error(`Devin's config.json is not valid JSON (${errorDetail(error)}). ${help}`);
+      throw new Error(
+        `Devin's config.json is not valid JSON (${errorDetail(error)}). ${help}`,
+      );
     }
   }
   const root = asRecord(config);
@@ -69,18 +89,24 @@ export function devinAskEditsConfig(user: string | null): string {
   }
   const permissions = root.permissions ?? {};
   if (!asRecord(permissions) || Array.isArray(permissions)) {
-    throw new Error(`Devin's config.json \`permissions\` is not an object. ${help}`);
+    throw new Error(
+      `Devin's config.json \`permissions\` is not an object. ${help}`,
+    );
   }
   const ask = (permissions as Record<string, unknown>).ask ?? [];
   if (!Array.isArray(ask)) {
-    throw new Error(`Devin's config.json \`permissions.ask\` is not a list. ${help}`);
+    throw new Error(
+      `Devin's config.json \`permissions.ask\` is not a list. ${help}`,
+    );
   }
   return JSON.stringify(
     {
       ...root,
       permissions: {
         ...(permissions as Record<string, unknown>),
-        ask: ask.includes(DEVIN_ASK_EDITS_RULE) ? ask : [...ask, DEVIN_ASK_EDITS_RULE],
+        ask: ask.includes(DEVIN_ASK_EDITS_RULE)
+          ? ask
+          : [...ask, DEVIN_ASK_EDITS_RULE],
       },
     },
     null,
@@ -116,7 +142,10 @@ export function devinCredentialsCandidates(home: string): string[] {
 export function devinApiKeyFromCredentials(toml: string): string | null {
   for (const key of ["windsurf_api_key", "devin_api_key", "api_key"]) {
     const match = toml.match(
-      new RegExp(`^\\s*${key}\\s*=\\s*(?:"([^"\\r\\n]+)"|'([^'\\r\\n]+)')`, "m"),
+      new RegExp(
+        `^\\s*${key}\\s*=\\s*(?:"([^"\\r\\n]+)"|'([^'\\r\\n]+)')`,
+        "m",
+      ),
     );
     const value = (match?.[1] ?? match?.[2])?.trim();
     if (value) return value;
@@ -140,9 +169,7 @@ export function devinAuthenticateParams(
   methodId: string,
   apiKey: string | null,
 ): Record<string, unknown> {
-  return apiKey
-    ? { methodId, _meta: { api_key: apiKey } }
-    : { methodId };
+  return apiKey ? { methodId, _meta: { api_key: apiKey } } : { methodId };
 }
 
 export function devinPromptBlocks(
@@ -196,7 +223,9 @@ export function devinRestoreError(error: unknown): Error {
       "Devin timed out restoring the previous conversation. Send again to retry.",
     );
   }
-  return new Error(`Devin could not restore the previous conversation. ${detail}`);
+  return new Error(
+    `Devin could not restore the previous conversation. ${detail}`,
+  );
 }
 
 function errorDetail(error: unknown): string {
@@ -236,7 +265,15 @@ export type DevinModelFamily = {
   variants: DevinModelVariant[];
 };
 
-const EFFORT_ORDER = ["none", "minimal", "low", "medium", "high", "xhigh", "max"];
+const EFFORT_ORDER = [
+  "none",
+  "minimal",
+  "low",
+  "medium",
+  "high",
+  "xhigh",
+  "max",
+];
 
 const EFFORT_WORDS: Record<string, string> = {
   none: "none",
@@ -297,7 +334,11 @@ export function devinThoughtLevel(raw: unknown): DevinThoughtLevel | null {
 }
 
 /** Names are more regular than ids: `swe-1-7-lightning` is "Lightning Max". */
-function parseDevinVariant(name: string): { base: string; effort?: string; fast: boolean } {
+function parseDevinVariant(name: string): {
+  base: string;
+  effort?: string;
+  fast: boolean;
+} {
   let rest = name.trim();
   let fast = false;
   if (/\s+fast$/i.test(rest)) {
@@ -308,19 +349,32 @@ function parseDevinVariant(name: string): { base: string; effort?: string; fast:
   const context = /\s+\d+(?:\.\d+)?[KM]$/i.exec(rest)?.[0] ?? "";
   rest = rest.slice(0, rest.length - context.length);
   if (/\s+no thinking$/i.test(rest)) {
-    return { base: rest.replace(/\s+no thinking$/i, "") + context, effort: "none", fast };
+    return {
+      base: rest.replace(/\s+no thinking$/i, "") + context,
+      effort: "none",
+      fast,
+    };
   }
   // "Medium Thinking" is an effort; a bare "Thinking" suffix is part of the name.
   const match =
-    /^(.*\S)\s+(none|minimal|low|medium|high|xhigh|x-high|extra high|max)(\s+thinking)?$/i.exec(rest);
+    /^(.*\S)\s+(none|minimal|low|medium|high|xhigh|x-high|extra high|max)(\s+thinking)?$/i.exec(
+      rest,
+    );
   if (match) {
-    return { base: match[1] + context, effort: EFFORT_WORDS[match[2].toLowerCase()], fast };
+    return {
+      base: match[1] + context,
+      effort: EFFORT_WORDS[match[2].toLowerCase()],
+      fast,
+    };
   }
   return { base: rest + context, fast };
 }
 
 function familyKey(base: string): string {
-  return base.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return base
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 /** Effort survives as an id suffix on CLIs that dropped it from the names. */
@@ -363,7 +417,9 @@ export function devinModelFamilies(
     if (seen.has(value)) continue;
     seen.add(value);
     const fusion = devinFusionParts(value, label);
-    const parsed = fusion ? { base: "Fusion", fast: false } : parseDevinVariant(label);
+    const parsed = fusion
+      ? { base: "Fusion", fast: false }
+      : parseDevinVariant(label);
     const effort = fusion
       ? undefined
       : (parsed.effort ?? EFFORT_ID_SUFFIX.exec(value)?.[1]?.toLowerCase());
@@ -401,7 +457,9 @@ function isCleanFamily(family: DevinModelFamily): boolean {
   if (family.variants.length < 2) return true;
   const withEffort = family.variants.filter((variant) => variant.effort).length;
   if (withEffort !== 0 && withEffort !== family.variants.length) return false;
-  const pairs = new Set(family.variants.map((variant) => `${variant.effort}|${variant.fast}`));
+  const pairs = new Set(
+    family.variants.map((variant) => `${variant.effort}|${variant.fast}`),
+  );
   return pairs.size === family.variants.length;
 }
 
@@ -414,7 +472,7 @@ function defaultVariant(family: DevinModelFamily): DevinModelVariant {
 function thoughtLevelSetting(thought: DevinThoughtLevel): ModelSetting {
   return {
     id: "effort",
-    label: "Effort",
+    label: t("Effort"),
     kind: "select",
     value: thought.current ?? thought.choices[0].value,
     options: thought.choices,
@@ -470,10 +528,13 @@ function familyModel(
   if (efforts.length > 1) {
     settings.push({
       id: "effort",
-      label: "Effort",
+      label: t("Effort"),
       kind: "select",
       value: fallback.effort ?? efforts[0],
-      options: efforts.map((value) => ({ value, label: EFFORT_LABELS[value] ?? value })),
+      options: efforts.map((value) => ({
+        value,
+        label: EFFORT_LABELS[value] ?? value,
+      })),
     });
   } else if (thought) {
     settings.push(thoughtLevelSetting(thought));
@@ -481,12 +542,12 @@ function familyModel(
   if (family.variants.some((variant) => variant.fast)) {
     settings.push({
       id: "fast",
-      label: "Fast",
+      label: t("Fast"),
       kind: "toggle",
       value: "false",
       options: [
-        { value: "false", label: "Off" },
-        { value: "true", label: "Fast" },
+        { value: "false", label: t("Off") },
+        { value: "true", label: t("Fast") },
       ],
     });
   }
@@ -527,7 +588,7 @@ function fusionModel(family: DevinModelFamily): AgentModel {
   const settings: ModelSetting[] = [
     {
       id: "lead",
-      label: "Lead",
+      label: t("Lead"),
       kind: "select",
       value: first.lead,
       options: [...leads].map(([value, label]) => ({ value, label })),
@@ -536,7 +597,7 @@ function fusionModel(family: DevinModelFamily): AgentModel {
   if (effortChoice && efforts.length > 1) {
     settings.push({
       id: "effort",
-      label: "Effort",
+      label: t("Effort"),
       kind: "select",
       value: first.leadEffort ?? efforts[0],
       options: efforts.map((value) => ({
@@ -547,7 +608,7 @@ function fusionModel(family: DevinModelFamily): AgentModel {
   }
   settings.push({
     id: "sidekick",
-    label: "Sidekick",
+    label: t("Sidekick"),
     kind: "select",
     value: first.sidekick,
     options: [...sidekicks].map(([value, label]) => ({ value, label })),
@@ -582,8 +643,12 @@ export function devinModelValue(
   const effort = settings.effort ?? fallback.effort;
   const fast = settings.fast != null ? settings.fast === "true" : fallback.fast;
   return (
-    family.variants.find((variant) => variant.effort === effort && variant.fast === fast) ??
-    family.variants.find((variant) => variant.effort === effort && !variant.fast) ??
+    family.variants.find(
+      (variant) => variant.effort === effort && variant.fast === fast,
+    ) ??
+    family.variants.find(
+      (variant) => variant.effort === effort && !variant.fast,
+    ) ??
     fallback
   ).value;
 }
@@ -632,7 +697,9 @@ export function devinNearestEffort(
   let best: string | null = null;
   let bestDistance = Infinity;
   // Ascending, so the first of two equally close levels is the lower one.
-  for (const choice of EFFORT_ORDER.filter((effort) => choices.includes(effort))) {
+  for (const choice of EFFORT_ORDER.filter((effort) =>
+    choices.includes(effort),
+  )) {
     const distance = Math.abs(EFFORT_ORDER.indexOf(choice) - rank);
     if (distance >= bestDistance) continue;
     best = choice;
@@ -697,7 +764,9 @@ export function stripAnsi(text: string): string {
   return text.replace(ANSI, "");
 }
 
-function cleanPreview(preview: ToolPreview | undefined): ToolPreview | undefined {
+function cleanPreview(
+  preview: ToolPreview | undefined,
+): ToolPreview | undefined {
   if (!preview?.output) return preview;
   return { ...preview, output: stripAnsi(preview.output) };
 }
@@ -720,7 +789,9 @@ export function devinEventsFromUpdate(params: unknown): HarnessEvent[] {
   const meta = asRecord(update?._meta);
   const number = (key: string) => {
     const value = meta?.[`cognition.ai/${key}`];
-    return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+    return typeof value === "number" && Number.isFinite(value)
+      ? value
+      : undefined;
   };
   const inputTokens = number("inputTokens");
   const outputTokens = number("outputTokens");
@@ -766,7 +837,9 @@ export function devinPermissionCommand(params: unknown): string | undefined {
   const tool = asRecord(asRecord(params)?.toolCall);
   const meta = asRecord(tool?._meta);
   const command = meta?.["cognition.ai/editableCommand"];
-  return typeof command === "string" && command.trim() ? command.trim() : undefined;
+  return typeof command === "string" && command.trim()
+    ? command.trim()
+    : undefined;
 }
 
 /**
@@ -786,7 +859,9 @@ export function devinSessionTitle(params: unknown): string | null {
  * Slash commands from `available_commands_update`. Devin also lists every
  * installed skill there; MonoCode already discovers those from disk.
  */
-export function devinCommandsFromUpdate(params: unknown): NativeCommand[] | null {
+export function devinCommandsFromUpdate(
+  params: unknown,
+): NativeCommand[] | null {
   const update = updateOf(params);
   if (updateKind(update) !== "available_commands_update") return null;
   const raw = update?.availableCommands ?? update?.available_commands;
@@ -815,7 +890,8 @@ export function devinCommandsFromUpdate(params: unknown): NativeCommand[] | null
 
 export function devinAgentMessageText(params: unknown): string {
   // A subagent's reply is its own, never part of the answer being collected.
-  if (asRecord(updateOf(params)?._meta)?.["cognition.ai/subagent_context"]) return "";
+  if (asRecord(updateOf(params)?._meta)?.["cognition.ai/subagent_context"])
+    return "";
   return devinEventsFromUpdate(params)
     .map((event) => (event.type === "message.delta" ? event.text : ""))
     .join("");

@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { ask } from "@tauri-apps/plugin-dialog";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -56,7 +57,10 @@ export function useProjectIndex(root: string | undefined): {
   index: GitDiffIndex | null;
   reload: () => void;
 } {
-  const [loaded, setLoaded] = useState<{ root: string; index: GitDiffIndex } | null>(null);
+  const [loaded, setLoaded] = useState<{
+    root: string;
+    index: GitDiffIndex;
+  } | null>(null);
   const [nonce, setNonce] = useState(0);
   const reload = useCallback(() => setNonce((value) => value + 1), []);
 
@@ -71,7 +75,8 @@ export function useProjectIndex(root: string | undefined): {
       const current = ++generation;
       void gitDiffIndex(root)
         .then((next) => {
-          if (!cancelled && current === generation) setLoaded({ root, index: next });
+          if (!cancelled && current === generation)
+            setLoaded({ root, index: next });
         })
         .catch(() => {
           if (!cancelled && current === generation) setLoaded(null);
@@ -87,7 +92,10 @@ export function useProjectIndex(root: string | undefined): {
     };
   }, [root, nonce]);
 
-  return { index: loaded && loaded.root === root ? loaded.index : null, reload };
+  return {
+    index: loaded && loaded.root === root ? loaded.index : null,
+    reload,
+  };
 }
 
 function confirmNative(message: string): Promise<boolean> {
@@ -217,12 +225,12 @@ export function MonoProjectCommit({
     const untracked = file.status === "untracked";
     const ok = await ask(
       untracked
-        ? `Delete untracked file ${name}?`
-        : `Discard changes in ${name}? This cannot be undone.`,
+        ? t("Delete untracked file {0}?", { "0": name })
+        : t("Discard changes in {0}? This cannot be undone.", { "0": name }),
       {
         title: "MonoCode",
         kind: "warning",
-        okLabel: untracked ? "Delete" : "Discard",
+        okLabel: untracked ? t("Delete") : t("Discard"),
       },
     );
     if (!ok) return;
@@ -282,8 +290,10 @@ export function MonoProjectCommit({
       ? Promise.resolve(true)
       : confirmNative(
           kind === "pr"
-            ? `Create a pull request from default branch "${index.branch}"?`
-            : `Push to default branch "${index.branch}"?`,
+            ? t('Create a pull request from default branch "{0}"?', {
+                "0": index.branch,
+              })
+            : t('Push to default branch "{0}"?', { "0": index.branch }),
         );
 
   const openCreatedPr = async () => {
@@ -346,7 +356,9 @@ export function MonoProjectCommit({
       return;
     }
     setBusy(createPr ? "pr" : "commit");
-    const committed = files.filter((entry) => selected.includes(entry.relative));
+    const committed = files.filter((entry) =>
+      selected.includes(entry.relative),
+    );
     try {
       await gitCommit(root, message, false, selected);
       // Committed work is accepted work: clear it from the session's review.
@@ -364,10 +376,10 @@ export function MonoProjectCommit({
       if (createPr) await openCreatedPr();
       setStatus(
         createPr
-          ? "Pull request created"
+          ? t("Pull request created")
           : push
-            ? "Committed and pushed"
-            : "Committed",
+            ? t("Committed and pushed")
+            : t("Committed"),
       );
     } catch (error) {
       fail(error);
@@ -420,7 +432,7 @@ export function MonoProjectCommit({
             ref={messageRef}
             rows={1}
             value={message}
-            placeholder={`Message (${MOD}↩ to commit)`}
+            placeholder={t("Message ({0}↩ to commit)", { "0": MOD })}
             disabled={!!busy && busy !== "generate"}
             onChange={(event) => setMessage(event.target.value)}
             onKeyDown={(event) => {
@@ -439,13 +451,13 @@ export function MonoProjectCommit({
             type="button"
             aria-label={
               busy === "generate"
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("Cancel commit message generation")
+                : t("Generate commit message")
             }
             title={
               busy === "generate"
-                ? "Cancel commit message generation"
-                : "Generate commit message"
+                ? t("Cancel commit message generation")
+                : t("Generate commit message")
             }
             disabled={
               busy === "generate" ? false : !!busy || selected.length === 0
@@ -487,12 +499,12 @@ export function MonoProjectCommit({
             ) : (
               <Check className="size-3.5" strokeWidth={2} />
             )}
-            Commit
+            {t("Commit")}
           </button>
           <button
             type="button"
-            aria-label="Commit options"
-            title="Commit options"
+            aria-label={t("Commit options")}
+            title={t("Commit options")}
             aria-expanded={menuOpen}
             disabled={!!busy || !index?.branch}
             onClick={() => setMenuOpen((open) => !open)}
@@ -507,7 +519,7 @@ export function MonoProjectCommit({
           {menuOpen ? (
             <div
               role="menu"
-              aria-label="Commit options"
+              aria-label={t("Commit options")}
               className="absolute top-full right-0 z-30 mt-1 min-w-48 rounded-md border border-content/10 bg-background-base py-1 shadow-lg"
             >
               <button
@@ -517,7 +529,7 @@ export function MonoProjectCommit({
                 onClick={() => void commit(true)}
                 className="flex h-7 w-full items-center px-3 text-left text-[12px] text-content hover:bg-content/10 disabled:opacity-40"
               >
-                Commit & Push
+                {t("Commit & Push")}
               </button>
               <button
                 type="button"
@@ -526,7 +538,7 @@ export function MonoProjectCommit({
                 onClick={() => void commit(true, true)}
                 className="flex h-7 w-full items-center px-3 text-left text-[12px] text-content hover:bg-content/10 disabled:opacity-40"
               >
-                Commit, Push & Create PR
+                {t("Commit, Push & Create PR")}
               </button>
             </div>
           ) : null}
@@ -554,7 +566,8 @@ export function MonoProjectCommit({
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-none py-1">
         {changed.length === 0 ? (
           <p role="status" className="px-3 py-2 text-[12px] text-content/45">
-            {status ?? (index ? "No uncommitted changes" : "Loading changes…")}
+            {status ??
+              (index ? t("No uncommitted changes") : t("Loading changes…"))}
           </p>
         ) : (
           <>
@@ -568,7 +581,7 @@ export function MonoProjectCommit({
             ) : null}
             {inCommit.length > 0 ? (
               <FileSection
-                title="This Commit"
+                title={t("This Commit")}
                 count={inCommit.length}
                 open={commitOpen}
                 onToggle={() => setCommitOpen((open) => !open)}
@@ -576,7 +589,7 @@ export function MonoProjectCommit({
                 onToggleView={toggleView}
                 headerActions={[
                   {
-                    title: "Leave All Out",
+                    title: t("Leave All Out"),
                     icon: <Minus className="size-3.5" strokeWidth={1.75} />,
                     onClick: () => choose(selected, false),
                   },
@@ -591,7 +604,7 @@ export function MonoProjectCommit({
             ) : null}
             {rest.length > 0 ? (
               <FileSection
-                title="Changes"
+                title={t("Changes")}
                 count={rest.length}
                 open={restOpen}
                 onToggle={() => setRestOpen((open) => !open)}
@@ -599,7 +612,7 @@ export function MonoProjectCommit({
                 onToggleView={toggleView}
                 headerActions={[
                   {
-                    title: "Add All to Commit",
+                    title: t("Add All to Commit"),
                     icon: <Plus className="size-3.5" strokeWidth={1.75} />,
                     onClick: () =>
                       choose(

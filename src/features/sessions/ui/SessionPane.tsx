@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { GripVertical, X } from "../../../shared/ui/icons";
 import {
   memo,
@@ -832,8 +833,8 @@ const LocalSessionPane = memo(function LocalSessionPane({
           </span>
           <button
             type="button"
-            title={`Close Pane (${MOD}W)`}
-            aria-label="Close pane"
+            title={t("Close Pane ({0}W)", { "0": MOD })}
+            aria-label={t("Close pane")}
             data-no-drag
             className="grid size-5 shrink-0 place-items-center rounded text-content/50 hover:bg-content/10 hover:text-content"
             onPointerDown={(e) => e.stopPropagation()}
@@ -893,7 +894,9 @@ const LocalSessionPane = memo(function LocalSessionPane({
                 </div>
               ) : session.inboxAsk ? (
                 <div className="scrollbar-none h-full min-h-0 overflow-y-auto">
-                  <DiscussionEmpty message="Explore this item with your agent." />
+                  <DiscussionEmpty
+                    message={t("Explore this item with your agent.")}
+                  />
                 </div>
               ) : (
                 <EmptySession

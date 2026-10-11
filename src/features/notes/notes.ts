@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import { fuzzyMatch } from "../../shared/lib/fuzzy";
 import type { ProjectFile } from "../../platform/tauri/fs";
@@ -233,7 +234,7 @@ export function noteTitle(text: string): string {
     const title = unwrapMarkdown(trimmed).slice(0, MAX_TITLE);
     if (title) return title;
   }
-  return "Untitled";
+  return t("Untitled");
 }
 
 /** Folder name for a note saved from a session, or null when there is no project. */
@@ -271,7 +272,7 @@ export function appendNoteReference(
 ): string {
   const content = body.replace(/\r\n?/g, "\n").trim();
   if (!content) return draft;
-  const heading = title.trim() || "Untitled";
+  const heading = title.trim() || t("Untitled");
   const block = `Note: ${heading}\n\n${content}`;
   const separator =
     draft.length === 0
@@ -301,7 +302,7 @@ export function noteSlugsInText(text: string): string[] {
 export function injectNotePrompt(text: string, notes: Note[]): string {
   if (notes.length === 0) return text;
   const blocks = notes.map((note) => {
-    const heading = note.title.trim() || "Untitled";
+    const heading = note.title.trim() || t("Untitled");
     return [`Referenced note "${heading}":`, "", note.body.trim()].join("\n");
   });
   return [text.trimEnd(), "", "---", ...blocks].join("\n");

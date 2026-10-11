@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, Loader } from "../../../shared/ui/icons";
 import {
@@ -175,13 +176,13 @@ export function WorkingTreeDiff({ cwd, focusPath, focusKind }: Props) {
         tooLarge: loaded?.tooLarge,
         emptyMessage:
           loaded == null
-            ? "Loading…"
+            ? t("Loading…")
             : loaded.error
-              ? `Couldn’t load diff: ${loaded.error}`
+              ? t("Couldn’t load diff: {0}", { "0": loaded.error })
               : unchanged
                 ? kind === "staged"
-                  ? "No staged changes"
-                  : "No unstaged changes"
+                  ? t("No staged changes")
+                  : t("No unstaged changes")
                 : undefined,
         additions:
           unified?.additions ?? (canUseIndexCounts ? file.additions : 0),
@@ -272,7 +273,7 @@ export function WorkingTreeDiff({ cwd, focusPath, focusKind }: Props) {
   if (!cwd || cwd === "~") {
     return (
       <p className="grid h-full place-items-center text-[13px] text-content/45">
-        No project folder
+        {t("No project folder")}
       </p>
     );
   }
@@ -280,7 +281,7 @@ export function WorkingTreeDiff({ cwd, focusPath, focusKind }: Props) {
     return (
       <div className="grid h-full place-items-center p-6 text-center">
         <AlertCircle className="mx-auto mb-3 size-5 text-red-400" />
-        <p className="text-[13px] text-content">Couldn’t load changes</p>
+        <p className="text-[13px] text-content">{t("Couldn’t load changes")}</p>
         <p className="mt-1 text-[12px] text-content/50">{error}</p>
       </div>
     );

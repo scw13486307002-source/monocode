@@ -1,3 +1,4 @@
+import { t } from "../../../shared/i18n/index";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { isImeComposition } from "../../../shared/lib/keyboard";
 import { ArrowUp, Plus } from "../../../shared/ui/icons";
@@ -169,7 +170,9 @@ export function MonoComposer({
           if (incoming.length === 0) {
             if (dropped)
               setDropError(
-                "Nothing to attach from that drop — the file may have been moved, renamed, or deleted.",
+                t(
+                  "Nothing to attach from that drop — the file may have been moved, renamed, or deleted.",
+                ),
               );
             return;
           }
@@ -255,7 +258,7 @@ export function MonoComposer({
       >
         {fileDrag ? (
           <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center rounded-lg bg-accent/8 text-[12px] text-content/70">
-            Drop files to attach
+            {t("Drop files to attach")}
           </div>
         ) : null}
         {dropError ? (
@@ -301,8 +304,8 @@ export function MonoComposer({
           </div>
           <button
             type="button"
-            title="Attach files"
-            aria-label="Attach files"
+            title={t("Attach files")}
+            aria-label={t("Attach files")}
             disabled={!enabled || submitting}
             onClick={() => readAttachments(pickAttachments)}
             className={`col-start-1 grid size-6.5 place-items-center rounded-md bg-content/8 text-content/55 hover:bg-content/12 hover:text-content ${stacked ? "row-start-2" : "row-start-1"}`}
@@ -312,8 +315,8 @@ export function MonoComposer({
           <textarea
             ref={field}
             rows={1}
-            aria-label={`Message ${name}`}
-            placeholder={`Message ${name}`}
+            aria-label={t("Message {0}", { "0": name })}
+            placeholder={t("Message {0}", { "0": name })}
             spellCheck={autocorrect}
             autoCorrect={autocorrect ? "on" : "off"}
             disabled={!enabled || submitting}
@@ -341,8 +344,8 @@ export function MonoComposer({
           />
           <button
             type="submit"
-            aria-label="Send"
-            title={pendingReads ? "Reading attachments…" : "Send"}
+            aria-label={t("Send")}
+            title={pendingReads ? t("Reading attachments…") : t("Send")}
             disabled={!ready}
             className={`primary-action col-start-3 grid size-6.5 place-items-center rounded-md transition-[background-color,color,transform] duration-150 active:scale-90 disabled:cursor-default ${stacked ? "row-start-2" : "row-start-1"}`}
           >

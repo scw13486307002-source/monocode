@@ -28,6 +28,7 @@ mod macos;
 mod macos_background;
 mod mcp;
 mod menu;
+mod locale;
 mod mono;
 #[cfg(target_os = "macos")]
 mod mono_chat;
@@ -263,6 +264,7 @@ pub fn run() {
             control::init(app.handle())?;
             reminders::init(app.handle());
             checkpoint::init(app.handle())?;
+            locale::init(app.handle());
             menu::install(app.handle())?;
             #[cfg(target_os = "windows")]
             tray::install(app.handle())?;
@@ -288,6 +290,7 @@ pub fn run() {
             menu::dispatch(app, event.id().as_ref());
         })
         .invoke_handler(tauri::generate_handler![
+            locale::interface_set_locale,
             remote::remote_machines,
             remote::remote_connect,
             remote::remote_disconnect,

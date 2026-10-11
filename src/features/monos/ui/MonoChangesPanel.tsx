@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
+import { t } from "../../../shared/i18n/index";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentProps,
+  type ReactNode,
+} from "react";
 import { lazySurface } from "../../../shared/ui/lazySurface";
 import { ChevronDown, Folder, GitBranch } from "../../../shared/ui/icons";
 import {
@@ -50,7 +58,10 @@ export function MonoChangesPanel({
   onClose: () => void;
   windowControls?: ReactNode;
 }) {
-  const { projects, outside, loaded, error } = useSessionProjects(sessionId, cwd);
+  const { projects, outside, loaded, error } = useSessionProjects(
+    sessionId,
+    cwd,
+  );
   const [tab, setTab] = useState<MonoChangesTab>(request.tab);
   const [focusPath, setFocusPath] = useState(request.path);
   const [selectedRoot, setSelectedRoot] = useState<string | null>(null);
@@ -62,11 +73,20 @@ export function MonoChangesPanel({
         )
       : undefined) ??
     projects[0];
-  const [indexes, setIndexes] = useState<ReadonlyMap<string, GitDiffIndex | null>>(new Map());
-  const updateIndex = useCallback((root: string, index: GitDiffIndex | null) => {
-    setIndexes((previous) => previous.get(root) === index ? previous : new Map(previous).set(root, index));
-  }, []);
-  const index = project ? indexes.get(project.root) ?? null : null;
+  const [indexes, setIndexes] = useState<
+    ReadonlyMap<string, GitDiffIndex | null>
+  >(new Map());
+  const updateIndex = useCallback(
+    (root: string, index: GitDiffIndex | null) => {
+      setIndexes((previous) =>
+        previous.get(root) === index
+          ? previous
+          : new Map(previous).set(root, index),
+      );
+    },
+    [],
+  );
+  const index = project ? (indexes.get(project.root) ?? null) : null;
 
   useEffect(() => {
     setTab(request.tab);
@@ -96,12 +116,12 @@ export function MonoChangesPanel({
     <MonoSidebar
       open
       kind="changes"
-      label="Changes"
+      label={t("Changes")}
       color={color}
       windowControls={windowControls}
     >
       <MonoSidebarHeader
-        title="Changes"
+        title={t("Changes")}
         heading={
           project ? (
             <ProjectHeading
@@ -116,14 +136,14 @@ export function MonoChangesPanel({
       />
       <div
         role="tablist"
-        aria-label="Changes views"
+        aria-label={t("Changes views")}
         className="flex h-9 shrink-0 items-stretch gap-4 border-b border-stroke px-4"
       >
         <TabButton
           selected={tab === "changes"}
           onClick={() => setTab("changes")}
         >
-          Changes
+          {t("Changes")}
           {project && project.files.length > 0 ? (
             <span className="tabular-nums text-content/40">
               {project.files.length}
@@ -135,7 +155,7 @@ export function MonoChangesPanel({
           disabled={!project}
           onClick={() => setTab("commit")}
         >
-          Commit
+          {t("Commit")}
         </TabButton>
       </div>
       <div className="relative flex min-h-0 flex-1 flex-col">
@@ -143,7 +163,7 @@ export function MonoChangesPanel({
             commit draft survives a look at the diff. */}
         <div
           role="tabpanel"
-          aria-label="Changes"
+          aria-label={t("Changes")}
           hidden={tab !== "changes" && !!project}
           className="absolute inset-0 h-full"
         >
@@ -158,7 +178,7 @@ export function MonoChangesPanel({
           <div
             key={`${sessionId}:${cwd}:${entry.root}`}
             role="tabpanel"
-            aria-label="Commit"
+            aria-label={t("Commit")}
             hidden={tab !== "commit" || entry.root !== project?.root}
             className="absolute inset-0 flex h-full flex-col"
           >
@@ -178,13 +198,18 @@ export function MonoChangesPanel({
         ))}
       </div>
       {error ? (
-        <p role="alert" className="shrink-0 border-t border-stroke px-4 py-2 text-[12px] text-red-400">
-          Couldn’t load repositories: {error}
+        <p
+          role="alert"
+          className="shrink-0 border-t border-stroke px-4 py-2 text-[12px] text-red-400"
+        >
+          {t("Couldn’t load repositories:")} {error}
         </p>
       ) : null}
       {loaded && !project && outside.length > 0 ? (
         <p className="shrink-0 border-t border-stroke px-4 py-2 text-[11px] text-content/45">
-          These files aren’t in a Git repository, so there’s nothing to commit.
+          {t(
+            "These files aren’t in a Git repository, so there’s nothing to commit.",
+          )}
         </p>
       ) : null}
     </MonoSidebar>
@@ -299,7 +324,7 @@ function ProjectHeading({
         {open ? (
           <div
             role="menu"
-            aria-label="Projects"
+            aria-label={t("Projects")}
             className="absolute top-full left-0 z-30 mt-1 min-w-44 rounded-md border border-content/10 bg-background-base py-1 shadow-lg"
           >
             {projects.map((entry) => (
@@ -351,7 +376,12 @@ type SessionProject = { root: string; files: MonoProjectFile[] };
 function useSessionProjects(
   sessionId: string,
   cwd: string,
-): { projects: SessionProject[]; outside: string[]; loaded: boolean; error: string | null } {
+): {
+  projects: SessionProject[];
+  outside: string[];
+  loaded: boolean;
+  error: string | null;
+} {
   const [projects, setProjects] = useState<SessionProject[]>([]);
   const [outside, setOutside] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);

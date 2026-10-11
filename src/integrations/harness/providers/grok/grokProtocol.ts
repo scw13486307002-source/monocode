@@ -1,11 +1,29 @@
-import { promptBlocks, type PromptContentBlock } from "../../../../features/sessions/model/attachments";
-import type { AgentModel, ModelSetting, ModelSettingChoice } from "../../../../features/sessions/model/models";
-import type { Attachment, RuntimeMode, ToolPreview } from "../../../../features/sessions/model/session";
+import { t } from "../../../../shared/i18n/index";
+import {
+  promptBlocks,
+  type PromptContentBlock,
+} from "../../../../features/sessions/model/attachments";
+import type {
+  AgentModel,
+  ModelSetting,
+  ModelSettingChoice,
+} from "../../../../features/sessions/model/models";
+import type {
+  Attachment,
+  RuntimeMode,
+  ToolPreview,
+} from "../../../../features/sessions/model/session";
 import { normalizeTaskListStatus } from "../../../../features/sessions/model/taskList";
 import { acpAgentInfo } from "../../core/acpSubagents";
 import type { ApprovalDecision, HarnessEvent } from "../../core/types";
-import type { UserQuestion, UserQuestionReply } from "../../../../features/sessions/model/userQuestion";
-import { questionsFromUnknown, selectedAnswerLabels } from "../../../../features/sessions/model/userQuestion";
+import type {
+  UserQuestion,
+  UserQuestionReply,
+} from "../../../../features/sessions/model/userQuestion";
+import {
+  questionsFromUnknown,
+  selectedAnswerLabels,
+} from "../../../../features/sessions/model/userQuestion";
 import {
   composeToolTitle,
   extractSearchQuery,
@@ -484,18 +502,18 @@ export function fallbackGrokModels(): AgentModel[] {
     modelFromNative("grok-4.6", "Grok 4.6", {
       contextWindow: 500_000,
       efforts: [
-        { value: "xhigh", label: "Extra High" },
-        { value: "high", label: "High", default: true },
-        { value: "medium", label: "Medium" },
-        { value: "low", label: "Low" },
+        { value: "xhigh", label: t("Extra High") },
+        { value: "high", label: t("High"), default: true },
+        { value: "medium", label: t("Medium") },
+        { value: "low", label: t("Low") },
       ],
     }),
     modelFromNative("grok-4.5", "Grok 4.5", {
       contextWindow: 500_000,
       efforts: [
-        { value: "high", label: "High", default: true },
-        { value: "medium", label: "Medium" },
-        { value: "low", label: "Low" },
+        { value: "high", label: t("High"), default: true },
+        { value: "medium", label: t("Medium") },
+        { value: "low", label: t("Low") },
       ],
     }),
   ];
@@ -566,7 +584,7 @@ function effortSetting(
 ): ModelSetting {
   return {
     id: "effort",
-    label: "Reasoning",
+    label: t("Reasoning"),
     kind: "select",
     value:
       value && options.some((item) => item.value === value)

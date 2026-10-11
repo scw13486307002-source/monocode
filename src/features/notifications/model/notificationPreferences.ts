@@ -1,9 +1,10 @@
+import { t } from "../../../shared/i18n/index";
 export const NOTIFICATION_CATEGORIES = [
-  { id: "pullRequests", label: "Pull requests / Merge requests" },
-  { id: "issues", label: "Issues and Linear tasks" },
-  { id: "agentFinished", label: "Agent finished" },
-  { id: "agentInput", label: "Agent approvals and questions" },
-  { id: "reminders", label: "Reminders" },
+  { id: "pullRequests", label: t("Pull requests / Merge requests") },
+  { id: "issues", label: t("Issues and Linear tasks") },
+  { id: "agentFinished", label: t("Agent finished") },
+  { id: "agentInput", label: t("Agent approvals and questions") },
+  { id: "reminders", label: t("Reminders") },
 ] as const;
 
 export type NotificationCategory =

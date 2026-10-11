@@ -1,3 +1,4 @@
+import { t } from "../../shared/i18n/index";
 import { invoke } from "@tauri-apps/api/core";
 import type { Block, Session } from "../sessions/model/session";
 
@@ -23,7 +24,7 @@ export const ARTIFACT_DELETED_EVENT = "monocode:artifact-deleted";
 export function artifactLabel(kind: ArtifactKind): string {
   switch (kind) {
     case "document":
-      return "Document";
+      return t("Document");
   }
 }
 
